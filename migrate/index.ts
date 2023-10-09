@@ -431,8 +431,8 @@ await Promise.all(
     organizations.map(async (org) => {
         const maria = await mariadb.createConnection({
             host: "localhost",
-            user: org.name,
-            password: org.name,
+            user: "root", //used to be org.name, which is consistent with authentication of mariadb container on the server, had to change it so it works with my backup style
+            password: "pass", //used to be org.name, which is consistent with authentication of mariadb container on the server, had to change it so it works with my backup style
             database: `${org.name}-prod`,
             port: 3306,
         });
