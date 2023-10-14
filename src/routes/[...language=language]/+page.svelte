@@ -10,6 +10,8 @@
 
     export let data: PageData;
 
+    let brandColor = data.configuration.brand_color_secondary;
+
     // Initialize the interactive calendar
     onMount(async () => {
         if (data.calendars.length > 0) {
@@ -17,6 +19,13 @@
             const calendar = new FullCalendar.Calendar(calendarEl, {
                 initialView: "dayGridMonth",
                 plugins: [iCalendarPlugin],
+                eventTimeFormat: {
+                    hour: "numeric",
+                    minute: "2-digit",
+                    hour12: false,
+                },
+                eventColor: data.configuration.brand_color_secondary,
+
                 eventSources: data.calendars.map((cal) => {
                     return {
                         url: `${data.origin}/api/calendar/${cal.id}`,
@@ -28,14 +37,6 @@
         }
     });
 </script>
-
-<svelte:head>
-    <style>
-        :root {
-            @apply bg-neutral-100;
-        }
-    </style>
-</svelte:head>
 
 <main>
     <img
@@ -102,7 +103,11 @@
 
         {#if data.calendars.length > 0}
             <div class="container">
-                <div id="calendar" class="h-[600px]" />
+                <div
+                    style="--fc-button-bg-color: {brandColor}; --fc-today-button-bg-color: {brandColor};"
+                    id="calendar"
+                    class="max-h-full"
+                />
             </div>
         {/if}
 
