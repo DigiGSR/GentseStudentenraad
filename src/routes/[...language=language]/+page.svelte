@@ -24,6 +24,7 @@
                     minute: "2-digit",
                     hour12: false,
                 },
+                firstDay: 1,
                 eventColor: data.configuration.brand_color_secondary,
 
                 eventSources: data.calendars.map((cal) => {
