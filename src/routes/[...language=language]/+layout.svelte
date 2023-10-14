@@ -99,7 +99,9 @@
                 {:else}
                     <a
                         class="flex items-center gap-2 bg-neutral-800 px-3 py-1 rounded-full"
-                        href={$page.url.toString().replace("/nl", "/en")}
+                        href={$page.url.toString().includes("/nl")
+                            ? $page.url.toString().replace("/nl", "/en")
+                            : ($page.url.pathname = `en${$page.url.pathname}`)}
                     >
                         <i class="bi bi-translate" />
                         <p class="text-xs font-semibold">EN</p>
