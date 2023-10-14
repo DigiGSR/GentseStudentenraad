@@ -16,6 +16,17 @@ export const handle = (async ({ event, resolve }) => {
     const ticket = event.url.searchParams.get("ticket");
     let tokenExpired = false;
 
+    if (
+        !(event.url.pathname.substring(0, 3) == "/nl") &&
+        !(event.url.pathname.substring(0, 3) == "/en")
+    ) {
+        //todo this might have issues with a route, we should probably move to a cookie based system
+        //if no language is set we should set it
+        event.url.pathname = `nl${event.url.pathname}`;
+        console.log("mispoes", event.url.pathname);
+        return Response.redirect(event.url.toString(), 303);
+    }
+
     if (token) {
         try {
             const decoded = jwt.verify(token, secret) as { username: string };
