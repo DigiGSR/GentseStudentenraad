@@ -11,13 +11,13 @@
     export let data: PageData;
 
     let brandColor = data.configuration.brand_color_secondary;
-
     // Initialize the interactive calendar
     onMount(async () => {
         if (data.calendars.length > 0) {
             const calendarEl = document.getElementById("calendar");
             const calendar = new FullCalendar.Calendar(calendarEl, {
                 initialView: "dayGridMonth",
+                eventDisplay: "block",
                 plugins: [iCalendarPlugin],
                 eventTimeFormat: {
                     hour: "numeric",
@@ -26,7 +26,6 @@
                 },
                 firstDay: 1,
                 eventColor: data.configuration.brand_color_secondary,
-
                 eventSources: data.calendars.map((cal) => {
                     return {
                         url: `${data.origin}/api/calendar/${cal.id}`,

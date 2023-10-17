@@ -2,67 +2,121 @@
     import "../../app.scss";
     import { page } from "$app/stores";
     import type { LayoutData } from "./$types";
-
     let showLinks = false;
     export let data: LayoutData;
+
+    let isdropDownHidden = false;
 </script>
 
 <div class="flex flex-col w-full min-h-[100vh]">
     <nav style:background-color={data.configuration.brand_color_primary}>
-        <div class="flex shadow-md p-3 items-center gap-5">
+        <div class="flex text-white lg:text-sm text-xs shadow-md p-3 items-center gap-5">
             <!--            <button on:click={() => (showLinks = !showLinks)}>-->
             <!--                <i class="bi-list text-xl cursor-pointer p-1" />-->
             <!--            </button>-->
 
             <a href="/nl">
-                <img src={data.configuration.logo_url} class="h-8" alt="Logo" />
+                <img
+                    src={data.configuration.logo_url}
+                    class="h-8 invisible lg:visible"
+                    alt="Logo"
+                />
             </a>
 
             {#each data.routes as route}
-                <a href={route[1]}>{route[0]}</a>
+                <a class="hover:opacity-70 opacity-100 transition duration-150" href={route[1]}
+                    >{route[0]}</a
+                >
             {/each}
+
+            {#if data.configuration.organization == "GSR"}
+                <div
+                    on:mouseenter={() => {
+                        isdropDownHidden = true;
+                    }}
+                    on:mouseleave={() => {
+                        isdropDownHidden = false;
+                    }}
+                    class="relative group {isdropDownHidden ? 'py-10 px-6 -mx-6 -my-10' : ''} "
+                >
+                    <div
+                        class="flex flex-row gap-x-1 hover:cursor-pointer hover:opacity-70 opacity-100 transition duration-150"
+                    >
+                        <p>Projecten</p>
+                        {#if isdropDownHidden}
+                            <i class="bi bi-chevron-up translate-y-0.25" />
+                        {:else}
+                            <i class="bi bi-chevron-down translate-y-0.25" />
+                        {/if}
+                    </div>
+
+                    <!-- Dropdown options -->
+                    <div
+                        style:background-color={data.configuration.brand_color_primary}
+                        class="absolute {isdropDownHidden
+                            ? 'visible'
+                            : 'invisible'} w-24 pb-2 mt-5 lg:mt-4 py-1 -translate-x-2 space-y-2 shadow-lg"
+                    >
+                        {#each data.configs as config}
+                            <a
+                                href="https://{config.hostnames[0]}"
+                                class="block px-4 pb-0.5 text-sm bg-opacity-50 hover:opacity-70 opacity-100 transition duration-150"
+                                >{config.name}</a
+                            >
+                        {/each}
+                    </div>
+                </div>
+            {/if}
 
             <div class="grow" />
 
+            <!--bi class is bootstrap icons-->
+
             {#if data.configuration.facebook_url}
                 <a href={data.configuration.facebook_url}>
-                    <i class="bi bi-facebook" />
+                    <i
+                        class="bi bi-facebook hover:opacity-70 opacity-100 transition duration-150"
+                    />
                 </a>
             {/if}
 
             {#if data.configuration.twitter_url}
                 <a href={data.configuration.twitter_url}>
-                    <i class="bi bi-twitter" />
+                    <i class="bi bi-twitter hover:opacity-70 opacity-100 transition duration-150" />
                 </a>
             {/if}
 
             {#if data.configuration.instagram_url}
                 <a href={data.configuration.instagram_url}>
-                    <i class="bi bi-instagram" />
+                    <i
+                        class="bi bi-instagram hover:opacity-70 opacity-100 transition duration-150"
+                    />
                 </a>
             {/if}
 
             {#if data.configuration.tiktok_url}
                 <a href={data.configuration.tiktok_url}>
-                    <i class="bi bi-tiktok" />
+                    <i class="bi bi-tiktok hover:opacity-70 opacity-100 transition duration-150" />
                 </a>
             {/if}
 
             {#if data.configuration.discord_url}
                 <a href={data.configuration.discord_url}>
-                    <i class="bi bi-discord" />
+                    <i class="bi bi-discord hover:opacity-70 opacity-100 transition duration-150" />
                 </a>
             {/if}
 
             {#if data.configuration.linkedin_url}
                 <a href={data.configuration.linkedin_url}>
-                    <i class="bi bi-linkedin" />
+                    <i
+                        class="bi bi-linkedin hover:opacity-70 opacity-100 transition duration-150"
+                    />
                 </a>
             {/if}
 
             {#if data.configuration.github_url}
                 <a href={data.configuration.github_url}>
-                    <i class="bi bi-github" />
+                    <i class="bi bi-github hover:opacity-70 opacity-100 transition duration-150" />
                 </a>
             {/if}
 
@@ -93,7 +147,9 @@
                         class="flex items-center gap-2 bg-neutral-800 px-3 py-1 rounded-full"
                         href={$page.url.toString().replace("/en", "/nl")}
                     >
-                        <i class="bi bi-translate" />
+                        <i
+                            class="bi bi-translate hover:opacity-70 opacity-100 transition duration-150"
+                        />
                         <p class="text-xs font-semibold">NL</p>
                     </a>
                 {:else}
@@ -149,7 +205,9 @@
 
                 {#if data.configuration.facebook_url}
                     <a href={data.configuration.facebook_url}>
-                        <div class="flex gap-2 items-center">
+                        <div
+                            class="flex gap-2 items-center hover:opacity-70 opacity-100 transition duration-150"
+                        >
                             <i class="bi bi-facebook" />
                             <p class="">Facebook</p>
                         </div>
@@ -158,7 +216,9 @@
 
                 {#if data.configuration.twitter_url}
                     <a href={data.configuration.twitter_url}>
-                        <div class="flex gap-2 items-center">
+                        <div
+                            class="flex gap-2 items-center hover:opacity-70 opacity-100 transition duration-150"
+                        >
                             <i class="bi bi-twitter" />
                             <p class="">Twitter</p>
                         </div>
@@ -167,7 +227,9 @@
 
                 {#if data.configuration.instagram_url}
                     <a href={data.configuration.instagram_url}>
-                        <div class="flex gap-2 items-center">
+                        <div
+                            class="flex gap-2 items-center hover:opacity-70 opacity-100 transition duration-150"
+                        >
                             <i class="bi bi-instagram" />
                             <p class="">Instagram</p>
                         </div>
@@ -176,7 +238,9 @@
 
                 {#if data.configuration.tiktok_url}
                     <a href={data.configuration.tiktok_url}>
-                        <div class="flex gap-2 items-center">
+                        <div
+                            class="flex gap-2 items-center hover:opacity-70 opacity-100 transition duration-150"
+                        >
                             <i class="bi bi-tiktok" />
                             <p class="">TikTok</p>
                         </div>
@@ -185,7 +249,9 @@
 
                 {#if data.configuration.discord_url}
                     <a href={data.configuration.discord_url}>
-                        <div class="flex gap-2 items-center">
+                        <div
+                            class="flex gap-2 items-center hover:opacity-70 opacity-100 transition duration-150"
+                        >
                             <i class="bi bi-discord" />
                             <p class="">Discord</p>
                         </div>
@@ -194,7 +260,9 @@
 
                 {#if data.configuration.linkedin_url}
                     <a href={data.configuration.linkedin_url}>
-                        <div class="flex gap-2 items-center">
+                        <div
+                            class="flex gap-2 items-center hover:opacity-70 opacity-100 transition duration-150"
+                        >
                             <i class="bi bi-linkedin" />
                             <p class="">LinkedIn</p>
                         </div>
@@ -203,7 +271,9 @@
 
                 {#if data.configuration.github_url}
                     <a href={data.configuration.github_url}>
-                        <div class="flex gap-2 items-center">
+                        <div
+                            class="flex gap-2 items-center hover:opacity-70 opacity-100 transition duration-150"
+                        >
                             <i class="bi bi-github" />
                             <p class="">GitHub</p>
                         </div>
@@ -238,10 +308,6 @@
 </div>
 
 <style lang="postcss">
-    nav {
-        @apply relative w-full z-[100] text-sm font-medium text-neutral-100;
-    }
-
     .panel-contents {
         @apply grid grid-cols-3 p-8 gap-8 absolute top-14 shadow-lg border-t-[1px] border-neutral-100/25;
     }
