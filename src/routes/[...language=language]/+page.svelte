@@ -7,6 +7,8 @@
     import { onMount } from "svelte";
     import * as FullCalendar from "fullcalendar";
     import iCalendarPlugin from "@fullcalendar/icalendar";
+    import googleCalendarPlugin from "@fullcalendar/google-calendar";
+    import { env } from "$env/dynamic/public";
 
     export let data: PageData;
 
@@ -16,9 +18,33 @@
         if (data.calendars.length > 0) {
             const calendarEl = document.getElementById("calendar");
             const calendar = new FullCalendar.Calendar(calendarEl, {
+                googleCalendarApiKey: env.PUBLIC_GOOGLE_CALENDAR_API_KEY,
                 initialView: "dayGridMonth",
                 eventDisplay: "block",
-                plugins: [iCalendarPlugin],
+                plugins: [iCalendarPlugin, googleCalendarPlugin],
+                eventSources: [
+                    {
+                        googleCalendarId: "c_nr8ih148s4o31575ksbrooflug@group.calendar.google.com",
+                    },
+                    {
+                        googleCalendarId:
+                            "gentsestudentenraad.be_k37f6bonoji57h4e40r6n0npnc@group.calendar.google.com",
+                    },
+                    {
+                        googleCalendarId:
+                            "gentsestudentenraad.be_deosrc3a6c2oe5dr69vinpl5m0@group.calendar.google.com",
+                    },
+                    //todo these should not be hardcoded, need to pull them from db
+                    //see code below that pulls ics  from db
+                ],
+
+                /*eventSources: data.calendars.map((cal) => {
+                    return {
+                        url: `${data.origin}/api/calendar/${cal.id}`,
+                        format: "ics",
+                    };
+                }),*/
+
                 eventTimeFormat: {
                     hour: "numeric",
                     minute: "2-digit",
@@ -26,12 +52,6 @@
                 },
                 firstDay: 1,
                 eventColor: data.configuration.brand_color_secondary,
-                eventSources: data.calendars.map((cal) => {
-                    return {
-                        url: `${data.origin}/api/calendar/${cal.id}`,
-                        format: "ics",
-                    };
-                }),
             });
             calendar.render();
         }

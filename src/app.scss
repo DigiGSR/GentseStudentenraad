@@ -23,6 +23,10 @@
     -webkit-text-size-adjust: 100%;
 }
 
+.fc-event-time {
+    min-width: fit-content;
+}
+
 h1 {
     @apply text-5xl font-semibold font-serif;
 }
