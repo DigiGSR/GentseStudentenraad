@@ -42,11 +42,10 @@
                     <div
                         class="flex flex-row gap-x-1 hover:cursor-pointer hover:opacity-70 opacity-100 transition duration-150"
                     >
-                        <p>Projecten</p>
                         {#if isdropDownHidden}
-                            <i class="bi bi-chevron-up translate-y-0.25" />
+                            <i class="bi bi-diagram-3-fill text-lg translate-y-0.25" />
                         {:else}
-                            <i class="bi bi-chevron-down translate-y-0.25" />
+                            <i class="bi bi-diagram-3 text-lg translate-y-0.25" />
                         {/if}
                     </div>
 
@@ -55,20 +54,37 @@
                         style:background-color={data.configuration.brand_color_primary}
                         class="absolute {isdropDownHidden
                             ? 'visible'
-                            : 'invisible'} w-24 pb-2 mt-5 lg:mt-4 py-1 -translate-x-2 space-y-2 shadow-lg"
+                            : 'invisible'} flex flex-col w-64 -ml-[7.25rem] pb-2 lg:mt-4 py-1 -translate-y-0.5 space-y-2 shadow-lg"
                     >
-                        {#each data.configs as config}
+                        <div
+                            class="flex justify-between pt-4 px-8 border-t-white border-t-2 flex-row"
+                        >
                             <a
-                                href="https://{config.hostnames[0]}"
-                                class="block px-4 pb-0.5 text-sm bg-opacity-50 hover:opacity-70 opacity-100 transition duration-150"
-                                >{config.name}</a
+                                href="https://epione.sittool.net/"
+                                class="flex flex-col justify-center items-center hover:cursor-pointer hover:opacity-70 opacity-100 transition duration-150"
                             >
-                        {/each}
+                                <img
+                                    class="w-16"
+                                    src="https://gentsestudentenraad.be/static/persistent/images/147a54a5-be6a-4c83-991e-a272af38d205-epione_logo.jpg"
+                                />
+                                <p class="mt-1">Epione</p>
+                            </a>
+                            <a
+                                href="http://cultour.be/"
+                                class="flex flex-col justify-center items-center hover:cursor-pointer hover:opacity-70 opacity-100 transition duration-150"
+                            >
+                                <img
+                                    class="w-16"
+                                    src="https://gentsestudentenraad.be/static/persistent/images/2610b6b3-b15e-4e52-8b09-451b84ff11ac-29943013_1656257771093967_1296670863_o.jpg"
+                                />
+                                <p class="mt-1">Cultour</p>
+                            </a>
+                        </div>
                     </div>
                 </div>
             {/if}
 
-            <div class="grow" />
+            <div class="grow lg:flex hidden" />
 
             <!--bi class is bootstrap icons-->
 
@@ -137,7 +153,7 @@
                     href="https://login.ugent.be/login?service={$page.url.origin}"
                 >
                     <i class="bi bi-person" />
-                    <p class="text-xs font-semibold">Inloggen</p>
+                    <p class="text-xs lg:block hidden font-semibold">Inloggen</p>
                 </a>
             {/if}
 
