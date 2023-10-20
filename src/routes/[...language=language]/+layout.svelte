@@ -63,9 +63,9 @@
                                 href="https://epione.sittool.net/"
                                 class="flex flex-col justify-center items-center hover:cursor-pointer hover:opacity-70 opacity-100 transition duration-150"
                             >
-                                <img
-                                    class="w-16"
-                                    src="https://gentsestudentenraad.be/static/persistent/images/147a54a5-be6a-4c83-991e-a272af38d205-epione_logo.jpg"
+                                <div
+                                    class="w-16 bg-center bg-contain bg-no-repeat h-16"
+                                    style="background-image: url(/img/epione.png)"
                                 />
                                 <p class="mt-1">Epione</p>
                             </a>
@@ -73,9 +73,9 @@
                                 href="http://cultour.be/"
                                 class="flex flex-col justify-center items-center hover:cursor-pointer hover:opacity-70 opacity-100 transition duration-150"
                             >
-                                <img
-                                    class="w-16"
-                                    src="https://gentsestudentenraad.be/static/persistent/images/2610b6b3-b15e-4e52-8b09-451b84ff11ac-29943013_1656257771093967_1296670863_o.jpg"
+                                <div
+                                    class="w-16 bg-center bg-contain bg-no-repeat h-16"
+                                    style="background-image: url(/img/cultour.jpg)"
                                 />
                                 <p class="mt-1">Cultour</p>
                             </a>

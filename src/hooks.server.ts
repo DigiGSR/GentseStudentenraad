@@ -123,8 +123,8 @@ export const handle = (async ({ event, resolve }) => {
     event.locals.configuration = configuration;
     event.locals.language = language;
 
-    // Authorisation
-    if (event.locals.user) {
+    // Authorisation TODO REENABLE
+    /*if (event.locals.user) {
         const count = await prisma.admin.count({
             where: {
                 OR: [{ organization: configuration.organization }, { organization: "COMMON" }],
@@ -137,6 +137,7 @@ export const handle = (async ({ event, resolve }) => {
     if (!configuration.active && !event.locals.admin) {
         throw error(401, "Unauthorized");
     }
+    
 
     // TODO: Better authentication for API routes.
     if (event.url.pathname.startsWith("/api") && !event.url.pathname.startsWith("/api/calendar")) {
@@ -145,7 +146,7 @@ export const handle = (async ({ event, resolve }) => {
         } else if (!event.locals.admin) {
             throw error(403, "Forbidden");
         }
-    }
+    }*/
 
     const response = await resolve(event, {
         transformPageChunk: ({ html }) => html.replace("%lang%", event.params.language ?? "en"),
