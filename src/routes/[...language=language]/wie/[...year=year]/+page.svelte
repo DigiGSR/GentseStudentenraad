@@ -18,8 +18,23 @@
     />
 {/if}
 
+<div class="container flex text-lg -mt-32 translate-y-10 justify-end gap-4">
+    <p>Bekijk historische data:</p>
+    <!--TODO translation-->
+    <select
+        name="year"
+        id="year"
+        bind:value={selected}
+        on:change={() => goto(`/nl/wie/${selected}`)}
+    >
+        {#each data.years as year}
+            <option value={year}>{year}</option>
+        {/each}
+    </select>
+</div>
+
 {#if data.i18n.get("who-about")}
-    <div class="container md grid grid-cols-2 gap-x-8 gap-y-2 py-12">
+    <div class="container md grid grid-cols-2 gap-x-8 gap-y-2">
         {@html data.i18n.get("who-about")}
     </div>
 {/if}
@@ -51,18 +66,4 @@
             </div>
         </div>
     {/each}
-
-    <div class="container flex items-center justify-center py-12 gap-4">
-        <p>Bekijk historische data:</p>
-        <select
-            name="year"
-            id="year"
-            bind:value={selected}
-            on:change={() => goto(`/nl/wie/${selected}`)}
-        >
-            {#each data.years as year}
-                <option value={year}>{year}</option>
-            {/each}
-        </select>
-    </div>
 </div>

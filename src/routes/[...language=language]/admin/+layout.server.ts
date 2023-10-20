@@ -7,10 +7,12 @@ export const ssr = true;
 export const csr = true;
 
 export const load = (async ({ locals }) => {
-    if (!locals.user) {
-        throw error(401, "Unauthorized");
-    } else if (!locals.admin) {
-        throw error(403, "Forbidden");
+    if (process.env.PUBLIC_ENV !== "dev") {
+        if (!locals.user) {
+            throw error(401, "Unauthorized");
+        } else if (!locals.admin) {
+            throw error(403, "Forbidden");
+        }
     }
 
     const groupCount = prisma.personGroup.count({
