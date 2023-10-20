@@ -77,44 +77,24 @@ export const handle = (async ({ event, resolve }) => {
     // 2. The hostname contained in the request headers.
     const requestedHost = event.url.searchParams.get("host") || event.url.hostname;
 
-    const configuration = (await prisma.configuration.findFirst({
+    let configuration = await prisma.configuration.findFirst({
         where: {
             hostnames: {
                 has: requestedHost,
             },
         },
-    })) || {
-        id: 6,
-        organization: "GSR",
-        active: true,
-        hostnames: ["gsr.staging.gentsestudentenraad.be"],
-        facebook_url: "https://www.facebook.com/gentsestudentenraad",
-        twitter_url: "https://twitter.com/gentsestud",
-        instagram_url: "https://www.instagram.com/gentsestudentenraad/",
-        tiktok_url: null,
-        linkedin_url: null,
-        discord_url: "https://discord.gg/7gk3fdZ5wm",
-        github_url: null,
-        adres: "Hoveniersberg 24, 9000 Gent",
-        phone: "041234567",
-        email_adres: "info@studentenraad.be",
-        group_photo:
-            "https://gentsestudentenraad.be/static/persistent/images/7a2e803a-f3c1-47c2-bfe6-298aca6b09b1-DB-GSR-2.jpg",
-        brand_color_primary: "#550123",
-        brand_color_secondary: "#550123",
-        logo_url: "https://gentsestudentenraad.be/static/persistent/images/logo.png",
-        name: "Gentse Studentenraad",
-        short_description:
-            "De Gentse Studentenraad is de centrale studentenraad van de Universiteit Gent",
-        i18n: true,
-        who_section: true,
-        news_section: true,
-        faq_section: true,
-        opinions_section: true,
-        elections_section: true,
-        feedback_section: true,
-        project_section: true,
-    };
+    });
+
+    if (!configuration && process.env.PUBLIC_ENV === "dev") {
+        //if dev environment and no arg, just default to gsr site
+        configuration = await prisma.configuration.findFirst({
+            where: {
+                hostnames: {
+                    has: "gsr.staging.gentsestudentenraad.be",
+                },
+            },
+        });
+    }
 
     //todo remove, this is for dev environment so that if ?host is not supplied we default to gsr config
 
