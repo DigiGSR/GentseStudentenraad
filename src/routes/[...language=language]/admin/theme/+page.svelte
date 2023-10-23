@@ -3,6 +3,7 @@
     import type { PageData } from "./$types";
     import ActionButton from "$lib/components/admin/ActionButton.svelte";
     import { goto } from "$app/navigation";
+    import TextField from "$lib/components/admin/TextField.svelte";
 
     export let data: PageData;
 
@@ -40,6 +41,14 @@
     <div class="w-fit flex gap-2 items-center">
         <ColorPicker bind:hex={data.configuration.brand_color_secondary} label="" />
         <p>Secundaire kleur: {data.configuration.brand_color_secondary}</p>
+    </div>
+
+    <div>
+        <TextField
+            placeholder="We wensen jullie veel success met de examens!"
+            bind:value={data.configuration.info_bar}
+            description="Info bar tekst (geen text = geen infobar)"
+        />
     </div>
 
     <ActionButton action={put} />

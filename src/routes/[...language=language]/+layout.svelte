@@ -182,13 +182,14 @@
             {/if}
         </div>
     </nav>
-    <div
-        style:background-color={data.configuration.brand_color_secondary}
-        class="flex text-white flex-row w-full justify-center lg:text-base text-sm py-1"
-    >
-        sample text!
-    </div>
-
+    {#if data.configuration.info_bar !== ""}
+        <div
+            style:background-color={data.configuration.brand_color_secondary}
+            class="flex text-white flex-row w-full justify-center lg:text-base text-sm py-1"
+        >
+            {data.configuration.info_bar}
+        </div>
+    {/if}
     {#if showLinks}
         <div
             class="panel-contents"
