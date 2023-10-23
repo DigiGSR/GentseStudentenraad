@@ -99,6 +99,9 @@ model Configuration {
   short_description     String
   info_bar              String @default("test")
 
+  // Calendars
+  calendars String[] @default([])
+
   // Features
   i18n              Boolean @default(false)
   who_section       Boolean @default(false)
