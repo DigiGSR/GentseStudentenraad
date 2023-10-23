@@ -3,6 +3,7 @@
     import Checkbox from "$lib/components/admin/Checkbox.svelte";
     import ActionButton from "$lib/components/admin/ActionButton.svelte";
     import { goto } from "$app/navigation";
+    import TextField from "$lib/components/admin/TextField.svelte";
 
     export let data: PageData;
 
@@ -56,6 +57,42 @@
         label="Standpuntensectie"
         description={null}
     />
+    <Checkbox
+        bind:value={data.configuration.calendar_section}
+        label="Kalendersectie"
+        description={null}
+    />
     <Checkbox bind:value={data.configuration.i18n} label="Vertalingen" description={null} />
+    <div>
+        <div class="flex flex-row items-start">
+            <p class="text-[18px] opacity-50 font-semibold uppercase">Kalenders</p>
+            <button
+                on:click={() => {
+                    data.configuration.calendars.push("");
+                    data.configuration.calendars = data.configuration.calendars; //yes this is actual svelte syntax that is needed
+                }}
+                class="text-[18px] ml-1 bi bi-plus-circle opacity-50 hover:opacity-80 hover:cursor-pointer transition duration-150"
+            />
+        </div>
+
+        {#if data.configuration.calendar_section}
+            {#each data.configuration.calendars as calendar, index (calendar)}
+                <div class="flex flex-row items-start">
+                    <button
+                        on:click={() => {
+                            data.configuration.calendars.splice(index, 1);
+                            data.configuration.calendars = data.configuration.calendars; //yes this is actual svelte syntax that is needed
+                        }}
+                        class="text-[12px] mr-1 bi bi-dash-circle opacity-50 hover:opacity-80 hover:cursor-pointer transition duration-150"
+                    />
+                    <TextField
+                        placeholder={calendar}
+                        bind:value={data.configuration.calendars[index]}
+                        description={`kalender ${index + 1}`}
+                    />
+                </div>
+            {/each}
+        {/if}
+    </div>
     <ActionButton action={put} />
 </div>

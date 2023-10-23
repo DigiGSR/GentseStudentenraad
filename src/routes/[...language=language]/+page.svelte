@@ -15,29 +15,17 @@
     let brandColor = data.configuration.brand_color_secondary;
     // Initialize the interactive calendar
     onMount(async () => {
-        if (data.calendars.length > 0) {
+        if (data.configuration.calendar_section) {
             const calendarEl = document.getElementById("calendar");
             const calendar = new FullCalendar.Calendar(calendarEl, {
                 googleCalendarApiKey: env.PUBLIC_GOOGLE_CALENDAR_API_KEY,
                 initialView: "dayGridMonth",
                 eventDisplay: "block",
                 plugins: [iCalendarPlugin, googleCalendarPlugin],
-                eventSources: [
-                    {
-                        googleCalendarId: "c_nr8ih148s4o31575ksbrooflug@group.calendar.google.com",
-                    },
-                    {
-                        googleCalendarId:
-                            "gentsestudentenraad.be_k37f6bonoji57h4e40r6n0npnc@group.calendar.google.com",
-                    },
-                    {
-                        googleCalendarId:
-                            "gentsestudentenraad.be_deosrc3a6c2oe5dr69vinpl5m0@group.calendar.google.com",
-                    },
-                    //todo these should not be hardcoded, need to pull them from db
-                    //see code below that pulls ics  from db
-                ],
-
+                eventSources: data.configuration.calendars.map((cal) => {
+                    return { googleCalendarId: cal };
+                }),
+                //todo ics support
                 /*eventSources: data.calendars.map((cal) => {
                     return {
                         url: `${data.origin}/api/calendar/${cal.id}`,

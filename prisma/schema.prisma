@@ -99,9 +99,6 @@ model Configuration {
   short_description     String
   info_bar              String @default("test")
 
-  // Calendars
-  calendars String[] @default([])
-
   // Features
   i18n              Boolean @default(false)
   who_section       Boolean @default(false)
@@ -111,6 +108,8 @@ model Configuration {
   elections_section Boolean @default(false)
   feedback_section  Boolean @default(false)
   project_section   Boolean @default(false)
+  calendar_section  Boolean @default(false)
+  calendars         String[] @default([])
 
   @@map("configuration")
 }
