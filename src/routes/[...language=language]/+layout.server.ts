@@ -16,6 +16,111 @@ export const load = (async ({ params, locals }) => {
     // Create navigation bar routes. It's a bit messy but it's our only option.
     const routes = [];
 
+    const newRoutes = [
+        {
+            hierarchyRoute: true,
+            name: "Over GSR",
+            childRoutes: [
+                {
+                    name: "Wie",
+                    route: "/nl/wie",
+                },
+                {
+                    name: "Geschiedenis",
+                    route: "/nl/geschiedenis",
+                },
+                {
+                    name: "Organigram",
+                    route: "/nl/organigram",
+                },
+                {
+                    name: "Projecten",
+                    route: "/nl/projecten",
+                },
+                {
+                    name: "Sponseringen",
+                    route: "/nl/sponseringen",
+                },
+                {
+                    name: "Partners",
+                    route: "/nl/partners",
+                },
+            ],
+        },
+        {
+            hierarchyRoute: false,
+            name: "Nieuws",
+            route: "nl/nieuws",
+        },
+        {
+            hierarchyRoute: false,
+            name: "Example",
+            route: "nl/nieuws",
+        },
+        {
+            hierarchyRoute: true,
+            name: "FAQ",
+            childRoutes: [
+                {
+                    name: "Uitvouwende delen",
+                    route: "todo",
+                },
+                {
+                    name: "Studiehulp",
+                    route: "todo",
+                },
+                {
+                    name: "Mentaal",
+                    route: "todo",
+                },
+                {
+                    name: "Ugent problemen",
+                    route: "todo",
+                },
+                {
+                    name: "Internationalizering",
+                    route: "todo",
+                },
+            ],
+        },
+        {
+            hierarchyRoute: true,
+            name: "Werking",
+            childRoutes: [
+                {
+                    name: "Standpunten",
+                    route: "todo",
+                },
+                {
+                    name: "Vakfeedback",
+                    route: "todo",
+                },
+                {
+                    name: "Bestuursverkiezingen",
+                    route: "todo",
+                },
+            ],
+        },
+        {
+            hierarchyRoute: true,
+            name: "Vertegenwoordigingen",
+            childRoutes: [
+                {
+                    name: "Stuver worden",
+                    route: "todo",
+                },
+                {
+                    name: "Stuver zijn",
+                    route: "todo",
+                },
+                {
+                    name: "Stuver verkiezingen",
+                    route: "todo",
+                },
+            ],
+        },
+    ];
+
     const configs = await prisma.configuration.findMany();
     const pages = await prisma.page.findMany({
         where: { organization: locals.configuration.organization },
@@ -115,7 +220,7 @@ export const load = (async ({ params, locals }) => {
     // Done! Pass to the view.
     return {
         language: locals.language,
-        routes,
+        routes: newRoutes,
         configs: configs.filter((e) => e.id != locals.configuration.id),
         configuration: locals.configuration,
         i18n: translations,

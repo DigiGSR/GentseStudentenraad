@@ -6,10 +6,18 @@
     export let data: LayoutData;
 
     let isdropDownHidden = false;
+    let navBarHeight;
+    let currWidth;
+    let currWidth2;
+    $: offset = currWidth - currWidth2;
 </script>
 
 <div class="flex flex-col w-full min-h-[100vh]">
-    <nav style:background-color={data.configuration.brand_color_primary}>
+    <nav
+        class="relative"
+        bind:clientHeight={navBarHeight}
+        style:background-color={data.configuration.brand_color_primary}
+    >
         <div class="flex text-white lg:text-sm text-xs shadow-md p-3 items-center gap-5">
             <!--            <button on:click={() => (showLinks = !showLinks)}>-->
             <!--                <i class="bi-list text-xl cursor-pointer p-1" />-->
@@ -24,9 +32,33 @@
             </a>
 
             {#each data.routes as route}
-                <a class="hover:opacity-70 opacity-100 transition duration-150" href={route[1]}
-                    >{route[0]}</a
-                >
+                {#if route.hierarchyRoute === true}
+                    <div class="flex-col hover:cursor-pointer group min-w-fit">
+                        <div
+                            bind:offsetWidth={currWidth}
+                            style:background-color={data.configuration.brand_color_primary}
+                            style={`top: ${navBarHeight}px; transform: translateX(-20%);`}
+                            class="group-hover:visible invisible absolute gap-y-2 py-2 flex flex-col justify-between px-8 border-t-white border-t-2"
+                        >
+                            {#each route.childRoutes as childRoute}
+                                <a
+                                    class="hover:opacity-70 opacity-100 transition duration-150"
+                                    href={childRoute.route}>{childRoute.name}</a
+                                >
+                            {/each}
+                        </div>
+                        <a
+                            class="pb-6 hover:opacity-70 w-fit opacity-100 transition duration-150"
+                            href={route.route}
+                            >{route.name} <i class="bi bi-chevron-down translate-y-0.25" /></a
+                        >
+                    </div>
+                {:else}
+                    <a
+                        class="hover:opacity-70 opacity-100 transition duration-150"
+                        href={route.route}>{route.name}</a
+                    >
+                {/if}
             {/each}
 
             {#if data.configuration.organization == "GSR"}
@@ -52,13 +84,12 @@
                     <!-- Dropdown options -->
                     <div
                         style:background-color={data.configuration.brand_color_primary}
-                        class="absolute {isdropDownHidden
+                        style={`top: ${navBarHeight}px;`}
+                        class="absolute top-0 {isdropDownHidden
                             ? 'visible'
-                            : 'invisible'} flex flex-col w-64 -ml-[7.25rem] pb-2 lg:mt-4 py-1 -translate-y-0.5 space-y-2 shadow-lg"
+                            : 'invisible'} flex flex-col w-64 -ml-[7.25rem] pb-2 py-1 space-y-2 shadow-lg"
                     >
-                        <div
-                            class="flex justify-between pt-4 px-8 border-t-white border-t-2 flex-row"
-                        >
+                        <div class="flex justify-between px-8 border-t-white border-t-2 flex-row">
                             <a
                                 href="https://epione.sittool.net/"
                                 class="flex flex-col justify-center items-center hover:cursor-pointer hover:opacity-70 opacity-100 transition duration-150"
@@ -182,6 +213,7 @@
             {/if}
         </div>
     </nav>
+
     {#if data.configuration.info_bar !== ""}
         <div
             style:background-color={data.configuration.brand_color_secondary}
@@ -220,7 +252,7 @@
         <slot />
     </div>
 
-    <footer class="bg-neutral-900 py-20 p-3 text-white">
+    <footer class="bg-neutral-900 py-20 m-3 text-white">
         <div class="container grid grid-cols-3 gap-12">
             <div class="flex flex-col gap-2">
                 <p class="font-semibold">{@html data.i18n.get("footer-social-media")}</p>
