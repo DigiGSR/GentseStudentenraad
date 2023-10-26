@@ -7,9 +7,6 @@
 
     let isdropDownHidden = false;
     let navBarHeight;
-    let currWidth;
-    let currWidth2;
-    $: offset = currWidth - currWidth2;
 </script>
 
 <div class="flex flex-col w-full min-h-[100vh]">
@@ -35,9 +32,8 @@
                 {#if route.hierarchyRoute === true}
                     <div class="flex-col hover:cursor-pointer group min-w-fit">
                         <div
-                            bind:offsetWidth={currWidth}
                             style:background-color={data.configuration.brand_color_primary}
-                            style={`top: ${navBarHeight}px; transform: translateX(-20%);`}
+                            style={`top: ${navBarHeight}px;`}
                             class="group-hover:visible invisible absolute gap-y-2 py-2 flex flex-col justify-between px-8 border-t-white border-t-2"
                         >
                             {#each route.childRoutes as childRoute}
