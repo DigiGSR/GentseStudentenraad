@@ -1,0 +1,68 @@
+<script>
+    import { flip } from "svelte/animate";
+    import { dndzone } from "svelte-dnd-action";
+    import uniqid from "uniqid";
+
+    /**
+     * @type {string}
+     */
+    export let name;
+    /**
+     * @type {{ id: any; name: string; route: string; }[] | undefined}
+     */
+    export let items;
+
+    const flipDurationMs = 300;
+    function handleDndConsider(e) {
+        items = e.detail.items;
+    }
+    function handleDndFinalize(e) {
+        items = e.detail.items;
+    }
+
+    function addItem() {
+        items.push({
+            id: uniqid(),
+            name: "nieuw",
+            route: "nl/nieuw",
+        });
+        items = items;
+    }
+
+    let dropTargetStyle = "";
+</script>
+
+<div class="w-fit p-2 gap-y-2 flex rounded-xl flex-col border border-gray-400">
+    <div class="flex gap-x-1 flex-row justify-between items-center">
+        <div class="flex gap-x-1 flex-row items-center">
+            <i class="bi bi-folder opacity-50" />
+            <input class="bg-transparent rounded-md w-32 p-1 focus:bg-white" bind:value={name} />
+        </div>
+        <i
+            on:click={addItem}
+            class="bi bi-plus-circle opacity-50 hover:opacity-80 hover:cursor-pointer transition duration-150"
+        />
+    </div>
+    <div
+        class="w-fit gap-y-2 flex rounded-xl flex-col"
+        use:dndzone={{ items, flipDurationMs, dropTargetStyle: dropTargetStyle }}
+        on:consider={handleDndConsider}
+        on:finalize={handleDndFinalize}
+    >
+        {#each items as item (item.id)}
+            <div
+                class="flex p-1.5 border rounded-xl gap-x-12 border-gray-400 justify-between flex-row w-fit"
+                animate:flip={{ duration: flipDurationMs }}
+            >
+                <input
+                    class="bg-transparent rounded-md p-1 w-40 focus:bg-white"
+                    bind:value={item.name}
+                />
+                <input
+                    class="w-32 rounded-md p-1 bg-transparent focus:bg-white"
+                    bind:value={item.route}
+                />
+            </div>
+        {/each}
+    </div>
+</div>
