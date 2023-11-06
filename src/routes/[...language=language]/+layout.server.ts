@@ -4,6 +4,7 @@ import { Organization, Markup } from "@prisma/client";
 import type { LayoutServerLoad } from "./$types";
 import { marked } from "marked";
 import sanitizeHtml from "sanitize-html";
+import uniqid from "uniqid";
 
 export const prerender = false;
 export const ssr = true;
@@ -21,30 +22,12 @@ export const load = (async ({ params, locals }) => {
             hierarchyRoute: true,
             name: "Over GSR",
             childRoutes: [
-                {
-                    name: "Wie",
-                    route: "/nl/wie",
-                },
-                {
-                    name: "Geschiedenis",
-                    route: "/nl/geschiedenis",
-                },
-                {
-                    name: "Organigram",
-                    route: "/nl/organigram",
-                },
-                {
-                    name: "Projecten",
-                    route: "/nl/projecten",
-                },
-                {
-                    name: "Sponseringen",
-                    route: "/nl/sponseringen",
-                },
-                {
-                    name: "Partners",
-                    route: "/nl/partners",
-                },
+                { id: uniqid.time(), name: "Wie", route: "/nl/wie" },
+                { id: uniqid.time(), name: "Geschiedenis", route: "/nl/geschiedenis" },
+                { id: uniqid.time(), name: "Organigram", route: "/nl/organigram" },
+                { id: uniqid.time(), name: "Projecten", route: "/nl/projecten" },
+                { id: uniqid.time(), name: "Sponseringen", route: "/nl/sponseringen" },
+                { id: uniqid.time(), name: "Partners", route: "/nl/partners" },
             ],
         },
         {
@@ -61,62 +44,29 @@ export const load = (async ({ params, locals }) => {
             hierarchyRoute: true,
             name: "FAQ",
             childRoutes: [
-                {
-                    name: "Uitvouwende delen",
-                    route: "todo",
-                },
-                {
-                    name: "Studiehulp",
-                    route: "todo",
-                },
-                {
-                    name: "Mentaal",
-                    route: "todo",
-                },
-                {
-                    name: "Ugent problemen",
-                    route: "todo",
-                },
-                {
-                    name: "Internationalizering",
-                    route: "todo",
-                },
+                { id: uniqid.time(), name: "Uitvouwende delen", route: "todo" },
+                { id: uniqid.time(), name: "Studiehulp", route: "todo" },
+                { id: uniqid.time(), name: "Mentaal", route: "todo" },
+                { id: uniqid.time(), name: "Ugent problemen", route: "todo" },
+                { id: uniqid.time(), name: "Internationalizering", route: "todo" },
             ],
         },
         {
             hierarchyRoute: true,
             name: "Werking",
             childRoutes: [
-                {
-                    name: "Standpunten",
-                    route: "todo",
-                },
-                {
-                    name: "Vakfeedback",
-                    route: "todo",
-                },
-                {
-                    name: "Bestuursverkiezingen",
-                    route: "todo",
-                },
+                { id: uniqid.time(), name: "Standpunten", route: "todo" },
+                { id: uniqid.time(), name: "Vakfeedback", route: "todo" },
+                { id: uniqid.time(), name: "Bestuursverkiezingen", route: "todo" },
             ],
         },
         {
             hierarchyRoute: true,
             name: "Vertegenwoordigingen",
             childRoutes: [
-                {
-                    name: "Stuver worden",
-                    route: "todo",
-                },
-                {
-                    name: "Stuver zijn",
-                    route: "todo",
-                },
-                {
-                    name: "Stuver verkiezingen",
-                    route: "todo",
-                },
+                { id: uniqid.time(), name: "Stuver worden", route: "todo" },
+                { id: uniqid.time(), name: "Stuver zijn", route: "todo" },
+                { id: uniqid.time(), name: "Stuver verkiezingen", route: "todo" },
             ],
         },
     ];
