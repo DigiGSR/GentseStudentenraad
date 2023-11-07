@@ -8,7 +8,7 @@
      */
     export let name;
     /**
-     * @type {{ id: any; name: string; route: string; }[] | undefined}
+     * @type {{ id: any; name: string; route: string; }[]}
      */
     export let items;
 
@@ -51,13 +51,14 @@
     >
         {#each items as item (item.id)}
             <div
-                class="flex p-1.5 border rounded-xl gap-x-12 border-gray-400 justify-between flex-row w-fit"
+                class="flex p-1.5 border rounded-xl border-gray-400 flex-row w-fit"
                 animate:flip={{ duration: flipDurationMs }}
             >
                 <input
                     class="bg-transparent rounded-md p-1 w-40 focus:bg-white"
                     bind:value={item.name}
                 />
+                <i class="bi text-3xl mx-12 bi-grip-horizontal opacity-50 hover:opacity-70" />
                 <input
                     class="w-32 rounded-md p-1 bg-transparent focus:bg-white"
                     bind:value={item.route}

@@ -127,10 +127,16 @@
                         bind:name={route.name}
                     />
                 {:else}
-                    <input
-                        class="bg-transparent rounded-md w-32 p-1 focus:bg-white"
-                        bind:value={route.name}
-                    />
+                    <div class="flex flex-row p-1.5 rounded-xl border border-gray-400">
+                        <input
+                            class="bg-transparent rounded-md w-40 p-1 focus:bg-white"
+                            bind:value={route.name}
+                        />
+                        <input
+                            class="bg-transparent rounded-md w-32 p-1 focus:bg-white"
+                            bind:value={route.route}
+                        />
+                    </div>
                 {/if}
             </div>
         {/each}
