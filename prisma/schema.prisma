@@ -47,7 +47,7 @@ model ParentRoute {
   id               Int       @id @default(autoincrement())
   name             String
   hierarchyRoute   Boolean
-  route            String?
+  slug             String?
   childRoutes      ChildRoute[]
   organization     Organization
 
@@ -57,7 +57,7 @@ model ParentRoute {
 model ChildRoute {
   id               Int      @id @default(autoincrement())
   name             String
-  route            String
+  slug             String
   parentRoute      ParentRoute @relation(fields: [parentRouteId], references: [id])
   parentRouteId    Int
   organization     Organization

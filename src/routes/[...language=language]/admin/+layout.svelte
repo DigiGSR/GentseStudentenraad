@@ -13,6 +13,7 @@
         <div class="space-y-1">
             <p class="category">Algemeen</p>
             <SideBarIcon icon="info-circle" value="Informatie" link="/admin/about" />
+            <SideBarIcon icon="segmented-nav" value="Navbar" link="/admin/navbar" />
             <SideBarIcon icon="brush" value="Thema" link="/admin/theme" />
             <SideBarIcon icon="globe" value="Sociale Media" link="/admin/media" />
             <SideBarIcon icon="toggles" value="Optionele Functies" link="/admin/features" />

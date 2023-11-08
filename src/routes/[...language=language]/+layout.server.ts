@@ -71,6 +71,13 @@ export const load = (async ({ params, locals }) => {
         },
     ];
 
+    const prismaRoutes = await prisma.parentRoute.findMany({
+        include: {
+            childRoutes: true, // Return all fields
+        },
+    });
+    //todo pass prismaroutes as routes
+
     const configs = await prisma.configuration.findMany();
     const pages = await prisma.page.findMany({
         where: { organization: locals.configuration.organization },
