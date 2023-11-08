@@ -3,22 +3,39 @@
     import AdminRouteElement from "$lib/components/admin/AdminRouteElement.svelte";
     import uniqid from "uniqid";
     import ActionButton from "$lib/components/admin/ActionButton.svelte";
+    import { goto } from "$app/navigation";
     export let data: PageData;
 
-    let localDataRoutes = data.routes;
+    //todo i18n for navbar editor
+
     const setNewChildRoutes = (currName, newRoutes) => {
-        for (let i = 0; i < localDataRoutes.length; i++) {
-            if (localDataRoutes[i].hierarchyRoute == true && localDataRoutes[i].name === currName) {
-                localDataRoutes[i].childRoutes = newRoutes;
+        for (let i = 0; i < data.configuration.navbar.length; i++) {
+            if (
+                data.configuration.navbar[i].hierarchyRoute == true &&
+                data.configuration.navbar[i].name === currName
+            ) {
+                data.configuration.navbar[i].childRoutes = newRoutes;
             }
         }
     };
 
-    function put() {
-        console.log("todo");
+    async function put() {
+        const res = await fetch(`/api/configuration/${data.configuration.id}`, {
+            method: "PUT",
+            body: JSON.stringify(data.configuration),
+            headers: {
+                "content-type": "application/json",
+            },
+        });
+
+        if (res.status === 200) {
+            goto("/admin");
+        } else {
+            alert(JSON.stringify(res, null, 2));
+        }
     }
 
-    $: console.log(localDataRoutes);
+    $: console.log(data.configuration.navbar);
 </script>
 
 <div class="flex flex-col gap-y-2 items-start">
@@ -26,18 +43,18 @@
         <p class="text-[18px] opacity-50 font-semibold uppercase">Routes</p>
         <button
             on:click={() => {
-                localDataRoutes.push({
+                data.configuration.navbar.push({
                     hierarchyRoute: false,
                     name: "nieuw",
                     route: "nl/nieuw",
                 });
-                localDataRoutes = localDataRoutes;
+                data.configuration.navbar = data.configuration.navbar;
             }}
             class="text-[18px] ml-1 bi bi-plus-circle opacity-50 hover:opacity-80 hover:cursor-pointer transition duration-150"
         />
         <button
             on:click={() => {
-                localDataRoutes.push({
+                data.configuration.navbar.push({
                     hierarchyRoute: true,
                     name: "nieuw",
                     route: "nl/nieuw",
@@ -49,13 +66,13 @@
                         },
                     ],
                 });
-                localDataRoutes = localDataRoutes;
+                data.configuration.navbar = data.configuration.navbar;
             }}
             class="text-[18px] ml-1 bi bi-folder-plus opacity-50 hover:opacity-80 hover:cursor-pointer transition duration-150"
         />
     </div>
 
-    {#each localDataRoutes as route}
+    {#each data.configuration.navbar as route}
         <div class="flex flex-row items-start">
             <button
                 on:click={() => {

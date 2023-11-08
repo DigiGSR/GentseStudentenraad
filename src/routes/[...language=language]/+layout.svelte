@@ -6,16 +6,21 @@
     export let data: LayoutData;
 
     let isdropDownHidden = false;
-    let navBarHeight;
+    let navBarHeight: number;
+
+    let parentWidth = Array(50).fill(0);
+    let childWidth = Array(50).fill(0);
+    let navelemheight = 0;
+
+    $: console.log(navBarHeight);
 </script>
 
 <div class="flex flex-col w-full min-h-[100vh]">
-    <nav
-        class="relative"
-        bind:clientHeight={navBarHeight}
-        style:background-color={data.configuration.brand_color_primary}
-    >
-        <div class="flex text-white lg:text-sm text-xs shadow-md p-3 items-center gap-5">
+    <nav style:background-color={data.configuration.brand_color_primary}>
+        <div
+            bind:clientHeight={navBarHeight}
+            class="flex text-white lg:text-sm text-xs shadow-md p-3 items-center gap-5"
+        >
             <!--            <button on:click={() => (showLinks = !showLinks)}>-->
             <!--                <i class="bi-list text-xl cursor-pointer p-1" />-->
             <!--            </button>-->
@@ -28,12 +33,21 @@
                 />
             </a>
 
-            {#each data.routes as route}
+            {#each data.configuration.navbar as route, i}
                 {#if route.hierarchyRoute === true}
-                    <div class="flex-col hover:cursor-pointer group min-w-fit">
+                    <div
+                        bind:clientHeight={navelemheight}
+                        bind:clientWidth={parentWidth[i]}
+                        class="flex-col hover:cursor-pointer group min-w-fit"
+                    >
                         <div
+                            bind:clientWidth={childWidth[i]}
                             style:background-color={data.configuration.brand_color_primary}
-                            style={`top: ${navBarHeight}px;`}
+                            style={`top: ${
+                                navBarHeight - navelemheight + 2
+                            }px;  transform: translateX(${Math.floor(
+                                (parentWidth[i] - childWidth[i]) / 2,
+                            )}px);`}
                             class="group-hover:visible invisible absolute gap-y-2 py-2 flex flex-col justify-between px-8 border-t-white border-t-2"
                         >
                             {#each route.childRoutes as childRoute}
@@ -65,7 +79,7 @@
                     on:mouseleave={() => {
                         isdropDownHidden = false;
                     }}
-                    class="relative group {isdropDownHidden ? 'py-10 px-6 -mx-6 -my-10' : ''} "
+                    class="group {isdropDownHidden ? 'py-10 px-6 -mx-6 -my-10' : ''} "
                 >
                     <div
                         class="flex flex-row gap-x-1 hover:cursor-pointer hover:opacity-70 opacity-100 transition duration-150"

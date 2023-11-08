@@ -17,72 +17,12 @@ export const load = (async ({ params, locals }) => {
     // Create navigation bar routes. It's a bit messy but it's our only option.
     const routes = [];
 
-    const newRoutes = [
-        {
-            hierarchyRoute: true,
-            name: "Over GSR",
-            childRoutes: [
-                { id: uniqid.time(), name: "Wie", route: "/nl/wie" },
-                { id: uniqid.time(), name: "Geschiedenis", route: "/nl/geschiedenis" },
-                { id: uniqid.time(), name: "Organigram", route: "/nl/organigram" },
-                { id: uniqid.time(), name: "Projecten", route: "/nl/projecten" },
-                { id: uniqid.time(), name: "Sponseringen", route: "/nl/sponseringen" },
-                { id: uniqid.time(), name: "Partners", route: "/nl/partners" },
-            ],
-        },
-        {
-            hierarchyRoute: false,
-            name: "Nieuws",
-            route: "nl/nieuws",
-        },
-        {
-            hierarchyRoute: false,
-            name: "Example",
-            route: "nl/nieuws",
-        },
-        {
-            hierarchyRoute: true,
-            name: "FAQ",
-            childRoutes: [
-                { id: uniqid.time(), name: "Uitvouwende delen", route: "todo" },
-                { id: uniqid.time(), name: "Studiehulp", route: "todo" },
-                { id: uniqid.time(), name: "Mentaal", route: "todo" },
-                { id: uniqid.time(), name: "Ugent problemen", route: "todo" },
-                { id: uniqid.time(), name: "Internationalizering", route: "todo" },
-            ],
-        },
-        {
-            hierarchyRoute: true,
-            name: "Werking",
-            childRoutes: [
-                { id: uniqid.time(), name: "Standpunten", route: "todo" },
-                { id: uniqid.time(), name: "Vakfeedback", route: "todo" },
-                { id: uniqid.time(), name: "Bestuursverkiezingen", route: "todo" },
-            ],
-        },
-        {
-            hierarchyRoute: true,
-            name: "Vertegenwoordigingen",
-            childRoutes: [
-                { id: uniqid.time(), name: "Stuver worden", route: "todo" },
-                { id: uniqid.time(), name: "Stuver zijn", route: "todo" },
-                { id: uniqid.time(), name: "Stuver verkiezingen", route: "todo" },
-            ],
-        },
-    ];
-
-    const prismaRoutes = await prisma.parentRoute.findMany({
-        include: {
-            childRoutes: true, // Return all fields
-        },
-    });
-    //todo pass prismaroutes as routes
-
     const configs = await prisma.configuration.findMany();
     const pages = await prisma.page.findMany({
         where: { organization: locals.configuration.organization },
     });
 
+    //todo remove all this, no longer necessary
     if (locals.configuration.who_section) {
         routes.push(locals.language == Language.DUTCH ? ["Wie", "/nl/wie"] : ["Who", "/en/wie"]);
     }
@@ -177,7 +117,6 @@ export const load = (async ({ params, locals }) => {
     // Done! Pass to the view.
     return {
         language: locals.language,
-        routes: newRoutes,
         configs: configs.filter((e) => e.id != locals.configuration.id),
         configuration: locals.configuration,
         i18n: translations,
