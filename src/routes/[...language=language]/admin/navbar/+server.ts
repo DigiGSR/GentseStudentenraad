@@ -4,7 +4,7 @@ import type { Configuration } from "@prisma/client";
 import type { RequestHandler } from "./$types";
 
 export const PUT = (async ({ request }) => {
-    const res: Configuration = await request.json();
+    const { childRoutes } = await request.json();
 
     try {
         await prisma.configuration.update({

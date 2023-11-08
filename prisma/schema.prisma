@@ -43,28 +43,6 @@ enum Markup {
   @@map("markup")
 }
 
-model ParentRoute {
-  id               Int       @id @default(autoincrement())
-  name             String
-  hierarchyRoute   Boolean
-  slug             String?
-  childRoutes      ChildRoute[]
-  organization     Organization
-
-  @@map("parentroute")
-}
-
-model ChildRoute {
-  id               Int      @id @default(autoincrement())
-  name             String
-  slug             String
-  parentRoute      ParentRoute @relation(fields: [parentRouteId], references: [id])
-  parentRouteId    Int
-  organization     Organization
-
-  @@map("childroute")
-}
-
 model Page {
   id               Int          @id @default(autoincrement())
   slug             String
@@ -122,6 +100,7 @@ model Configuration {
   info_bar              String @default("test")
 
   // Features
+  navbar            Json    @default("{}")
   i18n              Boolean @default(false)
   who_section       Boolean @default(false)
   news_section      Boolean @default(false)
