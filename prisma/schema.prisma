@@ -43,6 +43,28 @@ enum Markup {
   @@map("markup")
 }
 
+model ParentRoute {
+  id               Int       @id @default(autoincrement())
+  name             String
+  hierarchyRoute   Boolean
+  route            String?
+  childRoutes      ChildRoute[]
+  organization     Organization
+
+  @@map("parentroute")
+}
+
+model ChildRoute {
+  id               Int      @id @default(autoincrement())
+  name             String
+  route            String
+  parentRoute      ParentRoute @relation(fields: [parentRouteId], references: [id])
+  parentRouteId    Int
+  organization     Organization
+
+  @@map("childroute")
+}
+
 model Page {
   id               Int          @id @default(autoincrement())
   slug             String

@@ -75,7 +75,7 @@
                         <select
                             on:change={(e) => setAdmin(user.id, e.target.value)}
                             value={user.admin.length > 0 ? "True" : "False"}
-                            class="px-1 rounded-md"
+                            class="px-1 py-0.5 rounded-md"
                         >
                             <option value="True">True</option>
                             <option value="False">False</option>
