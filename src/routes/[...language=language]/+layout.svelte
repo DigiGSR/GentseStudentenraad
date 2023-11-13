@@ -226,13 +226,24 @@
         </div>
     </nav>
 
-    {#if data.configuration.info_bar !== ""}
-        <div
-            style:background-color={data.configuration.brand_color_secondary}
-            class="flex text-white flex-row w-full justify-center lg:text-base text-sm py-1"
-        >
-            {data.configuration.info_bar}
-        </div>
+    {#if data.configuration.info_bar}
+        {#if data.configuration.info_bar_link === ""}
+            <div
+                style:background-color={data.configuration.brand_color_secondary}
+                class="flex text-white flex-row w-full justify-center lg:text-base text-sm py-1"
+            >
+                {data.configuration.info_bar_text}
+            </div>
+        {:else}
+            <div
+                style:background-color={data.configuration.brand_color_secondary}
+                class="flex text-white flex-row w-full justify-center lg:text-base text-sm py-1"
+            >
+                <a class="hover:underline" href={data.configuration.info_bar_link}
+                    >{data.configuration.info_bar_text}</a
+                >
+            </div>
+        {/if}
     {/if}
     {#if showLinks}
         <div

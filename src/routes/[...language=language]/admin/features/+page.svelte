@@ -63,6 +63,8 @@
         description={null}
     />
     <Checkbox bind:value={data.configuration.i18n} label="Vertalingen" description={null} />
+    <Checkbox bind:value={data.configuration.info_bar} label="Info bar" description={null} />
+
     <div>
         <div class="flex flex-row items-start">
             <p class="text-[18px] opacity-50 font-semibold uppercase">Kalenders</p>

@@ -46,8 +46,16 @@
     <div>
         <TextField
             placeholder="We wensen jullie veel success met de examens!"
-            bind:value={data.configuration.info_bar}
-            description="Info bar tekst (geen text = geen infobar)"
+            bind:value={data.configuration.info_bar_text}
+            description="Info bar tekst"
+        />
+    </div>
+
+    <div>
+        <TextField
+            placeholder="https://example.com"
+            bind:value={data.configuration.info_bar_link}
+            description="Info bar Link"
         />
     </div>
 
