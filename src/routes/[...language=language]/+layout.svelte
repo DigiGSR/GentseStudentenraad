@@ -139,7 +139,9 @@
 
             {#if data.configuration.twitter_url}
                 <a href={data.configuration.twitter_url}>
-                    <i class="bi bi-twitter hover:opacity-70 opacity-100 transition duration-150" />
+                    <i
+                        class="bi bi-twitter-x hover:opacity-70 opacity-100 transition duration-150"
+                    />
                 </a>
             {/if}
 
