@@ -35,7 +35,11 @@
         }
     }
 
-    $: console.log(data.configuration.navbar);
+    function removeElem(name: string) {
+        const index = data.configuration.navbar.findIndex((item) => item.name === name);
+        data.configuration.navbar.splice(index, 1);
+        data.configuration.navbar = data.configuration.navbar;
+    }
 </script>
 
 <div class="flex flex-col gap-y-2 items-start">
@@ -76,7 +80,7 @@
         <div class="flex flex-row items-start">
             <button
                 on:click={() => {
-                    //todo remove
+                    removeElem(route.name);
                 }}
                 class="text-[12px] mr-1 bi bi-dash-circle opacity-50 hover:opacity-80 hover:cursor-pointer transition duration-150"
             />

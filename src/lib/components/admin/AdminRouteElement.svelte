@@ -1,12 +1,9 @@
-<script>
+<script lang="ts">
     import { flip } from "svelte/animate";
     import { dndzone } from "svelte-dnd-action";
     import uniqid from "uniqid";
 
-    /**
-     * @type {string}
-     */
-    export let name;
+    export let name: string;
     /**
      * @type {{ id: any; name: string; route: string; }[]}
      */
@@ -26,6 +23,12 @@
             name: "nieuw",
             route: "nl/nieuw",
         });
+        items = items;
+    }
+
+    function removeItem(id: number) {
+        const index = items.findIndex((item) => item.id === id);
+        items.splice(index, 1);
         items = items;
     }
 
@@ -54,6 +57,10 @@
                 class="flex p-1.5 border rounded-xl border-gray-400 flex-row w-fit"
                 animate:flip={{ duration: flipDurationMs }}
             >
+                <button
+                    on:click={() => removeItem(item.id)}
+                    class="text-[12px] mr-1 bi bi-dash-circle opacity-50 hover:opacity-80 hover:cursor-pointer transition duration-150"
+                />
                 <input
                     class="bg-transparent rounded-md p-1 w-40 focus:bg-white"
                     bind:value={item.name}
