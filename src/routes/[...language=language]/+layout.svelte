@@ -284,7 +284,7 @@
                         <div
                             class="flex gap-2 items-center hover:opacity-70 opacity-100 transition duration-150"
                         >
-                            <i class="bi bi-twitter" />
+                            <i class="bi bi-twitter-x" />
                             <p class="">Twitter</p>
                         </div>
                     </a>
