@@ -360,14 +360,17 @@
                     <p class="">{data.configuration.phone}</p>
                 {/if}
 
-                <p>{data.configuration.email_adres}</p>
+                <div>
+                    <a
+                        class="hover:cursor-pointer hover:underline"
+                        href="mailto:{data.configuration.email_adres}"
+                        >{data.configuration.email_adres}</a
+                    >
+                </div>
             </div>
 
             <div class="space-y-2">
                 <p class="font-semibold">{@html data.i18n.get("footer-varia")}</p>
-                <div class="w-full h-[2px] bg-white/20" />
-                <p class="">{@html data.i18n.get("footer-rss")}</p>
-                <p class="">Ontdek jouw FSR</p>
                 <p class="">{@html data.i18n.get("footer-complaints")}</p>
             </div>
         </div>
