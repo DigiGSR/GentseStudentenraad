@@ -97,8 +97,8 @@ model Configuration {
   logo_url              String
   name                  String
   short_description     String
-  info_bar_text         String @default("test")
-  info_bar_link         String @default("https://example.com")
+  info_bar_text         String 
+  info_bar_link         String
 
   // Features
   navbar            Json    @default("{}")
@@ -200,6 +200,7 @@ model Report {
   id           Int          @id @default(autoincrement())
   workgroup    String
   name         String
+  url          String
 
   organization Organization
 
