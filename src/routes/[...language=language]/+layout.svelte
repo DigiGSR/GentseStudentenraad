@@ -12,7 +12,18 @@
     let childWidth = Array(50).fill(0);
     let navelemheight = 0;
 
-    $: console.log(navBarHeight);
+    let navbarRoutes = data.configuration.navbar;
+
+    console.log(navbarRoutes);
+
+    if (data.user) {
+        //verslagen is CAS only, todo verslagen route zelf ook checken voor login
+        navbarRoutes.push({
+            name: "Verslagen",
+            route: "nl/verslagen",
+            hierarchyRoute: false,
+        });
+    }
 </script>
 
 <div class="flex flex-col w-full min-h-[100vh]">
@@ -33,7 +44,7 @@
                 />
             </a>
 
-            {#each data.configuration.navbar as route, i}
+            {#each navbarRoutes as route, i}
                 {#if route.hierarchyRoute === true}
                     <div
                         bind:clientHeight={navelemheight}
