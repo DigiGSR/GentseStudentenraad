@@ -1,14 +1,11 @@
 <script lang="ts">
     import type { PageData } from "./$types";
     import TextField from "$lib/components/admin/TextField.svelte";
-    import ImageUploader from "$lib/components/admin/ImageUploader.svelte";
     import ActionButton from "$lib/components/admin/ActionButton.svelte";
     import { goto } from "$app/navigation";
     import { Prisma } from "@prisma/client";
 
     export let data: PageData;
-    export let description =
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.";
     export let newReport: Prisma.ReportUncheckedCreateInput = {
         name: "",
         workgroup: "",
@@ -43,11 +40,19 @@
 </svelte:head>
 
 <div class="space-y-6">
-    <TextField description="Naam" bind:value={newReport.name} />
+    <TextField
+        placeholder={"Verslag algemene vergadering 4 22-23"}
+        description="Naam"
+        bind:value={newReport.name}
+    />
 
-    <TextField description="Werkgroep" bind:value={newReport.workgroup} />
+    <TextField
+        placeholder={"Algemene vergadering"}
+        description="Werkgroep"
+        bind:value={newReport.workgroup}
+    />
 
-    <TextField description="Url" bind:value={newReport.url} />
+    <TextField placeholder={"https://example.com"} description="Url" bind:value={newReport.url} />
     <!--todo, make this an image upload-->
 
     <ActionButton action={postReport} />

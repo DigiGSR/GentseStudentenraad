@@ -1,9 +1,6 @@
 <script lang="ts">
     import type { PageData } from "./$types";
     import TextField from "$lib/components/admin/TextField.svelte";
-    import Divider from "$lib/components/Divider.svelte";
-    import LongTextField from "$lib/components/admin/LongTextField.svelte";
-    import ImageUploader from "$lib/components/admin/ImageUploader.svelte";
     import ActionButton from "$lib/components/admin/ActionButton.svelte";
     import { goto } from "$app/navigation";
     import { Report } from "@prisma/client";
@@ -48,11 +45,19 @@
 </svelte:head>
 
 <div class="space-y-6">
-    <TextField description="Naam" bind:value={data.report.name} />
+    <TextField
+        placeholder={"Verslag algemene vergadering 4 22-23"}
+        description="Naam"
+        bind:value={data.report.name}
+    />
 
-    <TextField description="Werkgroep" bind:value={data.report.workgroup} />
+    <TextField
+        placeholder={"Algemene vergadering"}
+        description="Werkgroep"
+        bind:value={data.report.workgroup}
+    />
 
-    <TextField description="Url" bind:value={data.report.url} />
+    <TextField placeholder={"https://example.com"} description="Url" bind:value={data.report.url} />
     <!--todo, make this an image upload-->
 
     <ActionButton action={putReport} remove={() => remove(data.report)} />
