@@ -40,6 +40,12 @@
                 link="/admin/people"
             />
             <SideBarIcon
+                icon="pencil-square"
+                value="Verslagen"
+                link="/admin/reports"
+                badgeNeutral={data.reportCount}
+            />
+            <SideBarIcon
                 icon="people"
                 value="Groepen"
                 badgeNeutral={data.groupCount}
