@@ -196,6 +196,17 @@ model Person {
   @@map("person")
 }
 
+model Report {
+  id           Int          @id @default(autoincrement())
+  workgroup    String
+  name         String
+
+  organization Organization
+
+  @@map("report")
+}
+
+
 model PersonGroup {
   id           Int          @id @default(autoincrement())
   name         String
