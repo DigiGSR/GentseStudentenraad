@@ -1,10 +1,10 @@
 import { error, json } from "@sveltejs/kit";
 import { prisma } from "$lib/Prisma";
-import type { Configuration } from "@prisma/client";
+import type { Report } from "@prisma/client";
 import type { RequestHandler } from "./$types";
 
 export const PUT = (async ({ request, params }) => {
-    const res: Configuration = await request.json();
+    const res: Report = await request.json();
 
     try {
         await prisma.report.update({

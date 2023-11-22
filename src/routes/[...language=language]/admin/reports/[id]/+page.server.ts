@@ -4,15 +4,14 @@ export const prerender = false;
 export const ssr = false;
 export const csr = true;
 
-export const load = (async ({ locals }) => {
-    const groups = await prisma.personGroup.findMany({
-        //todo I dont think we actually need this?
+export const load = (async ({ params, locals }) => {
+    const report = await prisma.report.findFirstOrThrow({
         where: {
-            organization: locals.configuration.organization,
+            id: parseInt(params.id),
         },
     });
 
     return {
-        groups,
+        report,
     };
 }) satisfies PageServerLoad;
