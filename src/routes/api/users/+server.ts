@@ -11,7 +11,6 @@ export const PUT = (async ({ request }) => {
 
     try {
         for (const mutation of res) {
-            console.log(mutation);
             if (mutation.isAdmin === "False") {
                 await prisma.admin.deleteMany({
                     //this is only delete many because otherwise I cant use the AND selector. Why? ask the prisma devs...

@@ -2,6 +2,7 @@
     import "../../app.scss";
     import { page } from "$app/stores";
     import type { LayoutData } from "./$types";
+    import { env } from "$env/dynamic/public";
     let showLinks = false;
     export let data: LayoutData;
 
@@ -12,15 +13,13 @@
     let childWidth = Array(50).fill(0);
     let navelemheight = 0;
 
-    let navbarRoutes = data.configuration.navbar;
+    let navbarRoutes = [...data.configuration.navbar];
 
-    console.log(navbarRoutes);
-
-    if (data.user) {
+    if (data.user || env.PUBLIC_ENV == "dev") {
         //verslagen is CAS only, todo verslagen route zelf ook checken voor login
         navbarRoutes.push({
             name: "Verslagen",
-            route: "nl/verslagen",
+            route: "/nl/verslagen",
             hierarchyRoute: false,
         });
     }
