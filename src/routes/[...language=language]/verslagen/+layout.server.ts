@@ -7,7 +7,8 @@ export const csr = true;
 
 export const load = (async ({ locals }) => {
     if (process.env.PUBLIC_ENV !== "dev") {
-        if (!locals.user && !locals.admin) {
+        //cas only check
+        if (!locals.user) {
             throw error(403, "Unauthorized");
         }
     }

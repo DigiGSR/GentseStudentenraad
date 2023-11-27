@@ -39,7 +39,7 @@
     <div class="flex gap-x-1 flex-row justify-between items-center">
         <div class="flex gap-x-1 flex-row items-center">
             <i class="bi bi-folder opacity-50" />
-            <input class="bg-transparent rounded-md w-32 p-1 focus:bg-white" bind:value={name} />
+            <input class="bg-transparent rounded-md w-48 p-1 focus:bg-white" bind:value={name} />
         </div>
         <i
             on:click={addItem}
