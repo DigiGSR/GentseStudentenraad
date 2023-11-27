@@ -9,7 +9,12 @@
 
     $: currentReports = data.reports.filter((report) => report.workgroup === selectedWorkGroup);
 
-    let workgroups = ["Algemene Vergadering", "WG Digitalisering"]; //todo unhardcode
+    let workgroups = [];
+    for (let currReport of currentReports) {
+        if (!workgroups.includes(currReport.workgroup)) {
+            workgroups.push(currReport.workgroup);
+        }
+    }
 </script>
 
 <template>
