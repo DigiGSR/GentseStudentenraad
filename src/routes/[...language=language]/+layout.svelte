@@ -109,7 +109,9 @@
                             ? 'visible'
                             : 'invisible'} flex flex-col w-64 -ml-[7.25rem] pb-2 py-1 space-y-2 shadow-lg"
                     >
-                        <div class="flex justify-between px-8 border-t-white border-t-2 flex-row">
+                        <div
+                            class="grid grid-cols-2 p-3 gap-3 justify-between border-t-white border-t-2"
+                        >
                             <a
                                 href="https://epione.sittool.net/"
                                 class="flex flex-col justify-center items-center hover:cursor-pointer hover:opacity-70 opacity-100 transition duration-150"
@@ -126,9 +128,29 @@
                             >
                                 <div
                                     class="w-16 bg-center bg-contain bg-no-repeat h-16"
-                                    style="background-image: url(/img/cultour.jpg)"
+                                    style="background-image: url(/img/cultour.png)"
                                 />
                                 <p class="mt-1">Cultour</p>
+                            </a>
+                            <a
+                                href="https://durfdoen.be/"
+                                class="flex flex-col justify-center items-center hover:cursor-pointer hover:opacity-70 opacity-100 transition duration-150"
+                            >
+                                <div
+                                    class="w-16 bg-center bg-contain bg-no-repeat h-16"
+                                    style="background-image: url(/img/durfdoen.png)"
+                                />
+                                <p class="mt-1">Durfdoen</p>
+                            </a>
+                            <a
+                                href="https://deelplatform.ugent.be/"
+                                class="flex flex-col justify-center items-center hover:cursor-pointer hover:opacity-70 opacity-100 transition duration-150"
+                            >
+                                <div
+                                    class="w-16 bg-center bg-contain bg-no-repeat h-16"
+                                    style="background-image: url(/img/deelplatform.png)"
+                                />
+                                <p class="mt-1">Deelplatform</p>
                             </a>
                         </div>
                     </div>
