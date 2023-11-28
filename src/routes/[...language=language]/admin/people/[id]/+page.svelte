@@ -21,6 +21,8 @@
         person_group_id: data.groups[0].id,
     };
 
+    console.log(data.allPeople);
+
     async function putPerson() {
         const copy = { ...data.person };
         delete copy.positions;
@@ -130,9 +132,29 @@
 
         <TextField description="Academiejaar" bind:value={position.year} />
 
+        {#if position.substitutes.length > 0}
+            <div class="flex flex-row">
+                <p class="text-[12px] opacity-50 font-semibold uppercase">Plaatsvervangers:</p>
+                <div class="flex flex-col gap-y-1">
+                    {#each position.substitutes as person_id, index}
+                        <div class="flex flex-row ml-2 gap-x-2 items-center">
+                            <select
+                                class="rounded-md"
+                                bind:value={position.substitutes[index].person.id}
+                            >
+                                {#each data.allPeople as person}
+                                    <option value={person.id}>{person.name}</option>
+                                {/each}
+                            </select>
+                        </div>
+                    {/each}
+                </div>
+            </div>
+        {/if}
+
         <div>
             <p class="text-[12px] opacity-50 font-semibold uppercase">GROEP</p>
-            <select bind:value={position.person_group_id}>
+            <select class="rounded-md" bind:value={position.person_group_id}>
                 {#each data.groups as group}
                     <option value={group.id}>
                         {group.name}

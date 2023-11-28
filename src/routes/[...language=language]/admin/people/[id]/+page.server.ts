@@ -10,6 +10,11 @@ export const load = (async ({ params, locals }) => {
             positions: {
                 include: {
                     person_group: true,
+                    substitutes: {
+                        include: {
+                            person: true,
+                        },
+                    },
                 },
             },
         },
@@ -18,6 +23,8 @@ export const load = (async ({ params, locals }) => {
         },
     });
 
+    const allPeople = await prisma.person.findMany();
+
     const groups = await prisma.personGroup.findMany({
         where: {
             organization: locals.configuration.organization,
@@ -25,6 +32,7 @@ export const load = (async ({ params, locals }) => {
     });
 
     return {
+        allPeople,
         person,
         groups,
     };

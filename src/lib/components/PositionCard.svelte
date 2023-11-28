@@ -3,6 +3,8 @@
     import Tag from "./Tag.svelte";
 
     export let position: PageData;
+
+    let substituteDropdown = true;
 </script>
 
 <div class="rounded-lg p-6 space-y-4 bg-white h-fit">
@@ -17,7 +19,7 @@
             <i class="bi bi-person-circle text-6xl text-center h-16" />
         {/if}
         <div>
-            <p class="opacity-90 text-sn text-ellipsis">
+            <p class="opacity-90 text-ellipsis">
                 {position.name}
             </p>
             <p class="font-semibold text-xl">{position.person.name}</p>
@@ -32,27 +34,43 @@
         laboris.
     </p>
 
-    {#if position.substitutes.length > 0}
-        <div class="flex flex-row">
-            <p class="pt-1">Plaatsvervangers:</p>
-            <div class="flex flex-col gap-y-1">
-                {#each position.substitutes as substituteEntry}
-                    <div class="ml-2 flex flex-row gap-x-2 items-center">
-                        {#if substituteEntry.substitute.image}
-                            <img
-                                src={substituteEntry.substitute.image}
-                                alt="Portrait of {position.person.name}"
-                                class="h-8 w-8 object-cover rounded-full"
-                            />
-                        {/if}
-                        <p>{substituteEntry.substitute.name}</p>
+    <div class="flex flex-row gap-x-2">
+        {#if position.substitutes.length > 0}
+            <div
+                on:mousedown={() => (substituteDropdown = !substituteDropdown)}
+                class="flex opacity-90 flex-col text-xs bg-neutral-50 border-neutral-200 text-black hover:cursor-pointer border-2 {substituteDropdown
+                    ? 'rounded-2xl'
+                    : 'rounded-full'} w-fit font-medium"
+            >
+                <div class="flex select-none h-fit gap-2 items-center w-fit px-3 py-1 transition">
+                    <p>Plaatsvervangers</p>
+                    <i class="bi mt-0.5 bi-chevron-down" />
+                </div>
+                {#if substituteDropdown}
+                    <div class="flex flex-col pb-0.5">
+                        {#each position.substitutes as substitute}
+                            <div
+                                class="flex pl-2 py-1 rounded-xl hover:bg-neutral-200 flex-row gap-x-2 items-center"
+                            >
+                                {#if substitute.person.image}
+                                    <img
+                                        src={substitute.person.image}
+                                        alt="Portrait of {substitute.person.name}"
+                                        class="h-6 w-6 object-cover rounded-full"
+                                    />
+                                {/if}
+                                <p class="text-base opacity-90 font-normal">
+                                    {substitute.person.name}
+                                </p>
+                            </div>
+                        {/each}
                     </div>
-                {/each}
+                {/if}
             </div>
-        </div>
-    {/if}
+        {/if}
 
-    {#if position.person.mail !== null}
-        <Tag link="mailto:{position.person.mail}" value={position.person.mail} icon="mailbox" />
-    {/if}
+        {#if position.person.mail !== null}
+            <Tag link="mailto:{position.person.mail}" value={position.person.mail} icon="mailbox" />
+        {/if}
+    </div>
 </div>

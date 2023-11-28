@@ -20,7 +20,8 @@ export const load = (async ({ params, locals }) => {
                 include: {
                     substitutes: {
                         include: {
-                            substitute: true,
+                            person: true,
+                            position: true,
                         },
                     },
                     person: {},

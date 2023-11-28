@@ -32,6 +32,6 @@
 
 <style lang="postcss">
     .widget {
-        @apply flex gap-2 items-center text-xs border-2 w-fit px-3 py-1 rounded-full font-medium transition;
+        @apply flex h-fit gap-2 items-center text-xs border-2 w-fit px-3 py-1 rounded-full font-medium transition;
     }
 </style>

@@ -4,7 +4,7 @@ import type { Configuration } from "@prisma/client";
 import type { RequestHandler } from "./$types";
 
 export const PUT = (async ({ request, params }) => {
-    const res: Configuration = await request.json();
+    const res: any = await request.json();
 
     try {
         await prisma.personPosition.update({
@@ -14,7 +14,8 @@ export const PUT = (async ({ request, params }) => {
             },
         });
         return json({ message: "OK" });
-    } catch {
+    } catch (err) {
+        console.log(err);
         throw error(500);
     }
 }) satisfies RequestHandler;

@@ -225,7 +225,7 @@ model SubstituteForPosition { //this needs to be a seperate model because it is 
   id Int @id @default(autoincrement())
   
   person_id Int
-  substitute    Person @relation("Person_to_SubstitutePosition", fields: [person_id], references: [id])
+  person    Person @relation("Person_to_SubstitutePosition", fields: [person_id], references: [id])
 
   position_id Int
   position    PersonPosition @relation("SubstitutePosition_to_PersonPosition", fields: [position_id], references: [id])
