@@ -4,7 +4,7 @@
 
     export let position: PageData;
 
-    let substituteDropdown = true;
+    let substituteDropdown = false;
 </script>
 
 <div class="rounded-lg p-6 space-y-4 bg-white h-fit">
@@ -44,13 +44,15 @@
             >
                 <div class="flex select-none h-fit gap-2 items-center w-fit px-3 py-1 transition">
                     <p>Plaatsvervangers</p>
-                    <i class="bi mt-0.5 bi-chevron-down" />
+                    <i
+                        class="bi mt-0.5 {substituteDropdown ? 'bi-chevron-up' : 'bi-chevron-down'}"
+                    />
                 </div>
                 {#if substituteDropdown}
                     <div class="flex flex-col pb-0.5">
                         {#each position.substitutes as substitute}
                             <div
-                                class="flex pl-2 py-1 rounded-xl hover:bg-neutral-200 flex-row gap-x-2 items-center"
+                                class="flex pl-2 py-1 rounded-xl hover:bg-neutral-100 flex-row gap-x-2 items-center"
                             >
                                 {#if substitute.person.image}
                                     <img
