@@ -146,6 +146,12 @@
                                     <option value={person.id}>{person.name}</option>
                                 {/each}
                             </select>
+                            <button
+                                on:click={() => {
+                                    delete position.substitutes[index];
+                                }}
+                                class="text-[12px] mr-1 bi bi-dash-circle opacity-50 hover:opacity-80 hover:cursor-pointer transition duration-150"
+                            />
                         </div>
                     {/each}
                 </div>

@@ -4,7 +4,7 @@ import type { Configuration } from "@prisma/client";
 import type { RequestHandler } from "./$types";
 
 export const PUT = (async ({ request, params }) => {
-    const res: Configuration = await request.json();
+    const res: any = await request.json(); //todo invalid type
 
     try {
         await prisma.person.update({

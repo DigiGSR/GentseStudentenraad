@@ -12,7 +12,7 @@ export const load = (async ({ params, locals }) => {
                     person_group: true,
                     substitutes: {
                         include: {
-                            person: true,
+                            person: {},
                         },
                     },
                 },
@@ -23,7 +23,13 @@ export const load = (async ({ params, locals }) => {
         },
     });
 
-    const allPeople = await prisma.person.findMany();
+    const allPeople = await prisma.person.findMany({
+        orderBy: [
+            {
+                name: "asc",
+            },
+        ],
+    });
 
     const groups = await prisma.personGroup.findMany({
         where: {
