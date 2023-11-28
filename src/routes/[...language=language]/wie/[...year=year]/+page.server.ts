@@ -18,6 +18,11 @@ export const load = (async ({ params, locals }) => {
                     sort_index: "asc",
                 },
                 include: {
+                    substitutes: {
+                        include: {
+                            substitute: true,
+                        },
+                    },
                     person: {},
                 },
             },

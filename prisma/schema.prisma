@@ -224,8 +224,8 @@ model PersonGroup {
 model SubstituteForPosition { //this needs to be a seperate model because it is a many to many relationship (many persons can be substitutes for many positions and vice versa)
   id Int @id @default(autoincrement())
   
-  substitute_id Int
-  substitute    Person @relation("Person_to_SubstitutePosition", fields: [substitute_id], references: [id])
+  person_id Int
+  substitute    Person @relation("Person_to_SubstitutePosition", fields: [person_id], references: [id])
 
   position_id Int
   position    PersonPosition @relation("SubstitutePosition_to_PersonPosition", fields: [position_id], references: [id])
