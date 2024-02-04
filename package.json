@@ -55,6 +55,10 @@
     "dependencies": {
         "@fullcalendar/google-calendar": "^6.1.9",
         "@fullcalendar/icalendar": "^6.1.8",
+        "@milkdown/core": "^7.3.3",
+        "@milkdown/plugin-history": "^7.3.3",
+        "@milkdown/preset-commonmark": "^7.3.3",
+        "@milkdown/theme-nord": "^7.3.3",
         "@prisma/client": "^4.3.1",
         "@sveltejs/adapter-node": "^1.0.0-next.95",
         "@tabler/core": "^1.0.0-beta13",

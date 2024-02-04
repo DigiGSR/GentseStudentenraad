@@ -3,9 +3,7 @@
     import ActionButton from "$lib/components/admin/ActionButton.svelte";
     import TextField from "$lib/components/admin/TextField.svelte";
     import LongTextField from "$lib/components/admin/LongTextField.svelte";
-    import Checkbox from "$lib/components/admin/Checkbox.svelte";
-    import DatePicker from "$lib/components/admin/DatePicker.svelte";
-    import ImageUploader from "$lib/components/admin/ImageUploader.svelte";
+    import MarkDownEditor from "$lib/components/admin/MarkDownEditor.svelte";
     import { goto } from "$app/navigation";
 
     async function put() {
@@ -56,8 +54,12 @@
         </select>
     </div>
     <TextField bind:value={data.page.slug} description="Slug" />
+
     <TextField bind:value={data.page.nav_name_dutch} description="Titel (NL)" />
     <TextField bind:value={data.page.nav_name_english} description="Titel (EN)" />
+
+    <MarkDownEditor bind:value={data.page.content_dutch} description="Inhoud (NL)" />
+
     <LongTextField bind:value={data.page.content_dutch} description="Inhoud (NL)" />
     <LongTextField bind:value={data.page.content_english} description="Inhoud (EN)" />
     <LongTextField bind:value={data.page.config} description="Configuratie" />
