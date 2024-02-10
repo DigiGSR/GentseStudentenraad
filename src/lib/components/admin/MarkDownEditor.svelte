@@ -5,7 +5,10 @@
 
     import { Editor, rootCtx, defaultValueCtx, editorViewOptionsCtx } from "@milkdown/core";
     import { commonmark } from "@milkdown/preset-commonmark";
-    import { nord } from "@milkdown/theme-nord";
+    import { remarkStringifyOptionsCtx } from "@milkdown/core";
+    import { gfm } from "@milkdown/preset-gfm";
+
+    // Don't forget to import the css file.
     import { history } from "@milkdown/plugin-history";
 
     function editor(dom: any) {
@@ -14,6 +17,12 @@
             .config((ctx) => {
                 ctx.set(rootCtx, dom);
                 ctx.set(defaultValueCtx, value);
+                ctx.set(remarkStringifyOptionsCtx, {
+                    // some options, for example:
+                    bullet: "*",
+                    fences: true,
+                    incrementListMarker: false,
+                });
                 ctx.update(editorViewOptionsCtx, (prev) => ({
                     ...prev,
                     attributes: {
@@ -22,8 +31,9 @@
                     },
                 }));
             })
-            .config(nord)
+
             .use(commonmark)
+            .use(gfm)
             .use(history)
             .create();
         MakeEditor.then((editor) => {

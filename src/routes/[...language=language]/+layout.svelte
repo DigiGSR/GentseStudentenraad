@@ -23,6 +23,8 @@
             hierarchyRoute: false,
         });
     }
+
+    let houseIconHovered = false;
 </script>
 
 <div class="flex flex-col w-full min-h-[100vh]">
@@ -35,12 +37,26 @@
             <!--                <i class="bi-list text-xl cursor-pointer p-1" />-->
             <!--            </button>-->
 
-            <a href="/nl">
-                <img
-                    src={data.configuration.logo_url}
-                    class="h-8 invisible lg:visible"
-                    alt="Logo"
-                />
+            <a
+                on:mouseenter={() => {
+                    houseIconHovered = true;
+                }}
+                on:mouseleave={() => {
+                    houseIconHovered = false;
+                }}
+                href="/nl"
+            >
+                <div
+                    class="flex xl:hidden flex-row gap-x-1 hover:cursor-pointer hover:opacity-70 opacity-100 transition duration-150"
+                >
+                    {#if houseIconHovered}
+                        <i class="bi bi-house-fill text-lg translate-y-0.25" />
+                    {:else}
+                        <i class="bi bi-house text-lg translate-y-0.25" />
+                    {/if}
+                </div>
+
+                <img src={data.configuration.logo_url} class="h-8 hidden xl:flex" alt="Logo" />
             </a>
 
             {#each navbarRoutes as route, i}
@@ -160,56 +176,63 @@
             <div class="grow lg:flex hidden" />
 
             <!--bi class is bootstrap icons-->
+            <div class="hidden 2xl:flex flex-row gap-x-4">
+                {#if data.configuration.facebook_url}
+                    <a href={data.configuration.facebook_url}>
+                        <i
+                            class="bi bi-facebook hover:opacity-70 opacity-100 transition duration-150"
+                        />
+                    </a>
+                {/if}
 
-            {#if data.configuration.facebook_url}
-                <a href={data.configuration.facebook_url}>
-                    <i
-                        class="bi bi-facebook hover:opacity-70 opacity-100 transition duration-150"
-                    />
-                </a>
-            {/if}
+                {#if data.configuration.twitter_url}
+                    <a href={data.configuration.twitter_url}>
+                        <i
+                            class="bi bi-twitter-x hover:opacity-70 opacity-100 transition duration-150"
+                        />
+                    </a>
+                {/if}
 
-            {#if data.configuration.twitter_url}
-                <a href={data.configuration.twitter_url}>
-                    <i
-                        class="bi bi-twitter-x hover:opacity-70 opacity-100 transition duration-150"
-                    />
-                </a>
-            {/if}
+                {#if data.configuration.instagram_url}
+                    <a href={data.configuration.instagram_url}>
+                        <i
+                            class="bi bi-instagram hover:opacity-70 opacity-100 transition duration-150"
+                        />
+                    </a>
+                {/if}
 
-            {#if data.configuration.instagram_url}
-                <a href={data.configuration.instagram_url}>
-                    <i
-                        class="bi bi-instagram hover:opacity-70 opacity-100 transition duration-150"
-                    />
-                </a>
-            {/if}
+                {#if data.configuration.tiktok_url}
+                    <a href={data.configuration.tiktok_url}>
+                        <i
+                            class="bi bi-tiktok hover:opacity-70 opacity-100 transition duration-150"
+                        />
+                    </a>
+                {/if}
 
-            {#if data.configuration.tiktok_url}
-                <a href={data.configuration.tiktok_url}>
-                    <i class="bi bi-tiktok hover:opacity-70 opacity-100 transition duration-150" />
-                </a>
-            {/if}
+                {#if data.configuration.discord_url}
+                    <a href={data.configuration.discord_url}>
+                        <i
+                            class="bi bi-discord hover:opacity-70 opacity-100 transition duration-150"
+                        />
+                    </a>
+                {/if}
 
-            {#if data.configuration.discord_url}
-                <a href={data.configuration.discord_url}>
-                    <i class="bi bi-discord hover:opacity-70 opacity-100 transition duration-150" />
-                </a>
-            {/if}
+                {#if data.configuration.linkedin_url}
+                    <a href={data.configuration.linkedin_url}>
+                        <i
+                            class="bi bi-linkedin hover:opacity-70 opacity-100 transition duration-150"
+                        />
+                    </a>
+                {/if}
 
-            {#if data.configuration.linkedin_url}
-                <a href={data.configuration.linkedin_url}>
-                    <i
-                        class="bi bi-linkedin hover:opacity-70 opacity-100 transition duration-150"
-                    />
-                </a>
-            {/if}
-
-            {#if data.configuration.github_url}
-                <a href={data.configuration.github_url}>
-                    <i class="bi bi-github hover:opacity-70 opacity-100 transition duration-150" />
-                </a>
-            {/if}
+                {#if data.configuration.github_url}
+                    <a href={data.configuration.github_url}>
+                        <i
+                            class="bi bi-github hover:opacity-70 opacity-100 transition duration-150"
+                        />
+                    </a>
+                {/if}
+            </div>
 
             <div />
 
