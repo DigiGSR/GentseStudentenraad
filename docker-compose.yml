@@ -25,6 +25,9 @@ services:
             server_default:
             web2022:
                 ipv4_address: 10.0.0.2
+        volumes:
+            - "/home/celeste/volumes/staging/postgresql:/var/lib/postgresql/data"
+            - "./uploads:/static/uploads"
         restart: unless-stopped
         depends_on:
             - postgres
