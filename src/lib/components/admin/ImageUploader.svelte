@@ -1,16 +1,13 @@
 <script lang="ts">
     export let source: string | undefined = undefined;
     export let description: string | null = null;
-    let files: FileList;
+    import { enhance } from "$app/forms";
 
-    $: if (files) {
-        for (const file of files) {
-            let reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onload = (e) => {
-                source = e.target?.result?.toString();
-            };
-        }
+    function reloadAfterDelay() {
+        setTimeout(() => {
+            location.reload(); //really lazy way to fix but
+            //I think its fine, sveltekit literally has no way to recieve form response afaik
+        }, 200);
     }
 </script>
 
@@ -19,11 +16,24 @@
         <p class="text-[12px] opacity-50 font-semibold uppercase">{description}</p>
     {/if}
 
-    <div class="flex items-center gap-4 w-full bg-white rounded-md p-4 shadow-sm">
+    <form
+        class="flex items-center gap-4 w-full bg-white rounded-md p-4 shadow-sm"
+        method="post"
+        use:enhance
+        enctype="multipart/form-data"
+    >
         {#if source}
             <img class="h-32 rounded-md" src={source} alt="Preview" />
         {/if}
-
-        <input type="file" accept=".jpg, .jpeg, .png" bind:files />
-    </div>
+        <div class="group">
+            <input
+                type="file"
+                id="file"
+                name="fileToUpload"
+                accept={[".jpg", ".jpeg", ".png", ".webp"].join(",")}
+                required
+            />
+        </div>
+        <button class="action-button bg-neutral-300 text-black" type="submit">Submit</button>
+    </form>
 </div>

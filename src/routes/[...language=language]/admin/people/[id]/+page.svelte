@@ -8,6 +8,8 @@
     import { goto } from "$app/navigation";
     import { Person, Prisma, PersonPosition } from "@prisma/client";
 
+    import { enhance } from "$app/forms"; //todo make sure this doesnt break other forms that might be present on the page
+
     export let data: PageData;
     export let description =
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.";
@@ -113,7 +115,7 @@
 <div class="space-y-6">
     <TextField description="Naam" bind:value={data.person.name} />
 
-    <ImageUploader description="Portretfoto" source={data.person.image} />
+    <ImageUploader description="Portretfoto" bind:source={data.person.image} />
 
     <TextField description="Afbeelding" bind:value={data.person.image} />
 
