@@ -2,13 +2,6 @@
     export let source: string | undefined = undefined;
     export let description: string | null = null;
     import { enhance } from "$app/forms";
-
-    function reloadAfterDelay() {
-        setTimeout(() => {
-            location.reload(); //really lazy way to fix but
-            //I think its fine, sveltekit literally has no way to recieve form response afaik
-        }, 200);
-    }
 </script>
 
 <div class="py-2">
@@ -37,3 +30,9 @@
         <button class="action-button bg-neutral-300 text-black" type="submit">Submit</button>
     </form>
 </div>
+
+<style lang="postcss">
+    .action-button {
+        @apply flex items-center gap-2 px-4 py-2 text-center rounded-lg text-sm font-semibold;
+    }
+</style>

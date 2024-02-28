@@ -48,13 +48,9 @@ export const load = (async ({ params, locals }) => {
 import { writeFileSync } from "fs";
 import crypto from "crypto";
 
-interface FileUploadResponse {
-    success: boolean;
-    filePath?: string;
-}
-
 export const actions = {
-    default: async ({ request, params, url, locals }): Promise<FileUploadResponse> => {
+    //todo, types and somehow throw all this code into one function, since its spread over verslagen en person now
+    default: async ({ request, params, url, locals }): any => {
         console.log("YIPPIE!\n");
         console.log(request);
         const formData = Object.fromEntries(await request.formData());
