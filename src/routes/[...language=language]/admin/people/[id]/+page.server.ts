@@ -45,15 +45,15 @@ export const load = (async ({ params, locals }) => {
     };
 }) satisfies PageServerLoad;
 
-import { writeFileSync } from "fs";
+import { writeFileSync, existsSync, mkdirSync, unlinkSync } from "fs";
 import crypto from "crypto";
 
 export const actions = {
     //todo, types and somehow throw all this code into one function, since its spread over verslagen en person now
     default: async ({ request, params, url, locals }): any => {
-        console.log("YIPPIE!\n");
-        console.log(request);
         const formData = Object.fromEntries(await request.formData());
+
+        const routeDirectory = "person";
 
         if (
             !(formData.fileToUpload as File).name ||
@@ -71,18 +71,39 @@ export const actions = {
 
         const randomFilename = generateRandomFilename(16);
 
-        const filePath = `person/${randomFilename}.${fileExtension}`;
+        const filePath = `${routeDirectory}/${randomFilename}.${fileExtension}`;
 
-        const person = await prisma.person.update({
+        const person = await prisma.person.findFirst({
+            where: {
+                id: parseInt(params.id),
+            },
+        });
+
+        await prisma.person.update({
             where: {
                 id: parseInt(params.id),
             },
             data: {
-                image: `/${filePath}`,
+                image: `/uploads/${filePath}`,
             },
         });
 
-        writeFileSync(`static/${filePath}`, Buffer.from(await fileToUpload.arrayBuffer()));
+        if (!existsSync(`${process.env.UPLOAD_DIR}/${routeDirectory}`)) {
+            mkdirSync(`${process.env.UPLOAD_DIR}/${routeDirectory}`);
+        }
+        writeFileSync(
+            `${process.env.UPLOAD_DIR}/${filePath}`,
+            Buffer.from(await fileToUpload.arrayBuffer()),
+        );
+
+        const oldImagePath = process.env.UPLOAD_DIR.replace(/\/[^/]*$/, "") + person.image;
+        //trust me im an engineer
+
+        if (existsSync(oldImagePath)) {
+            unlinkSync(oldImagePath);
+        }
+
+        console.log(oldImagePath);
         //todo delete old file
 
         return {
