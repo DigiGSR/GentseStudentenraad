@@ -85,6 +85,7 @@
         "sass": "^1.58.0",
         "svelte-color-picker": "^1.0.7",
         "svelte-dnd-action": "^0.9.31",
-        "uniqid": "^5.4.0"
+        "uniqid": "^5.4.0",
+        "vite-plugin-restart": "^0.4.0"
     }
 }
