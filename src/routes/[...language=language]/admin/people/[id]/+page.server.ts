@@ -96,7 +96,8 @@ export const actions = {
             Buffer.from(await fileToUpload.arrayBuffer()),
         );
 
-        const oldImagePath = process.env.UPLOAD_DIR.replace(/\/[^/]*$/, "") + person.image;
+        const oldImagePath =
+            process.env.UPLOAD_DIR.replace(/\/api\//, "/").replace(/\/[^/]*$/, "") + person.image;
         //trust me im an engineer
 
         if (existsSync(oldImagePath)) {
