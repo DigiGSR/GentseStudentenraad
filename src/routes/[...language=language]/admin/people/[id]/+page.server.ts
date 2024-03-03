@@ -84,7 +84,7 @@ export const actions = {
                 id: parseInt(params.id),
             },
             data: {
-                image: `/uploads/${filePath}`,
+                image: `/api/uploads/${filePath}`,
             },
         });
 
