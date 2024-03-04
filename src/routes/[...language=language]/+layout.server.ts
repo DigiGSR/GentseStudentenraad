@@ -4,7 +4,6 @@ import { Organization, Markup } from "@prisma/client";
 import type { LayoutServerLoad } from "./$types";
 import { marked } from "marked";
 import sanitizeHtml from "sanitize-html";
-import uniqid from "uniqid";
 
 export const prerender = false;
 export const ssr = true;

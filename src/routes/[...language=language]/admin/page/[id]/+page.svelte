@@ -59,9 +59,8 @@
     <TextField bind:value={data.page.nav_name_english} description="Titel (EN)" />
 
     <MarkDownEditor bind:value={data.page.content_dutch} description="Inhoud (NL)" />
+    <MarkDownEditor bind:value={data.page.content_english} description="Inhoud (EN)" />
 
-    <LongTextField bind:value={data.page.content_dutch} description="Inhoud (NL)" />
-    <LongTextField bind:value={data.page.content_english} description="Inhoud (EN)" />
     <LongTextField bind:value={data.page.config} description="Configuratie" />
     <ActionButton action={put} {remove} />
 </div>

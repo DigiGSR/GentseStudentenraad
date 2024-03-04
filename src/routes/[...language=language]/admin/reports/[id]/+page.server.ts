@@ -69,6 +69,7 @@ export const actions = {
 
         const oldImagePath =
             process.env.UPLOAD_DIR.replace(/\/api\//, "/").replace(/\/[^/]*$/, "") + person.image;
+        //todo not working currently, something wrong here
         //trust me im an engineer
 
         if (existsSync(oldImagePath)) {

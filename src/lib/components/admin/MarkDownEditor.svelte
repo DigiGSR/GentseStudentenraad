@@ -2,61 +2,62 @@
     export let placeholder = "";
     export let value: string;
     export let description: string | null = null;
+    import { marked } from "marked";
 
-    import { Editor, rootCtx, defaultValueCtx, editorViewOptionsCtx } from "@milkdown/core";
-    import { commonmark } from "@milkdown/preset-commonmark";
-    import { remarkStringifyOptionsCtx } from "@milkdown/core";
-    import { gfm } from "@milkdown/preset-gfm";
+    $: markdownValue = marked.parse(value);
 
-    // Don't forget to import the css file.
-    import { history } from "@milkdown/plugin-history";
+    let editorSelected = true;
 
-    function editor(dom: any) {
-        // to obtain the editor instance we need to store a reference of the editor.
-        const MakeEditor = Editor.make()
-            .config((ctx) => {
-                ctx.set(rootCtx, dom);
-                ctx.set(defaultValueCtx, value);
-                ctx.set(remarkStringifyOptionsCtx, {
-                    // some options, for example:
-                    bullet: "*",
-                    fences: true,
-                    incrementListMarker: false,
-                });
-                ctx.update(editorViewOptionsCtx, (prev) => ({
-                    ...prev,
-                    attributes: {
-                        class: "milkdown-editor o max-h-96 mx-auto outline-none",
-                        spellcheck: "false",
-                    },
-                }));
-            })
+    $: renderSelected = !editorSelected;
 
-            .use(commonmark)
-            .use(gfm)
-            .use(history)
-            .create();
-        MakeEditor.then((editor) => {
-            console.log(editor); //because eslint
-        });
+    function toggleEditorRender() {
+        editorSelected = !editorSelected;
     }
 </script>
 
 <template>
     <div>
-        {#if description !== null}
-            <p class="text-[12px] opacity-50 font-semibold uppercase">{description}</p>
-        {/if}
-        <div
-            class="bg-white resize-y overflow-y-auto px-4 py-2 focus-within:border-black focus-within:border-2 rounded-md w-full border-neutral-200 border-[1px]"
-            use:editor
-        />
+        <div class="flex flex-row items-center mb-1">
+            {#if description !== null}
+                <p class="text-[12px] opacity-50 font-semibold uppercase">{description}</p>
+            {/if}
+            <div class="ml-2 rounded-lg flex flex-row mb-0.5 text-[14px]">
+                <button
+                    on:click={toggleEditorRender}
+                    class={`${
+                        editorSelected ? "bg-gray-200 text-gray-600" : "bg-white text-gray-400"
+                    } py-1 px-2 rounded-l-lg border-none`}
+                >
+                    editor
+                </button>
+                <button
+                    on:click={toggleEditorRender}
+                    class={`${
+                        renderSelected ? "bg-gray-200 text-gray-600" : "bg-white text-gray-400"
+                    } py-1 px-2 rounded-r-lg border-none`}
+                >
+                    render
+                </button>
+            </div>
+        </div>
+        <div class="w-full">
+            {#if editorSelected}
+                <textarea class="w-full h-96" {placeholder} bind:value />
+            {/if}
+            {#if renderSelected}
+                <div
+                    class="bg-white px-4 py-2 border-[1px] rounded-md w-full h-96 overflow-x-hidden overflow-y-scroll"
+                >
+                    {@html markdownValue}
+                    <!--TODO dit is misschien niet het beste idee, sanitize-html is applied server side however-->
+                </div>
+            {/if}
+        </div>
     </div>
 </template>
 
-<style>
-    .milkdown {
-        border: none !important;
-        resize: both;
+<style lang="postcss">
+    textarea {
+        @apply bg-white px-4 py-2 rounded-md w-full border-neutral-200 border-[1px];
     }
 </style>

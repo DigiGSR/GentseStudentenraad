@@ -103,6 +103,7 @@ export const actions = {
         if (existsSync(oldImagePath)) {
             unlinkSync(oldImagePath);
         }
+        //todo not working currently, something wrong here
 
         console.log(oldImagePath);
         //todo delete old file
