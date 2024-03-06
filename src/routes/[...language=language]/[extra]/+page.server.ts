@@ -12,7 +12,7 @@ export const csr = true;
 export const load = (async ({ params, locals }) => {
     const post = await prisma.page.findFirstOrThrow({
         where: {
-            slug: params.extra, // TODO: SQL INJECTION?
+            slug: params.extra,
             organization: locals.configuration.organization,
         },
     });
@@ -27,7 +27,9 @@ export const load = (async ({ params, locals }) => {
 
     let html: string | null = null;
     if (post.markup === "MARKDOWN") {
-        html = marked(source);
+        html = marked.parse(source);
+
+        console.log(html);
 
         if (!html) {
             throw error(500, { message: "Internal server error" });
