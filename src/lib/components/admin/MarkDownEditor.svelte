@@ -4,7 +4,9 @@
     export let description: string | null = null;
     import { marked } from "marked";
 
-    $: markdownValue = marked.parse(value);
+    let markdownValue = marked.parse(value);
+
+    console.log(marked.parse(value));
 
     let editorSelected = true;
 
