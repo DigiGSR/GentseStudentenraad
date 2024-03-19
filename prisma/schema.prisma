@@ -101,7 +101,7 @@ model Configuration {
   info_bar_link         String
 
   // Features
-  navbar            Json    @default("{}")
+  navbar            Json    @default("[]")
   i18n              Boolean @default(false)
   info_bar          Boolean @default(false)
   who_section       Boolean @default(false)

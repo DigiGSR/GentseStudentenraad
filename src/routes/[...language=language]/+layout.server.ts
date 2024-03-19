@@ -113,6 +113,10 @@ export const load = (async ({ params, locals }) => {
         }
     });
 
+    if (JSON.stringify(locals.configuration.navbar) == JSON.stringify({})) {
+        locals.configuration.navbar = [];
+    }
+
     // Done! Pass to the view.
     return {
         language: locals.language,
