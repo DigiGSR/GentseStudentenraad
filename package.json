@@ -19,7 +19,7 @@
         "@playwright/test": "^1.25.0",
         "@rgossiaux/svelte-headlessui": "^1.0.2",
         "@sveltejs/adapter-auto": "next",
-        "@sveltejs/kit": "1.15.7",
+        "@sveltejs/kit": "1.30.3",
         "@tailwindcss/typography": "^0.5.10",
         "@types/dompurify": "^2.3.4",
         "@types/ical": "^0.8.0",
