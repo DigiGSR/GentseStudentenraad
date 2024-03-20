@@ -1,6 +1,7 @@
 import mariadb from "mariadb";
 import { PrismaClient } from "@prisma/client";
 import { Organization as OrgEnum } from "@prisma/client";
+import download from "download";
 
 const prisma = new PrismaClient();
 
@@ -69,6 +70,85 @@ function hashCode(input: string): number {
     }
 
     return hash % 10000;
+}
+
+async function images(org: Organization, maria: mariadb.Connection) {
+    const rows = (await maria.query(`
+        SELECT * from image
+    `)) as any[];
+
+    let isRateLimited = false;
+    const maxRetries = 5;
+
+    await Promise.all(
+        rows.map(async (row) => {
+            let retries = 0;
+            while (retries < maxRetries) {
+                try {
+                    if (isRateLimited) {
+                        await new Promise((resolve) => setTimeout(resolve, 15000));
+                        isRateLimited = false;
+                    }
+                    await download(
+                        `${org.files}/images/${row.path}`,
+                        `./migrate/${org.name}/images`,
+                    ); //todo adapt main code to have subfolder for fsr/gsr
+                    break;
+                } catch (error) {
+                    console.log(`${org.name.toUpperCase()}: images (RATE LIMITED, sleeping 15s)`);
+                    retries++;
+                    if (retries < maxRetries) {
+                        isRateLimited = true;
+                        await new Promise((resolve) => setTimeout(resolve, 15000));
+                    } else {
+                        console.log(
+                            `${org.name.toUpperCase()}: images (download failed for ${
+                                org.files
+                            }/images/${row.path} after ${retries} retries)`,
+                        );
+                    }
+                }
+            }
+        }),
+    );
+}
+
+async function files(org: Organization, maria: mariadb.Connection) {
+    const rows = (await maria.query(`
+        SELECT * from file
+    `)) as any[];
+
+    let isRateLimited = false;
+    const maxRetries = 3;
+
+    await Promise.all(
+        rows.map(async (row) => {
+            let retries = 0;
+            while (retries < maxRetries) {
+                try {
+                    if (isRateLimited) {
+                        await new Promise((resolve) => setTimeout(resolve, 15000));
+                        isRateLimited = false;
+                    }
+                    await download(`${org.files}/files/${row.path}`, `./migrate/${org.name}/files`); //todo adapt main code to have subfolder for fsr/gsr
+                    break;
+                } catch (error) {
+                    console.log(`${org.name.toUpperCase()}: files (RATE LIMITED, sleeping 15s)`);
+                    retries++;
+                    if (retries < maxRetries) {
+                        isRateLimited = true;
+                        await new Promise((resolve) => setTimeout(resolve, 15000));
+                    } else {
+                        console.log(
+                            `${org.name.toUpperCase()}: files (download failed for ${
+                                org.files
+                            }/images/${row.path} after ${retries} retries)`,
+                        );
+                    }
+                }
+            }
+        }),
+    );
 }
 
 async function opinionGroup(org: Organization, maria: mariadb.Connection) {
@@ -466,6 +546,12 @@ await Promise.all(
 
         console.log(`${org.name.toUpperCase()}: elections`);
         await elections(org, maria);
+
+        console.log(`${org.name.toUpperCase()}: images`);
+        await images(org, maria);
+
+        console.log(`${org.name.toUpperCase()}: files`);
+        await files(org, maria);
     }),
 );
 
