@@ -4,6 +4,7 @@
     import uniqid from "uniqid";
     import ActionButton from "$lib/components/admin/ActionButton.svelte";
     import { goto } from "$app/navigation";
+    import { dataset_dev } from "svelte/internal";
     export let data: PageData;
 
     //todo i18n for navbar editor
@@ -39,6 +40,30 @@
         const index = data.configuration.navbar.findIndex((item) => item.name === name);
         data.configuration.navbar.splice(index, 1);
         data.configuration.navbar = data.configuration.navbar;
+    }
+
+    function moveUp(test) {
+        for (let i = 0; i < data.configuration.navbar.length; i++) {
+            if (data.configuration.navbar[i].name === test.name && i > 0) {
+                console.log(test);
+                data.configuration.navbar[i] = data.configuration.navbar[i - 1];
+                data.configuration.navbar[i - 1] = test;
+                break;
+            }
+        }
+    }
+    function moveDown(test) {
+        for (let i = 0; i < data.configuration.navbar.length; i++) {
+            if (
+                data.configuration.navbar[i].name === test.name &&
+                i < data.configuration.navbar.length - 1
+            ) {
+                console.log(test);
+                data.configuration.navbar[i] = data.configuration.navbar[i + 1];
+                data.configuration.navbar[i + 1] = test;
+                break;
+            }
+        }
     }
 </script>
 
@@ -83,6 +108,18 @@
                     removeElem(route.name);
                 }}
                 class="text-[12px] mr-1 bi bi-dash-circle opacity-50 hover:opacity-80 hover:cursor-pointer transition duration-150"
+            />
+            <i
+                on:click={() => {
+                    moveUp(route);
+                }}
+                class="bi bi-caret-up opacity-50 hover:opacity-80 hover:cursor-pointer transition duration-150"
+            />
+            <i
+                on:click={() => {
+                    moveDown(route);
+                }}
+                class="bi bi-caret-down opacity-50 hover:opacity-80 hover:cursor-pointer transition duration-150"
             />
             {#if route.hierarchyRoute === true}
                 <AdminRouteElement
