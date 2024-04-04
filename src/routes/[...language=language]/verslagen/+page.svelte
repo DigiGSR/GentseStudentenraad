@@ -23,7 +23,7 @@
             <div class="text-5xl font-serif font-bold">Verslagen</div>
             <div class="flex translate-y-[1rem] gap-4 pb-12">
                 <!--todo hacky translate-->
-                <p>Filter op werkgroep:</p>
+                <p>{@html data.i18n.get("filter-op-werkgroep")}</p>
                 <select bind:value={selectedWorkGroup}>
                     {#each workgroups as currWorkgroup}
                         <option value={currWorkgroup}>{currWorkgroup}</option>
@@ -32,10 +32,13 @@
             </div>
         </div>
 
-        <p>Hier vind je de verslagen terug van de verschillende werkgroepen binnenin de GSR</p>
+        <p>{@html data.i18n.get("hier-vind-je-verslagen")}</p>
         <div class="space-y-4 w-full">
             {#if currentReports.length < 1}
-                <p>Deze werkgroep heeft nog geen verslagen...</p>
+                <p>
+                    {@html data.i18n.get("werkgroep-geen-verslagen")}Deze werkgroep heeft nog geen
+                    verslagen...
+                </p>
             {/if}
             {#each currentReports as report}
                 <div class="bg-white grid grid-cols-3 items-center rounded-md overflow-clip">

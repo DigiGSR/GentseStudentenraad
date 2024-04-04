@@ -57,7 +57,7 @@
         {/each}
 
         <div class="flex items-center justify-center gap-4 pb-12">
-            <p>Bekijk historische data:</p>
+            <p>{@html data.i18n.get("filter-op-werkgroep")}</p>
             <select
                 name="year"
                 id="year"

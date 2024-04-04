@@ -63,7 +63,10 @@
         description="E-mailadres"
     />
 
-    <ImageUploader bind:source={data.configuration.group_photo} />
-
     <ActionButton action={put} />
+    <ImageUploader
+        org={data.configuration.organization}
+        dir={"cover"}
+        bind:source={data.configuration.group_photo}
+    />
 </div>

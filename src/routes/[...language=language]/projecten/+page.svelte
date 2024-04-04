@@ -6,14 +6,9 @@
 
 <template>
     <div class="container space-y-4 py-12">
-        <div class="text-5xl font-serif font-bold">Projecten</div>
+        <div class="text-5xl font-serif font-bold">{@html data.i18n.get("projecten-titel")}</div>
         <p>
-            Naast het vertegenwoordigen van studenten, ondersteunt de Gentse Studentenraad
-            verschillende grote en kleine projecten ten voordele van de studenten van de UGent. Een
-            verzoek om financiële ondersteuning wordt voorgelegd aan de Algemene Vergadering die
-            beslist over het bedrag en de modaliteiten van de ondersteuning. Een aanvraag moet
-            voldoen aan de voorwaarden opgesomd in het reglement voor financiële ondersteuning van
-            projecten en kan worden ingediend via financien@gentsestudentenraad.be.
+            {@html data.i18n.get("projecten-tekstje")}
         </p>
         <div class="space-y-4">
             {#each data.projects as project}

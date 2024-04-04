@@ -7,6 +7,7 @@
     import DatePicker from "$lib/components/admin/DatePicker.svelte";
     import ImageUploader from "$lib/components/admin/ImageUploader.svelte";
     import { goto } from "$app/navigation";
+    import NewButton from "lib/components/admin/NewButton.svelte";
 
     async function put() {
         const res = await fetch(`/api/news/${data.news_item.id}`, {

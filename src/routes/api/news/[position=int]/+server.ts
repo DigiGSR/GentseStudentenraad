@@ -6,6 +6,8 @@ import type { RequestHandler } from "./$types";
 export const PUT = (async ({ request, params }) => {
     const res: Configuration = await request.json();
 
+    console.log(res);
+
     try {
         await prisma.news.update({
             data: res,
@@ -14,7 +16,8 @@ export const PUT = (async ({ request, params }) => {
             },
         });
         return json({ message: "OK" });
-    } catch {
+    } catch (e) {
+        console.log("error", e);
         throw error(500);
     }
 }) satisfies RequestHandler;

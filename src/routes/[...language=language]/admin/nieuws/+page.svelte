@@ -2,6 +2,7 @@
     import type { PageData } from "./$types";
     import { goto } from "$app/navigation";
     import { News } from "@prisma/client";
+    import NewButton from "$lib/components/admin/NewButton.svelte";
 
     export let data: PageData;
 
@@ -31,7 +32,7 @@
 </svelte:head>
 
 <div class="overflow-scroll">
-    <table class="table-auto">
+    <table class="table-auto mb-6">
         <thead>
             <tr>
                 <th>
@@ -84,6 +85,8 @@
             {/each}
         </tbody>
     </table>
+
+    <NewButton href="/admin/nieuws/create" />
 </div>
 
 <style lang="sass">

@@ -59,7 +59,8 @@
                 class="w-full py-4 font-bold rounded-md text-center text-white"
                 style:background-color={data.configuration.brand_color_primary}
             >
-                <i class="bi bi-send-fill pr-2" /> Verzenden
+                <i class="bi bi-send-fill pr-2" />
+                {data.i18n.get("vakfeedback-verzenden")}
             </p>
         </div>
     </div>

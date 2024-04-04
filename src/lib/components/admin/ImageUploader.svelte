@@ -1,7 +1,32 @@
 <script lang="ts">
+    export let dir: string; //dir where file will end up
+    export let org: string; //elke FSR andere map
     export let source: string | undefined = undefined;
     export let description: string | null = null;
     import { enhance } from "$app/forms";
+
+    let imageValue = "";
+
+    function generateRandomFilename(length: number) {
+        const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        let filename = "";
+
+        for (let i = 0; i < length; i++) {
+            const randomIndex = Math.floor(Math.random() * charset.length);
+            filename += charset.charAt(randomIndex);
+        }
+
+        return filename;
+    }
+
+    function getFileExtension(filename: string): string {
+        return filename.slice(((filename.lastIndexOf(".") - 1) >>> 0) + 2);
+    }
+
+    let uploadFilename = `${org}/${dir}/${generateRandomFilename(16)}.${getFileExtension(
+        imageValue,
+    )}`;
+    $: console.log(uploadFilename);
 </script>
 
 <div class="py-2">
@@ -10,6 +35,7 @@
     {/if}
 
     <form
+        action={`/api/upload`}
         class="flex items-center gap-4 w-full bg-white rounded-md p-4 shadow-sm"
         method="post"
         use:enhance
@@ -19,7 +45,10 @@
             <img class="h-32 rounded-md" src={source} alt="Preview" />
         {/if}
         <div class="group">
+            <input type="hidden" name="oldFilename" value={source} />
+            <input type="hidden" name="uploadFilename" value={uploadFilename} />
             <input
+                bind:value={imageValue}
                 type="file"
                 id="file"
                 name="fileToUpload"
@@ -27,7 +56,13 @@
                 required
             />
         </div>
-        <button class="action-button bg-neutral-300 text-black" type="submit">Submit</button>
+        <button
+            on:click={() => {
+                source = uploadFilename;
+            }}
+            class="action-button bg-neutral-300 text-black"
+            type="submit">Submit</button
+        >
     </form>
 </div>
 

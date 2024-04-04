@@ -79,13 +79,13 @@
                             {#each route.childRoutes as childRoute}
                                 <a
                                     class="hover:opacity-70 opacity-100 transition duration-150"
-                                    href={childRoute.route}>{childRoute.name}</a
+                                    href={`/${childRoute.route}`}>{childRoute.name}</a
                                 >
                             {/each}
                         </div>
                         <a
                             class="pb-6 hover:opacity-70 w-fit opacity-100 transition duration-150"
-                            href={route.route}
+                            href={`/${route.route}`}
                             >{route.name} <i class="bi bi-chevron-down translate-y-0.25" /></a
                         >
                     </div>

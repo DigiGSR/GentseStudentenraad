@@ -2,6 +2,9 @@
     export let source: string | undefined = undefined;
     export let description: string | null = null;
     import { enhance } from "$app/forms";
+    import { dataset_dev } from "svelte/internal";
+    import type { LayoutData } from "../../../routes/$types";
+    export let data: LayoutData;
 
     let form: any;
 </script>
@@ -34,6 +37,7 @@
                 accept={[".pdf"].join(",")}
                 required
             />
+            <input type="hidden" name="org" value={data.configuration.organization} />
             <label class="action-button bg-neutral-800 text-white" for="file"
                 ><i class="bi bi-save" />Upload Verslag</label
             >

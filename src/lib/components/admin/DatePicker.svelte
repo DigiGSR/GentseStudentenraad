@@ -1,6 +1,11 @@
 <script lang="ts">
     export let value: Date;
     export let description: string | null;
+
+    let valueForHtml = value.toISOString().slice(0, 10);
+
+    $: value = new Date(valueForHtml);
+    $: console.log(value);
 </script>
 
 <template>
@@ -8,7 +13,7 @@
         {#if description !== null}
             <p class="text-[12px] opacity-50 font-semibold uppercase">{description}</p>
         {/if}
-        <input type="date" class="textfield" placeholder="Auteur" bind:value />
+        <input type="date" class="textfield" placeholder="Auteur" bind:value={valueForHtml} />
     </div>
 </template>
 

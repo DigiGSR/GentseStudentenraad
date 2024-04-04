@@ -117,8 +117,6 @@
 
     <ImageUploader description="Portretfoto" bind:source={data.person.image} />
 
-    <TextField description="Afbeelding" bind:value={data.person.image} />
-
     <TextField description="E-mailadres" bind:value={data.person.mail} />
 
     <ActionButton action={putPerson} remove={() => remove(data.person)} />

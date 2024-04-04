@@ -4,7 +4,6 @@
     import uniqid from "uniqid";
     import ActionButton from "$lib/components/admin/ActionButton.svelte";
     import { goto } from "$app/navigation";
-    import { dataset_dev } from "svelte/internal";
     export let data: PageData;
 
     //todo i18n for navbar editor
@@ -38,8 +37,18 @@
 
     function removeElem(name: string) {
         const index = data.configuration.navbar.findIndex((item) => item.name === name);
-        data.configuration.navbar.splice(index, 1);
-        data.configuration.navbar = data.configuration.navbar;
+        if (
+            confirm(
+                `Ben je zeker dat je ${
+                    data.configuration.navbar[index].route
+                        ? `route "${data.configuration.navbar[index].route}"`
+                        : `hiërarchische route "${data.configuration.navbar[index].name}"`
+                } wilt verwijderen?`,
+            )
+        ) {
+            data.configuration.navbar.splice(index, 1);
+            data.configuration.navbar = data.configuration.navbar;
+        }
     }
 
     function moveUp(test) {
@@ -67,6 +76,9 @@
     }
 </script>
 
+<div class="sticky top-0 right-0 pt-4 w-full flex justify-end flex-row">
+    <ActionButton action={put} />
+</div>
 <div class="flex flex-col gap-y-2 items-start">
     <div class="flex flex-row items-start">
         <p class="text-[18px] opacity-50 font-semibold uppercase">Routes</p>
@@ -74,8 +86,8 @@
             on:click={() => {
                 data.configuration.navbar.push({
                     hierarchyRoute: false,
-                    name: "nieuw",
-                    route: "nl/nieuw",
+                    name: "titel",
+                    route: "nl/slug",
                 });
                 data.configuration.navbar = data.configuration.navbar;
             }}
@@ -85,13 +97,13 @@
             on:click={() => {
                 data.configuration.navbar.push({
                     hierarchyRoute: true,
-                    name: "nieuw",
-                    route: "nl/nieuw",
+                    name: "titel",
+                    route: "nl/slug",
                     childRoutes: [
                         {
                             id: uniqid(),
-                            name: "nieuw",
-                            route: "nl/nieuw",
+                            name: "titel",
+                            route: "nl/slug",
                         },
                     ],
                 });
@@ -141,6 +153,4 @@
             {/if}
         </div>
     {/each}
-
-    <ActionButton action={put} />
 </div>

@@ -65,6 +65,13 @@
     </table>
 
     <NewButton href="/admin/i18n/create" />
+
+    <p class="text-[24px] pt-8 opacity-50 font-semibold uppercase">Missing tags</p>
+    <div class="flex flex-col">
+        {#each data.missingKeys as missingKey}
+            <div>{missingKey}</div>
+        {/each}
+    </div>
 </div>
 
 <style lang="sass">

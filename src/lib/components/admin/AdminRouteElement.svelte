@@ -20,16 +20,18 @@
     function addItem() {
         items.push({
             id: uniqid(),
-            name: "nieuw",
-            route: "nl/nieuw",
+            name: "titel",
+            route: "nl/slug",
         });
         items = items;
     }
 
     function removeItem(id: number) {
         const index = items.findIndex((item) => item.id === id);
-        items.splice(index, 1);
-        items = items;
+        if (confirm(`Ben je zeker dat je route "${items[index].route}" wilt verwijderen?`)) {
+            items.splice(index, 1);
+            items = items;
+        }
     }
 
     let dropTargetStyle = "";
