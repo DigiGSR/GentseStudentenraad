@@ -7,6 +7,9 @@
     export let data: LayoutData;
 
     let form: any;
+    $: console.log(form);
+    let img: any;
+    $: console.log(img);
 </script>
 
 <div class="py-2">
@@ -25,8 +28,10 @@
         bind:this={form}
         class="flex flex-row items-center gap-4 w-full rounded-md"
         method="post"
-        use:enhance
         enctype="multipart/form-data"
+        on:input={(data) => {
+            console.log(data);
+        }}
     >
         <div class="flex flex-row gap-x-2 w-full align-middle">
             <input

@@ -115,7 +115,12 @@
 <div class="space-y-6">
     <TextField description="Naam" bind:value={data.person.name} />
 
-    <ImageUploader description="Portretfoto" bind:source={data.person.image} />
+    <ImageUploader
+        org={data.configuration.organization}
+        dir={"cover"}
+        description="Portretfoto"
+        bind:source={data.person.image}
+    />
 
     <TextField description="E-mailadres" bind:value={data.person.mail} />
 

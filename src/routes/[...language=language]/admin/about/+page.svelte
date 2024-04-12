@@ -66,7 +66,7 @@
     <ActionButton action={put} />
     <ImageUploader
         org={data.configuration.organization}
-        dir={"cover"}
+        dir={"person"}
         bind:source={data.configuration.group_photo}
     />
 </div>

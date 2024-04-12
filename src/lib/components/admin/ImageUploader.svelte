@@ -1,11 +1,37 @@
 <script lang="ts">
     export let dir: string; //dir where file will end up
     export let org: string; //elke FSR andere map
+    console.log(dir, org);
     export let source: string | undefined = undefined;
     export let description: string | null = null;
     import { enhance } from "$app/forms";
 
-    let imageValue = "";
+    let formData: any;
+
+    let fileList: any;
+    $: console.log("fileList", fileList);
+
+    function submitge(formData: any) {
+        console.log("formData", formData);
+
+        fetch("/api/upload", {
+            method: "POST",
+            body: formData,
+        })
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error("Network response was not ok");
+                }
+                return response.json();
+            })
+            .then((data) => {
+                // Handle response data as needed
+                console.log(data);
+            })
+            .catch((error) => {
+                console.error("There was a problem with the fetch operation:", error);
+            });
+    }
 
     function generateRandomFilename(length: number) {
         const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -23,10 +49,10 @@
         return filename.slice(((filename.lastIndexOf(".") - 1) >>> 0) + 2);
     }
 
-    let uploadFilename = `${org}/${dir}/${generateRandomFilename(16)}.${getFileExtension(
-        imageValue,
-    )}`;
-    $: console.log(uploadFilename);
+    $: uploadFilename = fileList
+        ? `${org}/${dir}/${generateRandomFilename(16)}.${getFileExtension(fileList[0].name)}`
+        : "";
+    $: console.log("uploadFilename", uploadFilename);
 </script>
 
 <div class="py-2">
@@ -35,11 +61,14 @@
     {/if}
 
     <form
-        action={`/api/upload`}
         class="flex items-center gap-4 w-full bg-white rounded-md p-4 shadow-sm"
-        method="post"
-        use:enhance
         enctype="multipart/form-data"
+        on:submit={(event) => {
+            console.log("ev", event);
+        }}
+        on:formdata={(value) => {
+            submitge(value.formData);
+        }}
     >
         {#if source}
             <img class="h-32 rounded-md" src={source} alt="Preview" />
@@ -48,7 +77,7 @@
             <input type="hidden" name="oldFilename" value={source} />
             <input type="hidden" name="uploadFilename" value={uploadFilename} />
             <input
-                bind:value={imageValue}
+                bind:files={fileList}
                 type="file"
                 id="file"
                 name="fileToUpload"
@@ -56,13 +85,7 @@
                 required
             />
         </div>
-        <button
-            on:click={() => {
-                source = uploadFilename;
-            }}
-            class="action-button bg-neutral-300 text-black"
-            type="submit">Submit</button
-        >
+        <button class="action-button bg-neutral-300 text-black" type="submit">Submit</button>
     </form>
 </div>
 
