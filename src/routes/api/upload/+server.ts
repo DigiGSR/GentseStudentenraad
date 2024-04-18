@@ -77,5 +77,6 @@ export const POST = async ({ request, params }) => {
 
     return {
         success: true,
+        filePath: filePath,
     };
 };

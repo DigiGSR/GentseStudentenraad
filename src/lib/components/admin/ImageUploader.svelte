@@ -4,7 +4,6 @@
     console.log(dir, org);
     export let source: string | undefined = undefined;
     export let description: string | null = null;
-    import { enhance } from "$app/forms";
 
     let formData: any;
 
@@ -63,10 +62,8 @@
     <form
         class="flex items-center gap-4 w-full bg-white rounded-md p-4 shadow-sm"
         enctype="multipart/form-data"
-        on:submit={(event) => {
-            console.log("ev", event);
-        }}
         on:formdata={(value) => {
+            console.log("FOOOORM", value.formData);
             submitge(value.formData);
         }}
     >
