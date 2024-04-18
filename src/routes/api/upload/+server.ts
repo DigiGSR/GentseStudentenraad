@@ -75,8 +75,10 @@ export const POST = async ({ request, params }) => {
         Buffer.from(await fileToUpload.arrayBuffer()),
     );
 
-    return {
-        success: true,
-        filePath: filePath,
-    };
+    return new Response(
+        {
+            success: true,
+            filePath: filePath,
+        }.toString(),
+    );
 };
