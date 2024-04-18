@@ -18,6 +18,7 @@
             body: formData,
         })
             .then((response) => {
+                console.log("then1", formData);
                 if (!response.ok) {
                     throw new Error("Network response was not ok");
                 }
