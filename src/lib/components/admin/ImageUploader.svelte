@@ -18,14 +18,14 @@
             body: formData,
         })
             .then((response) => {
-                console.log("then1 text", response);
+                console.log("then1 text", response.body);
                 if (!response.ok) {
                     throw new Error("Network response was not ok");
                 }
                 return response.text();
             })
             .then((response) => {
-                console.log("then2 text", response);
+                console.log("then2 text", JSON.stringify(response));
             })
             .catch((error) => {
                 console.error("There was a problem with the fetch operation:", error);
