@@ -83,9 +83,7 @@
                                 >
                             {/each}
                         </div>
-                        <a
-                            class="pb-6 hover:opacity-70 w-fit opacity-100 transition duration-150"
-                            href={`/${route.route}`}
+                        <a class="pb-6 hover:opacity-70 w-fit opacity-100 transition duration-150"
                             >{route.name} <i class="bi bi-chevron-down translate-y-0.25" /></a
                         >
                     </div>
