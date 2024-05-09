@@ -74,7 +74,7 @@
                             }px;  transform: translateX(${Math.floor(
                                 (parentWidth[i] - childWidth[i]) / 2,
                             )}px);`}
-                            class="group-hover:visible invisible absolute gap-y-2 py-2 flex flex-col justify-between px-8 border-t-white border-t-2"
+                            class="group-hover:visible invisible absolute gap-y-2 py-2 flex flex-col justify-between px-8 border-t-white border-t-2 z-50"
                         >
                             {#each route.childRoutes as childRoute}
                                 <a
