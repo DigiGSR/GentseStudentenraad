@@ -27,6 +27,8 @@ export const load = (async ({ locals }) => {
         },
     });
 
+    const newsCount = prisma.news.count();
+
     const userCount = prisma.user.count();
 
     const questionCount = prisma.question.count({
@@ -75,6 +77,7 @@ export const load = (async ({ locals }) => {
         electionCount,
         pageCount,
         i18nCount,
+        newsCount,
         opinionCount,
         projectCount,
         userCount,

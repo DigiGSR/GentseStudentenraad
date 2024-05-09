@@ -58,7 +58,7 @@
             <SideBarIcon
                 icon="newspaper"
                 value="Nieuwsberichten"
-                badgeNeutral="9"
+                badgeNeutral={data.newsCount}
                 link="/admin/nieuws"
             />
             <SideBarIcon
