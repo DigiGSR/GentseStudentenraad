@@ -39,7 +39,7 @@
 <div class="container space-y-4">
     <TextField description="Naam" bind:value={data.group.name} />
     <LongTextField description="Beschrijving" bind:value={data.group.description} />
-    <TextField description="Sorteerindex" bind:value={data.group.sort_index} />
+    <TextField description="Sorteerindex" number={true} bind:value={data.group.sort_index} />
     <ActionButton action={put} {remove} />
 </div>
 
