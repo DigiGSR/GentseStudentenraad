@@ -18,7 +18,7 @@
     />
 {/if}
 
-<div class="container flex text-lg -mt-32 translate-y-10 justify-end gap-4">
+<div class="container flex text-lg -mt-32 translate-y-10 justify-start md:justify-end gap-4">
     <p>Bekijk historische data:</p>
     <!--TODO translation-->
     <select
@@ -34,7 +34,7 @@
 </div>
 
 {#if data.i18n.get("who-about")}
-    <div class="container md grid grid-cols-2 gap-x-8 gap-y-2">
+    <div class="container md pt-10 md:pt-0 grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-2">
         {@html data.i18n.get("who-about")}
     </div>
 {/if}
@@ -42,8 +42,8 @@
 <div class="space-y-12 py-12">
     {#each data.groups.filter((e) => e.positions.length > 0) as group}
         <div class="odd:bg-neutral-100">
-            <div class="container grid grid-cols-2 gap-6">
-                <div class="space-y-1 col-span-2">
+            <div class="container grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="space-y-1 md:col-span-2">
                     <p class="font-bold text-3xl">{group.name}</p>
                     {#if group.description}
                         <p class="opacity-90">{@html group.description}</p>
