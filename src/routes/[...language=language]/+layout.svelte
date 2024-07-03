@@ -300,8 +300,8 @@
         <slot />
     </div>
 
-    <footer class="bg-neutral-900 py-20 m-3 text-white">
-        <div class="container grid grid-cols-3 gap-12">
+    <footer class="bg-neutral-900 py-20 text-white">
+        <div class="container grid md:grid-cols-3 gap-12">
             <div class="flex flex-col gap-2">
                 <p class="font-semibold">{@html data.i18n.get("footer-social-media")}</p>
                 <div class="w-full h-[2px] bg-white/20" />
