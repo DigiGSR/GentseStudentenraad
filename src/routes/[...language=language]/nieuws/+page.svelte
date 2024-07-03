@@ -22,7 +22,7 @@
 <div class="container py-12 space-y-4">
     <NewsItemBig news_item={data.news[0]} />
 
-    <div class="grid grid-cols-3 gap-4">
+    <div class="grid md:grid-cols-3 gap-4">
         {#each data.news.slice(1, 4) as news_item}
             <NewsItemVertical {news_item} />
         {/each}
