@@ -89,7 +89,7 @@
                         {#each route.childRoutes as childRoute}
                             <a
                                 class="hover:opacity-70 opacity-100 transition duration-150 py-1 min-w-full"
-                                href={`/${childRoute.route}`}>{childRoute.name}</a
+                                href={`${childRoute.route}`}>{childRoute.name}</a
                             >
                         {/each}
                     </Dropdown>
