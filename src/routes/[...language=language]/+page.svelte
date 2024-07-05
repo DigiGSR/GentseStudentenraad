@@ -59,7 +59,7 @@
             {@html data.i18n.get("home-about")}
         </div>
 
-        <div class="grid grid-cols-4 container w-full gap-4">
+        <div class="grid md:grid-cols-4 container w-full gap-4">
             {#each data.news.slice(0, 4) as news_item}
                 <NewsItemVertical {news_item} />
             {/each}
@@ -77,7 +77,7 @@
         />
 
         <div class="container space-y-2">
-            <div class="gap-10 grid grid-cols-2">
+            <div class="gap-10 grid md:grid-cols-2">
                 <div>
                     <p class="font-bold text-xl opacity-90">{Chance().sentence({ words: 3 })}</p>
                     <p class="opacity-75">{Chance().paragraph()}</p>

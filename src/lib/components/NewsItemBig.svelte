@@ -13,7 +13,7 @@
 
 <div class="rounded-lg bg-white overflow-clip">
     <a href="/nieuws/{news_item.id}">
-        <div class="grid grid-cols-2 items-center">
+        <div class="grid md:grid-cols-2 items-center">
             <img
                 src={news_item.banner_image}
                 class="object-cover aspect-[3/2] w-full"

@@ -19,7 +19,7 @@
 
 <template>
     <div class="flex flex-col px-6 space-y-4 py-12 items-start">
-        <div class="flex flex-row justify-between w-full">
+        <div class="flex flex-col md:flex-row justify-between w-full">
             <div class="text-5xl font-serif font-bold">Verslagen</div>
             <div class="flex translate-y-[1rem] gap-4 pb-12">
                 <!--todo hacky translate-->
@@ -41,7 +41,7 @@
                 </p>
             {/if}
             {#each currentReports as report}
-                <div class="bg-white grid grid-cols-3 items-center rounded-md overflow-clip">
+                <div class="bg-white grid items-center rounded-md overflow-clip">
                     <div class="p-6 col-span-2 space-y-1">
                         <p class="text-2xl font-semibold">{report.name}</p>
                         <p class="opacity-75">{report.workgroup}</p>
