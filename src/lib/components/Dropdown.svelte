@@ -27,7 +27,7 @@
         bind:clientWidth={parentWidth}
         class="group
             {isOpen ? 'flex' : 'hidden'} 
-            relative md:absolute md:shadow-lg"
+            relative md:absolute md:shadow-lg z-50"
         style:background-color={bgColor}
     >
         <div

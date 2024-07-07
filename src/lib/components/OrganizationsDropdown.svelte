@@ -14,7 +14,7 @@
     <div
         class="group flex-col {isOpen
             ? 'flex'
-            : 'hidden'} relative md:absolute md:top-[40px] w-64 pb-2 py-4 space-y-2 shadow-lg mx-auto"
+            : 'hidden'} relative md:absolute md:top-[40px] w-64 pb-2 py-4 space-y-2 shadow-lg mx-auto z-50"
         style:background-color={bgColor}
     >
         <div class="grid grid-cols-2 p-3 gap-3 justify-between border-t-white border-t-2">
