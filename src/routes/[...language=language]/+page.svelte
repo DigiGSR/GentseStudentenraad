@@ -65,15 +65,16 @@
             {/each}
         </div>
 
-        <p class="container">{Chance().paragraph()}</p>
+        <p class="container">{@html data.i18n.get("home-stuver")}</p>
 
         <SeparatedBanner
-            title={Chance().sentence({ words: 6 })}
-            body={Chance().sentence({ words: 30 })}
+            title={data.i18n.get("home-stuver-frame-title")}
+            body={data.i18n.get("home-stuver-frame-body")}
             imageUrl="https://www.ugent.be/img/dcom/logos/ugentflag.jpg"
             imageAlt="UGent Flag"
             css="bg-neutral-900 text-white"
             imagePosition="left"
+            isHtml={true}
         />
 
         <div class="container space-y-2">
@@ -98,16 +99,17 @@
         </div>
 
         <SeparatedBanner
-            title={Chance().sentence({ words: 6 })}
-            body={Chance().sentence({ words: 30 })}
+            title={data.i18n.get("home-projects-title")}
+            body={data.i18n.get("home-projects-body")}
             imageUrl="https://unsplash.com/photos/ewGMqs2tmJI/download?ixid=MnwxMjA3fDB8MXxzZWFyY2h8MjJ8fHVuaXZlcnNpdHl8ZW58MHx8fHwxNjYzNzYzMzI3&force=true&w=1920"
             imageAlt="Classroom"
             css="text-white"
             color={data.configuration.brand_color_primary}
             imagePosition="right"
+            isHtml={true}
         />
 
-        <p class="container">{Chance().paragraph()}</p>
+        <p class="container">{@html data.i18n.get("home-events")}</p>
 
         {#if data.calendars.length > 0}
             <div class="container">
@@ -119,6 +121,6 @@
             </div>
         {/if}
 
-        <p class="container">{Chance().paragraph()}</p>
+        <p class="container">{@html data.i18n.get("home-contact")}</p>
     </div>
 </main>
