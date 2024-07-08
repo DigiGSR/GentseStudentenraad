@@ -8,6 +8,24 @@
     let selected = 2023;
 </script>
 
+<div class="container md py-4 justify-center text-center min-w-full">
+    {@html data.i18n.get("standpunten-info")}
+</div>
+
+<div class="flex items-center justify-center gap-4">
+    <p>{@html data.i18n.get("filter-op-werkgroep")}</p>
+    <select
+        name="year"
+        id="year"
+        bind:value={selected}
+        on:change={() => goto(`/standpunten/${selected}`)}
+    >
+        {#each data.years as year}
+            <option value={year}>{year}</option>
+        {/each}
+    </select>
+</div>
+
 {#if data.opinionGroups.filter((e) => e.opinions.length > 0).length > 0}
     <div class="container pt-12 space-y-24">
         {#each data.opinionGroups as group}
@@ -55,20 +73,6 @@
                 </div>
             {/if}
         {/each}
-
-        <div class="flex items-center justify-center gap-4 pb-12">
-            <p>{@html data.i18n.get("filter-op-werkgroep")}</p>
-            <select
-                name="year"
-                id="year"
-                bind:value={selected}
-                on:change={() => goto(`/standpunten/${selected}`)}
-            >
-                {#each data.years as year}
-                    <option value={year}>{year}</option>
-                {/each}
-            </select>
-        </div>
     </div>
 {:else}
     <div class="grow" />
