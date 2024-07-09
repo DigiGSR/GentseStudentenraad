@@ -3,7 +3,6 @@
     import { goto } from "$app/navigation";
     import PositionCard from "$lib/components/PositionCard.svelte";
     import type { PageData } from "./$types";
-    import { onMount } from "svelte";
 
     let selected = "2022";
 
