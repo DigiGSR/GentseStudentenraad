@@ -40,7 +40,8 @@
 {/if}
 
 <div class="space-y-12 py-12">
-    {#each data.groups.filter((e) => e.positions.length > 0) as group}
+    <!-- {#each data.groups.filter((e) => e.positions.length > 0) as group} NOTE: this filters out all of the groups without members. Is this the desired behaviour?-->
+    {#each data.groups as group}
         <div class="odd:bg-neutral-100">
             <div class="container grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div class="space-y-1 md:col-span-2">
