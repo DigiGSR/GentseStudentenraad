@@ -10,7 +10,7 @@ function makeSureDirectoriesExist(filePath: string) {
         console.log("currentDir", currentDir);
         try {
             if (!existsSync(currentDir)) {
-                mkdirSync(currentDir);
+                mkdirSync(currentDir, { recursive: true });
             }
         } catch (err) {
             console.error("Error creating directory:", err);
