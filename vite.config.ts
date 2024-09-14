@@ -11,6 +11,9 @@ const config: UserConfig = {
             restart: ["static/**/*"],
         }),
     ],
+    server: {
+        proxy: {},
+    },
 };
 
 export default config;
