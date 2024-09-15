@@ -10,36 +10,41 @@ services:
             context: .
             dockerfile: Dockerfile
             args:
-                DATABASE_URL: "postgresql://gsr:gsr@10.0.0.3:5432/gsr?schema=public"
+                DATABASE_URL: "postgresql://gsr:gsr@10.0.0.3:5432/mydb?schema=public"
+                UPLOAD_DIR: "/app/uploads"
+                BODY_SIZE_LIMIT: "15728640"
         environment:
-            DATABASE_URL: "postgresql://gsr:gsr@10.0.0.3:5432/gsr?schema=public"
+            DATABASE_URL: "postgresql://gsr:gsr@10.0.0.3:5432/mydb?schema=public"
+            UPLOAD_DIR: "/app/uploads"
+            PUBLIC_GOOGLE_CALENDAR_API_KEY: "${PUBLIC_GOOGLE_CALENDAR_API_KEY}"
+            BODY_SIZE_LIMIT: "15728640"
         labels:
             - "traefik.enable=true"
+            - "traefik.http.middlewares.limit.buffering.maxRequestBodyBytes=15728640"
             - "traefik.http.routers.staging.rule=Host(`gentsestudentenraad.be`,`stura.ugent.be`,`stuart.ugent.be`,`fris.ugent.be`,`stuveco.ugent.be`,`sturec.ugent.be`,`stubio.ugent.be`,`ppsr.ugent.be`,`stuff.ugent.be`,`bsr.ugent.be`)"
+            #- "traefik.http.routers.staging.rule=Host(`gsr.staging.gentsestudentenraad.be`,`stura.staging.gentsestudentenraad.be`,`stuart.staging.gentsestudentenraad.be`,`fris.staging.gentsestudentenraad.be`,`stuveco.staging.gentsestudentenraad.be`,`sturec.staging.gentsestudentenraad.be`,`stubio.staging.gentsestudentenraad.be`,`ppsr.staging.gentsestudentenraad.be`,`stuff.staging.gentsestudentenraad.be`,`bsr.staging.gentsestudentenraad.be`)"
             - "traefik.http.routers.staging.entrypoints=websecure"
             - "traefik.http.routers.staging.tls.certresolver=letsencrypt"
             - "traefik.http.services.staging.loadbalancer.server.port=3000"
-            - "traefik.http.middlewares.test-auth.basicauth.users=gsr:$$apr1$$vNW/TXZ8$$ZEBU.uYb/6e8efHUXsx1w0"
+            - "traefik.http.middlewares.test-auth.basicauth.users=gsrgsr:$$apr1$$vNW/TXZ8$$ZEBU.uYb/6e8efHUXsx1w0"
             - "traefik.http.routers.staging.middlewares=test-auth"
+        volumes:
+            - "/home/celeste/gsr-site-persistent/uploads:/app/uploads"
         networks:
             server_default:
             web2022:
                 ipv4_address: 10.0.0.2
-        volumes:
-            - "/home/celeste/volumes/staging/postgresql:/var/lib/postgresql/data"
-            - "./uploads:/static/uploads"
         restart: unless-stopped
         depends_on:
             - postgres
-
     postgres:
         container_name: website-postgres
         hostname: postgres
         image: postgres
         environment:
-            POSTGRES_DB: gsr
+            POSTGRES_DB: mydb
             POSTGRES_USER: gsr
-            POSTGRES_PASSWORD: $POSTGRES_PASSWORD
+            POSTGRES_PASSWORD: gsr
             PGDATA: /var/lib/postgresql/data/pgdata
         volumes:
             - "/home/jens/volumes/staging/postgresql:/var/lib/postgresql/data"
