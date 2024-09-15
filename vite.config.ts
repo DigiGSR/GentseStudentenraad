@@ -8,7 +8,7 @@ const config: UserConfig = {
         sveltekit(),
         basicSsl(),
         ViteRestart({
-            restart: ["static/**/*"],
+            restart: ["/app/client/uploads/*"],
         }),
     ],
     server: {
