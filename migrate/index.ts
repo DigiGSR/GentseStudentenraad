@@ -500,71 +500,73 @@ const tables = [
 ];
 
 // Reset tables in Postgres
-await Promise.all(
-    tables.map((table) => {
-        return prisma.$queryRawUnsafe(`TRUNCATE TABLE ${table} RESTART IDENTITY CASCADE;`);
-    }),
-);
 
-// Fill tables
-await Promise.all(
-    organizations.map(async (org) => {
-        const maria = await mariadb.createConnection({
-            host: "localhost",
-            user: "root", //used to be org.name, which is consistent with authentication of mariadb container on the server, had to change it so it works with my backup style
-            password: "pass", //used to be org.name, which is consistent with authentication of mariadb container on the server, had to change it so it works with my backup style
-            database: `${org.name}-prod`,
-            port: 3306,
-        });
+(async () => {
+    await Promise.all(
+        tables.map((table) => {
+            return prisma.$queryRawUnsafe(`TRUNCATE TABLE ${table} RESTART IDENTITY CASCADE;`);
+        }),
+    );
 
-        console.log(`${org.name.toUpperCase()}: opinion groups`);
-        await opinionGroup(org, maria);
+    // Fill tables
+    await Promise.all(
+        organizations.map(async (org) => {
+            const maria = await mariadb.createConnection({
+                host: "localhost",
+                user: "root", //used to be org.name, which is consistent with authentication of mariadb container on the server, had to change it so it works with my backup style
+                password: "pass", //used to be org.name, which is consistent with authentication of mariadb container on the server, had to change it so it works with my backup style
+                database: `${org.name}-prod`,
+                port: 3306,
+            });
 
-        console.log(`${org.name.toUpperCase()}: opinion`);
-        await opinion(org, maria);
+            console.log(`${org.name.toUpperCase()}: opinion groups`);
+            await opinionGroup(org, maria);
 
-        console.log(`${org.name.toUpperCase()}: news`);
-        await news(org, maria);
+            console.log(`${org.name.toUpperCase()}: opinion`);
+            await opinion(org, maria);
 
-        console.log(`${org.name.toUpperCase()}: question category`);
-        await questionCategory(org, maria);
+            console.log(`${org.name.toUpperCase()}: news`);
+            await news(org, maria);
 
-        console.log(`${org.name.toUpperCase()}: question`);
-        await question(org, maria);
+            console.log(`${org.name.toUpperCase()}: question category`);
+            await questionCategory(org, maria);
 
-        console.log(`${org.name.toUpperCase()}: group`);
-        await group(org, maria);
+            console.log(`${org.name.toUpperCase()}: question`);
+            await question(org, maria);
 
-        console.log(`${org.name.toUpperCase()}: person`);
-        await person(org, maria);
+            console.log(`${org.name.toUpperCase()}: group`);
+            await group(org, maria);
 
-        console.log(`${org.name.toUpperCase()}: position`);
-        await position(org, maria);
+            console.log(`${org.name.toUpperCase()}: person`);
+            await person(org, maria);
 
-        console.log(`${org.name.toUpperCase()}: user`);
-        await users(org, maria);
+            console.log(`${org.name.toUpperCase()}: position`);
+            await position(org, maria);
 
-        console.log(`${org.name.toUpperCase()}: elections`);
-        await elections(org, maria);
+            console.log(`${org.name.toUpperCase()}: user`);
+            await users(org, maria);
 
-        console.log(`${org.name.toUpperCase()}: images`);
-        await images(org, maria);
+            console.log(`${org.name.toUpperCase()}: elections`);
+            await elections(org, maria);
 
-        console.log(`${org.name.toUpperCase()}: files`);
-        await files(org, maria);
-    }),
-);
+            console.log(`${org.name.toUpperCase()}: images`);
+            await images(org, maria);
 
-// Update incrementer
-await Promise.all(
-    tables.map((table) => {
-        return prisma.$queryRawUnsafe(
-            `SELECT setval(pg_get_serial_sequence('${table}', 'id'), coalesce(max(id)+1, 1), false) FROM ${table};`,
-        );
-    }),
-);
+            console.log(`${org.name.toUpperCase()}: files`);
+            await files(org, maria);
+        }),
+    );
 
-await prisma.$queryRawUnsafe(`INSERT INTO public.configuration (
+    // Update incrementer
+    await Promise.all(
+        tables.map((table) => {
+            return prisma.$queryRawUnsafe(
+                `SELECT setval(pg_get_serial_sequence('${table}', 'id'), coalesce(max(id)+1, 1), false) FROM ${table};`,
+            );
+        }),
+    );
+
+    await prisma.$queryRawUnsafe(`INSERT INTO public.configuration (
     id,
     organization,
     active,
@@ -604,6 +606,6 @@ await prisma.$queryRawUnsafe(`INSERT INTO public.configuration (
 (7, 'BSR', true, '{bsr.staging.gentsestudentenraad.be}', 'https://www.facebook.com/BiomedischeStudentenraad/', 'https://twitter.com/gentsestud', null, null, null, 'https://discord.gg/FwrySrmb', null, null, 'bsr@ugent.be', '#5b5b5b', '#5b5b5b', 'https://bsr.ugent.be/static/footer_logo.png', 'BSR', 'De Biomedische Studentenraad of BSR is de studentenraad van alle studenten Biomedische Wetenschappen aan de Universiteit Gent. We vertegenwoordigen de stem van de studenten bij verschillende raden en commissies.', true, true, true, true, true, true, null, 'https://unsplash.com/photos/KTfAuP8gtYM/download?force=true&w=1920', false, false),
 (9, 'STUBIO', true, '{stubio.staging.gentsestudentenraad.be}', 'https://facebook.com/stubio.gent', 'https://twitter.com/gentsestud', 'https://www.instagram.com/fbwugent/', null, null, null, null, null, 'stubio@ugent.be', '#006400', '#006400', 'https://stubio.ugent.be/static/persistent/images/logo.png', 'Stubio', 'StuBio is de Facultaire Studentenraad van de Bio-ingenieurswetenschappen van de UGent. Stubio vertegenwoordigt en verdedigt (de belangen van) de studenten.', true, true, true, true, true, true, null, 'https://unsplash.com/photos/KTfAuP8gtYM/download?force=true&w=1920', false, false),
 (3, 'FRIS', true, '{fris.staging.gentsestudentenraad.be}', 'https://www.facebook.com/FEA.FRIS', 'https://www.youtube.com/watch?v=dQw4w9WgXcQ', 'https://www.instagram.com/fea.fris/', null, null, null, 'Jozef Plateaustraat 22, 9000 Gent', null, 'fris@ugent.be', '#669A2F', '#669A2F', 'https://fris.ugent.be/static/persistent/images/logo.png', 'FRIS', 'FRiS staat voor Facultaire Raad van Ingenieursstudenten, ofwel de overkoepelende raad van alle studentenvertegenwoordigers van de Faculteit Ingenieurswetenschappen en Architectuur.', false, true, true, true, true, true, null, 'https://unsplash.com/photos/KTfAuP8gtYM/download?force=true&w=1920', false, false);`);
-
+})();
 console.log("Done");
 process.exit(0);
