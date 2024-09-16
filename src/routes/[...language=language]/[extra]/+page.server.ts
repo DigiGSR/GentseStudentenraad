@@ -1,4 +1,3 @@
-import { marked } from "marked";
 import type { PageServerLoad } from "./$types";
 import { prisma } from "$lib/Prisma";
 import { Language } from "$lib/Language";
@@ -25,18 +24,7 @@ export const load = (async ({ params, locals }) => {
         throw error(404, { message: "Not found" });
     }
 
-    let html: string | null = null;
-    if (post.markup === "MARKDOWN") {
-        html = marked.parse(source);
-
-        console.log(html);
-
-        if (!html) {
-            throw error(500, { message: "Internal server error" });
-        }
-    } else {
-        html = source;
-    }
+    const html = source;
 
     return {
         contents: html,

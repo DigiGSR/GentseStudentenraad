@@ -2,7 +2,6 @@
     import type { PageData } from "./$types";
     import ActionButton from "$lib/components/admin/ActionButton.svelte";
     import TextField from "$lib/components/admin/TextField.svelte";
-    import LongTextField from "$lib/components/admin/LongTextField.svelte";
     import MarkDownEditor from "$lib/components/admin/MarkDownEditor.svelte";
     import { goto } from "$app/navigation";
 
@@ -61,6 +60,5 @@
     <MarkDownEditor bind:value={data.page.content_dutch} description="Inhoud (NL)" />
     <MarkDownEditor bind:value={data.page.content_english} description="Inhoud (EN)" />
 
-    <LongTextField bind:value={data.page.config} description="Configuratie" />
     <ActionButton action={put} {remove} />
 </div>
