@@ -3,8 +3,7 @@
     export let value: string;
     export let description: string | null = null;
     import { marked } from "marked";
-
-    let markdownValue = marked.parse(value);
+    let markdownValue = marked.parse(value, {});
 
     console.log(marked.parse(value));
 
@@ -15,9 +14,16 @@
     function toggleEditorRender() {
         editorSelected = !editorSelected;
     }
+
+    // onMount(() => {
+    //     const quill = new Quill("#editor", {
+    //         theme: "snow",
+    //     });
+    // });
 </script>
 
 <template>
+    <div id="editor" />
     <div>
         <div class="flex flex-row items-center mb-1">
             {#if description !== null}
@@ -47,12 +53,8 @@
                 <textarea class="w-full h-96" {placeholder} bind:value />
             {/if}
             {#if renderSelected}
-                <div
-                    class="bg-white px-4 py-2 border-[1px] rounded-md w-full h-96 overflow-x-hidden overflow-y-scroll"
-                >
-                    {@html markdownValue}
-                    <!--TODO dit is misschien niet het beste idee, sanitize-html is applied server side however-->
-                </div>
+                {@html markdownValue}
+                <!--TODO dit is misschien niet het beste idee, sanitize-html is applied server side however-->
             {/if}
         </div>
     </div>

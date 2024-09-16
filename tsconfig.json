@@ -3,7 +3,7 @@
     "compilerOptions": {
         "module": "esnext",
         "target": "esnext",
-        "moduleResolution": "Node",
+        "moduleResolution": "bundler",
         "allowJs": true,
         "checkJs": true,
         "esModuleInterop": true,
@@ -12,9 +12,7 @@
         "skipLibCheck": true,
         "sourceMap": true,
         "strict": true,
-        "strictPropertyInitialization": false,
-        "importsNotUsedAsValues": "preserve",
-        "baseUrl": "./src"
+        "strictPropertyInitialization": false
     },
     "ts-node": {
         "esm": true

@@ -26,8 +26,6 @@ services:
             - "traefik.http.routers.staging.entrypoints=websecure"
             - "traefik.http.routers.staging.tls.certresolver=letsencrypt"
             - "traefik.http.services.staging.loadbalancer.server.port=3000"
-            - "traefik.http.middlewares.test-auth.basicauth.users=gsrgsr:$$apr1$$vNW/TXZ8$$ZEBU.uYb/6e8efHUXsx1w0"
-            - "traefik.http.routers.staging.middlewares=test-auth"
         volumes:
             - "/home/celeste/gsr-site-persistent/uploads:/app/uploads"
         networks:
