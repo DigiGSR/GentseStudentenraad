@@ -45,13 +45,6 @@
 </svelte:head>
 
 <div class="space-y-6">
-    <div>
-        <p class="text-[12px] opacity-50 font-semibold uppercase">Type</p>
-        <select class="px-3 py-2">
-            <option>MARKDOWN</option>
-            <option>PLAIN_TEXT</option>
-        </select>
-    </div>
     <TextField bind:value={data.page.slug} description="Slug" />
 
     <TextField bind:value={data.page.nav_name_dutch} description="Titel (NL)" />
