@@ -10,6 +10,7 @@ export const load = (async () => {
 
 import { writeFileSync, existsSync, mkdirSync } from "fs";
 import crypto from "crypto";
+import type { Actions } from "@sveltejs/kit";
 
 export const actions = {
     //todo, types and somehow throw all this code into one function, since its spread over verslagen en person now
@@ -56,7 +57,7 @@ export const actions = {
             success: true,
         };
     },
-};
+} satisfies Actions;
 
 function getFileExtension(filename: string): string {
     return filename.slice(((filename.lastIndexOf(".") - 1) >>> 0) + 2);

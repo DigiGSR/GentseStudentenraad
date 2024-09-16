@@ -15,59 +15,59 @@ export const load = (async ({ locals }) => {
         }
     }
 
-    const groupCount = prisma.personGroup.count({
+    const groupCount = await prisma.personGroup.count({
         where: {
             organization: locals.configuration.organization,
         },
     });
 
-    const personCount = prisma.person.count({
+    const personCount = await prisma.person.count({
         where: {
             organization: locals.configuration.organization,
         },
     });
 
-    const newsCount = prisma.news.count();
+    const newsCount = await prisma.news.count();
 
-    const userCount = prisma.user.count();
+    const userCount = await prisma.user.count();
 
-    const questionCount = prisma.question.count({
+    const questionCount = await prisma.question.count({
         where: {
             organization: locals.configuration.organization,
         },
     });
 
-    const projectCount = prisma.project.count({
+    const projectCount = await prisma.project.count({
         where: {
             organization: locals.configuration.organization,
         },
     });
 
-    const opinionCount = prisma.opinion.count({
+    const opinionCount = await prisma.opinion.count({
         where: {
             organization: locals.configuration.organization,
         },
     });
 
-    const i18nCount = prisma.i18n.count({
+    const i18nCount = await prisma.i18n.count({
         where: {
             organization: locals.configuration.organization,
         },
     });
 
-    const pageCount = prisma.page.count({
+    const pageCount = await prisma.page.count({
         where: {
             organization: locals.configuration.organization,
         },
     });
 
-    const electionCount = prisma.election.count({
+    const electionCount = await prisma.election.count({
         where: {
             organization: locals.configuration.organization,
         },
     });
 
-    const reportCount = prisma.report.count({
+    const reportCount = await prisma.report.count({
         where: {
             organization: locals.configuration.organization,
         },
