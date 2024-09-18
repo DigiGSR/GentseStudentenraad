@@ -1,7 +1,6 @@
-import mariadb from "mariadb";
+import * as mariadb from "mariadb";
 import { PrismaClient } from "@prisma/client";
 import { Organization as OrgEnum } from "@prisma/client";
-import download from "download";
 
 const prisma = new PrismaClient();
 
@@ -72,94 +71,15 @@ function hashCode(input: string): number {
     return hash % 10000;
 }
 
-async function images(org: Organization, maria: mariadb.Connection) {
-    const rows = (await maria.query(`
-        SELECT * from image
-    `)) as any[];
-
-    let isRateLimited = false;
-    const maxRetries = 5;
-
-    await Promise.all(
-        rows.map(async (row) => {
-            let retries = 0;
-            while (retries < maxRetries) {
-                try {
-                    if (isRateLimited) {
-                        await new Promise((resolve) => setTimeout(resolve, 15000));
-                        isRateLimited = false;
-                    }
-                    await download(
-                        `${org.files}/images/${row.path}`,
-                        `./migrate/${org.name}/images`,
-                    ); //todo adapt main code to have subfolder for fsr/gsr
-                    break;
-                } catch (error) {
-                    console.log(`${org.name.toUpperCase()}: images (RATE LIMITED, sleeping 15s)`);
-                    retries++;
-                    if (retries < maxRetries) {
-                        isRateLimited = true;
-                        await new Promise((resolve) => setTimeout(resolve, 15000));
-                    } else {
-                        console.log(
-                            `${org.name.toUpperCase()}: images (download failed for ${
-                                org.files
-                            }/images/${row.path} after ${retries} retries)`,
-                        );
-                    }
-                }
-            }
-        }),
-    );
-}
-
-async function files(org: Organization, maria: mariadb.Connection) {
-    const rows = (await maria.query(`
-        SELECT * from file
-    `)) as any[];
-
-    let isRateLimited = false;
-    const maxRetries = 3;
-
-    await Promise.all(
-        rows.map(async (row) => {
-            let retries = 0;
-            while (retries < maxRetries) {
-                try {
-                    if (isRateLimited) {
-                        await new Promise((resolve) => setTimeout(resolve, 15000));
-                        isRateLimited = false;
-                    }
-                    await download(`${org.files}/files/${row.path}`, `./migrate/${org.name}/files`); //todo adapt main code to have subfolder for fsr/gsr
-                    break;
-                } catch (error) {
-                    console.log(`${org.name.toUpperCase()}: files (RATE LIMITED, sleeping 15s)`);
-                    retries++;
-                    if (retries < maxRetries) {
-                        isRateLimited = true;
-                        await new Promise((resolve) => setTimeout(resolve, 15000));
-                    } else {
-                        console.log(
-                            `${org.name.toUpperCase()}: files (download failed for ${
-                                org.files
-                            }/images/${row.path} after ${retries} retries)`,
-                        );
-                    }
-                }
-            }
-        }),
-    );
-}
-
 async function opinionGroup(org: Organization, maria: mariadb.Connection) {
-    const rows = (await maria.query(`
+    const rows = await maria.query(`
         SELECT
         p.id as id,
         p.name as name,
         p.\`rank\` as sort_index,
         null as about
         FROM policy p;
-    `)) as any[];
+    `);
 
     await prisma.opinionGroup.createMany({
         data: rows.map((row) => {
@@ -173,21 +93,20 @@ async function opinionGroup(org: Organization, maria: mariadb.Connection) {
         }),
     });
 }
-
 async function opinion(org: Organization, maria: mariadb.Connection) {
-    const rows = (await maria.query(`
+    const rows = await maria.query(`
         SELECT
             s.id,
             NULLIF(s.name, '') as title,
             NULLIF(s.description, '') as about,
             f.path as document_link,
-            s.policy_id as opinion_group,
             str_to_date(concat(s.year,'-09-01'), '%Y-%m-%d') as published_at,
+            s.policy_id as opinion_group,
             s.visible as published
         FROM standpoint s
         LEFT JOIN file f on s.file_id = f.id
         WHERE s.policy_id IS NOT NULL AND s.name NOT LIKE '';
-    `)) as any[];
+    `);
 
     await prisma.opinion.createMany({
         data: rows.map((row) => {
@@ -206,7 +125,7 @@ async function opinion(org: Organization, maria: mariadb.Connection) {
 }
 
 async function news(org: Organization, maria: mariadb.Connection) {
-    const rows = (await maria.query(`
+    const rows = await maria.query(`
         SELECT
             n.id AS id,
             n.title AS title,
@@ -219,7 +138,7 @@ async function news(org: Organization, maria: mariadb.Connection) {
             i.name as banner_image_alt
         FROM news n
         LEFT JOIN image i on n.image_id = i.id;
-    `)) as any[];
+    `);
 
     await prisma.news.createMany({
         data: rows.map((row) => {
@@ -240,7 +159,7 @@ async function news(org: Organization, maria: mariadb.Connection) {
 }
 
 async function questionCategory(org: Organization, maria: mariadb.Connection) {
-    const rows = (await maria.query(`
+    const rows = await maria.query(`
         SELECT
             ASCII(SUBSTRING(fs.abbr, 1, 1)) * ASCII(SUBSTRING(fs.abbr, 2, 2)) as id,
             IF(fs.\`rank\` IS NULL, 0, fs.\`rank\`) as sort_index,
@@ -248,7 +167,7 @@ async function questionCategory(org: Organization, maria: mariadb.Connection) {
             IF(fs.description = '', NULL, fs.description) as description,
             fs.abbr as slug
         FROM faq_subject fs;
-    `)) as any[];
+    `);
 
     await prisma.questionCategory.createMany({
         data: rows.map((row) => {
@@ -265,7 +184,7 @@ async function questionCategory(org: Organization, maria: mariadb.Connection) {
 }
 
 async function question(org: Organization, maria: mariadb.Connection) {
-    const rows = (await maria.query(`
+    const rows = await maria.query(`
         SELECT
             f.id as id,
             f.title as question,
@@ -275,7 +194,7 @@ async function question(org: Organization, maria: mariadb.Connection) {
         LEFT JOIN faq_subsubject fs on fs.id = f.subsubject_id
         LEFT JOIN faq_subject s on fs.subject_abbr = s.abbr
         WHERE s.abbr IS NOT NULL;
-    `)) as any[];
+    `);
 
     await prisma.question.createMany({
         data: rows.map((row) => {
@@ -292,13 +211,13 @@ async function question(org: Organization, maria: mariadb.Connection) {
 }
 
 async function group(org: Organization, maria: mariadb.Connection) {
-    const rows = (await maria.query(`
+    const rows = await maria.query(`
         SELECT
             g.abbr as id,
             g.name,
             IF(g.text = '', NULL, g.text) as description
         FROM \`group\` g;
-    `)) as any[];
+    `);
 
     await prisma.personGroup.createMany({
         data: rows.map((row) => {
@@ -314,11 +233,11 @@ async function group(org: Organization, maria: mariadb.Connection) {
 }
 
 async function person(org: Organization, maria: mariadb.Connection) {
-    const rows = (await maria.query(`
+    const rows = await maria.query(`
         SELECT s.id, s.first_name, s.last_name, i.path, s.email
         FROM stuver s
         LEFT JOIN image i on i.id = s.image_id;
-    `)) as any[];
+    `);
 
     await prisma.person.createMany({
         data: rows.map((row) => {
@@ -334,11 +253,11 @@ async function person(org: Organization, maria: mariadb.Connection) {
 }
 
 async function users(org: Organization, maria: mariadb.Connection) {
-    const rows = (await maria.query(`
+    const rows = await maria.query(`
         SELECT * FROM \`user\` u
         LEFT OUTER JOIN roles_users ru on u.id = ru.user_id
         WHERE ru.role_id != 3 AND u.username IS NOT NULL;
-    `)) as any[];
+    `);
 
     for (const row of rows) {
         await prisma.user.upsert({
@@ -387,7 +306,7 @@ async function users(org: Organization, maria: mariadb.Connection) {
 }
 
 async function position(org: Organization, maria: mariadb.Connection) {
-    const rows = (await maria.query(`
+    const rows = await maria.query(`
         SELECT DISTINCT
             p.id as id,
             p.year as year,
@@ -402,7 +321,7 @@ async function position(org: Organization, maria: mariadb.Connection) {
         LEFT JOIN stuver_education se on s.id = se.stuver_id
         WHERE p2.group_abbr IS NOT NULL
         GROUP BY p.year, p2.name, person_id;
-    `)) as any[];
+    `);
 
     await prisma.personPosition.createMany({
         data: rows
@@ -423,12 +342,12 @@ async function position(org: Organization, maria: mariadb.Connection) {
 }
 
 async function elections(org: Organization, maria: mariadb.Connection) {
-    const rows = (await maria.query(`
+    const rows = await maria.query(`
         SELECT p.*, f.path
         FROM position p
         LEFT JOIN file f on f.id = p.file_id
         WHERE p.group_abbr = 'db' OR p.group_abbr = 'bv' OR p.group_abbr = 'enlight';
-    `)) as any[];
+    `);
 
     const getId = (tag: string): number => {
         tag = tag.toLowerCase();
@@ -549,11 +468,11 @@ const tables = [
             console.log(`${org.name.toUpperCase()}: elections`);
             await elections(org, maria);
 
-            console.log(`${org.name.toUpperCase()}: images`);
-            await images(org, maria);
+            //console.log(`${org.name.toUpperCase()}: images`);
+            //await images(org, maria);
 
-            console.log(`${org.name.toUpperCase()}: files`);
-            await files(org, maria);
+            //console.log(`${org.name.toUpperCase()}: files`);
+            //await files(org, maria);
         }),
     );
 
@@ -566,46 +485,47 @@ const tables = [
         }),
     );
 
-    await prisma.$queryRawUnsafe(`INSERT INTO public.configuration (
-    id,
-    organization,
-    active,
-    hostnames,
-    facebook_url,
-    twitter_url,
-    instagram_url,
-    tiktok_url,
-    linkedin_url,
-    discord_url,
-    adres,
-    phone,
-    email_adres,
-    brand_color_primary,
-    brand_color_secondary,
-    logo_url,
-    name,
-    short_description,
-    i18n,
-    who_section,
-    news_section,
-    faq_section,
-    opinions_section,
-    elections_section,
-    github_url,
-    group_photo,
-    feedback_section,
-    project_section
-) VALUES
-(5, 'STUART', true, '{stuart.staging.gentsestudentenraad.be}', 'https://www.facebook.com/StudentenraadStuArt/', 'https://twitter.com/StuArt_UGent', null, null, null, null, null, null, 'stuart@ugent.be', '#1974D2', '#1974D2', 'https://stuart.ugent.be/static/persistent/images/logo.png', 'StuArt', 'StuArt is de facultaire studentenraad van de Faculteit Letteren en Wijsbegeerte. Deze raad bestaat uit studentenvertegenwoordigers die de belangen van de student aan onze faculteit verdedigen.', true, true, true, true, true, true, null, 'https://unsplash.com/photos/KTfAuP8gtYM/download?force=true&w=1920', false, false),
-(4, 'STUREC', true, '{sturec.staging.gentsestudentenraad.be}', 'https://www.facebook.com/sturecugent', null, 'https://www.instagram.com/sturecugent/', null, 'https://www.linkedin.com/company/sturec-ugent', 'https://discord.com/invite/RPJJg4P', 'StuReC-lokaal @ Campus Aula', null, 'sturec@ugent.be', '#DC4E28', '#DC4E28', 'https://sturec.ugent.be/static/persistent/images/d9e06d91-5b76-494b-9ff2-5007a54df41f-logo2.png', 'StuReC', 'De Studentenraad Recht en Criminologie (StuReC) is hét platform voor studentenvertegenwoordiging aan de Faculteit Recht en Criminologie van de Universiteit Gent.', true, true, true, true, true, true, null, 'https://unsplash.com/photos/KTfAuP8gtYM/download?force=true&w=1920', true, true),
-(10, 'STUFF', true, '{stuff.staging.gentsestudentenraad.be}', 'https://www.facebook.com/StudentenraadFaculteitFarmacie', null, null, null, null, null, null, null, 'stuff@ugent.be', '#4D1B4D', '#4D1B4D', 'https://stuff.ugent.be/static/footer_logo.png', 'StuFF', 'StuFF is de Studentenraad van de Faculteit Farmaceutische Wetenschappen aan de Universiteit Gent.', true, true, true, true, true, true, null, 'https://unsplash.com/photos/KTfAuP8gtYM/download?force=true&w=1920', false, false),
-(6, 'GSR', true, '{gsr.staging.gentsestudentenraad.be}', 'https://www.facebook.com/gentsestudentenraad', 'https://twitter.com/gentsestud', 'https://www.instagram.com/gentsestudentenraad/', null, null, 'https://discord.gg/7gk3fdZ5wm', 'Hoveniersberg 24, 9000 Gent', '041234567', 'info@studentenraad.be', '#550123', '#550123', 'https://gentsestudentenraad.be/static/persistent/images/logo.png', 'Gentse Studentenraad', 'De Gentse Studentenraad is de centrale studentenraad van de Universiteit Gent', true, true, true, true, true, true, null, 'https://gentsestudentenraad.be/static/persistent/images/7a2e803a-f3c1-47c2-bfe6-298aca6b09b1-DB-GSR-2.jpg', true, true),
-(2, 'PPSR', true, '{ppsr.staging.gentsestudentenraad.be}', 'https://facebook.com/studentFPPW', 'https://www.instagram.com/ppsr_ugent', null, null, null, null, null, null, 'ppsrugent@gmail.com', '#6F0105', '#6F0105', 'https://ppsr.ugent.be/static/persistent/images/dba6f6f0-846f-401d-8d78-65b80c775c95-LogoPPSRA2white.png', 'PPSR', 'De Psychologische en Pedagogische Studentenraad (PPSR) is de facultaire studentenraad van de Faculteit Psychologie en Pedagogische Wetenschappen.', true, true, true, true, true, true, null, 'https://unsplash.com/photos/KTfAuP8gtYM/download?force=true&w=1920', true, false),
-(8, 'STUVECO', true, '{stuveco.staging.gentsestudentenraad.be}', 'https://www.facebook.com/studentenraadstuveco', null, 'https://instagram.com/studentenraad.stuveco', null, null, null, 'Tweekerkenstraat 2, 9000 Gent', null, 'stuveco@ugent.be', '#AEB050', '#AEB050', 'https://stuveco.ugent.be/static/persistent/images/c93b7b54-806a-49d1-8f09-e33c21aaacd1-Kopie_van_Logo_stuveco.png', 'Stuveco', 'Stuveco is de facultaire studentenraad van de Faculteit Economie en Bedrijfskunde. Stuveco vertegenwoordigt de belangen van alle studenten die een richting studeren aan onze faculteit.', true, true, true, true, true, true, null, 'https://unsplash.com/photos/KTfAuP8gtYM/download?force=true&w=1920', false, false),
-(1, 'STURA', true, '{stura.staging.gentsestudentenraad.be}', 'https://www.facebook.com/StuRaPSW', 'https://twitter.com/gentsestud', 'https://www.instagram.com/sturapsw/?hl=nl', null, null, null, null, null, 'stura@ugent.be', '#8AC94A', '#8AC94A', 'https://stura.ugent.be/static/persistent/images/0f9bc674-d47d-47d0-aee0-106902cd8eba-footer_logowHITE.png', 'StuRa', 'StuRa is de studentenraad van de faculteit Politieke en Sociale Wetenschappen aan de Universiteit Gent.', true, true, true, true, true, true, null, 'https://unsplash.com/photos/KTfAuP8gtYM/download?force=true&w=1920', false, false),
-(7, 'BSR', true, '{bsr.staging.gentsestudentenraad.be}', 'https://www.facebook.com/BiomedischeStudentenraad/', 'https://twitter.com/gentsestud', null, null, null, 'https://discord.gg/FwrySrmb', null, null, 'bsr@ugent.be', '#5b5b5b', '#5b5b5b', 'https://bsr.ugent.be/static/footer_logo.png', 'BSR', 'De Biomedische Studentenraad of BSR is de studentenraad van alle studenten Biomedische Wetenschappen aan de Universiteit Gent. We vertegenwoordigen de stem van de studenten bij verschillende raden en commissies.', true, true, true, true, true, true, null, 'https://unsplash.com/photos/KTfAuP8gtYM/download?force=true&w=1920', false, false),
-(9, 'STUBIO', true, '{stubio.staging.gentsestudentenraad.be}', 'https://facebook.com/stubio.gent', 'https://twitter.com/gentsestud', 'https://www.instagram.com/fbwugent/', null, null, null, null, null, 'stubio@ugent.be', '#006400', '#006400', 'https://stubio.ugent.be/static/persistent/images/logo.png', 'Stubio', 'StuBio is de Facultaire Studentenraad van de Bio-ingenieurswetenschappen van de UGent. Stubio vertegenwoordigt en verdedigt (de belangen van) de studenten.', true, true, true, true, true, true, null, 'https://unsplash.com/photos/KTfAuP8gtYM/download?force=true&w=1920', false, false),
-(3, 'FRIS', true, '{fris.staging.gentsestudentenraad.be}', 'https://www.facebook.com/FEA.FRIS', 'https://www.youtube.com/watch?v=dQw4w9WgXcQ', 'https://www.instagram.com/fea.fris/', null, null, null, 'Jozef Plateaustraat 22, 9000 Gent', null, 'fris@ugent.be', '#669A2F', '#669A2F', 'https://fris.ugent.be/static/persistent/images/logo.png', 'FRIS', 'FRiS staat voor Facultaire Raad van Ingenieursstudenten, ofwel de overkoepelende raad van alle studentenvertegenwoordigers van de Faculteit Ingenieurswetenschappen en Architectuur.', false, true, true, true, true, true, null, 'https://unsplash.com/photos/KTfAuP8gtYM/download?force=true&w=1920', false, false);`);
+    //     await prisma.$queryRawUnsafe(`INSERT INTO public.configuration (
+    //     id,
+    //     organization,
+    //     active,
+    //     hostnames,
+    //     facebook_url,
+    //     twitter_url,
+    //     instagram_url,
+    //     tiktok_url,
+    //     linkedin_url,
+    //     discord_url,
+    //     adres,
+    //     phone,
+    //     email_adres,
+    //     brand_color_primary,
+    //     brand_color_secondary,
+    //     logo_url,
+    //     name,
+    //     short_description,
+    //     i18n,
+    //     who_section,
+    //     news_section,
+    //     faq_section,
+    //     opinions_section,
+    //     elections_section,
+    //     github_url,
+    //     group_photo,
+    //     feedback_section,
+    //     project_section
+    // ) VALUES
+    // (5, 'STUART', true, '{stuart.staging.gentsestudentenraad.be}', 'https://www.facebook.com/StudentenraadStuArt/', 'https://twitter.com/StuArt_UGent', null, null, null, null, null, null, 'stuart@ugent.be', '#1974D2', '#1974D2', 'https://stuart.ugent.be/static/persistent/images/logo.png', 'StuArt', 'StuArt is de facultaire studentenraad van de Faculteit Letteren en Wijsbegeerte. Deze raad bestaat uit studentenvertegenwoordigers die de belangen van de student aan onze faculteit verdedigen.', true, true, true, true, true, true, null, 'https://unsplash.com/photos/KTfAuP8gtYM/download?force=true&w=1920', false, false),
+    // (4, 'STUREC', true, '{sturec.staging.gentsestudentenraad.be}', 'https://www.facebook.com/sturecugent', null, 'https://www.instagram.com/sturecugent/', null, 'https://www.linkedin.com/company/sturec-ugent', 'https://discord.com/invite/RPJJg4P', 'StuReC-lokaal @ Campus Aula', null, 'sturec@ugent.be', '#DC4E28', '#DC4E28', 'https://sturec.ugent.be/static/persistent/images/d9e06d91-5b76-494b-9ff2-5007a54df41f-logo2.png', 'StuReC', 'De Studentenraad Recht en Criminologie (StuReC) is hét platform voor studentenvertegenwoordiging aan de Faculteit Recht en Criminologie van de Universiteit Gent.', true, true, true, true, true, true, null, 'https://unsplash.com/photos/KTfAuP8gtYM/download?force=true&w=1920', true, true),
+    // (10, 'STUFF', true, '{stuff.staging.gentsestudentenraad.be}', 'https://www.facebook.com/StudentenraadFaculteitFarmacie', null, null, null, null, null, null, null, 'stuff@ugent.be', '#4D1B4D', '#4D1B4D', 'https://stuff.ugent.be/static/footer_logo.png', 'StuFF', 'StuFF is de Studentenraad van de Faculteit Farmaceutische Wetenschappen aan de Universiteit Gent.', true, true, true, true, true, true, null, 'https://unsplash.com/photos/KTfAuP8gtYM/download?force=true&w=1920', false, false),
+    // (6, 'GSR', true, '{gsr.staging.gentsestudentenraad.be}', 'https://www.facebook.com/gentsestudentenraad', 'https://twitter.com/gentsestud', 'https://www.instagram.com/gentsestudentenraad/', null, null, 'https://discord.gg/7gk3fdZ5wm', 'Hoveniersberg 24, 9000 Gent', '041234567', 'info@studentenraad.be', '#550123', '#550123', 'https://gentsestudentenraad.be/static/persistent/images/logo.png', 'Gentse Studentenraad', 'De Gentse Studentenraad is de centrale studentenraad van de Universiteit Gent', true, true, true, true, true, true, null, 'https://gentsestudentenraad.be/static/persistent/images/7a2e803a-f3c1-47c2-bfe6-298aca6b09b1-DB-GSR-2.jpg', true, true),
+    // (2, 'PPSR', true, '{ppsr.staging.gentsestudentenraad.be}', 'https://facebook.com/studentFPPW', 'https://www.instagram.com/ppsr_ugent', null, null, null, null, null, null, 'ppsrugent@gmail.com', '#6F0105', '#6F0105', 'https://ppsr.ugent.be/static/persistent/images/dba6f6f0-846f-401d-8d78-65b80c775c95-LogoPPSRA2white.png', 'PPSR', 'De Psychologische en Pedagogische Studentenraad (PPSR) is de facultaire studentenraad van de Faculteit Psychologie en Pedagogische Wetenschappen.', true, true, true, true, true, true, null, 'https://unsplash.com/photos/KTfAuP8gtYM/download?force=true&w=1920', true, false),
+    // (8, 'STUVECO', true, '{stuveco.staging.gentsestudentenraad.be}', 'https://www.facebook.com/studentenraadstuveco', null, 'https://instagram.com/studentenraad.stuveco', null, null, null, 'Tweekerkenstraat 2, 9000 Gent', null, 'stuveco@ugent.be', '#AEB050', '#AEB050', 'https://stuveco.ugent.be/static/persistent/images/c93b7b54-806a-49d1-8f09-e33c21aaacd1-Kopie_van_Logo_stuveco.png', 'Stuveco', 'Stuveco is de facultaire studentenraad van de Faculteit Economie en Bedrijfskunde. Stuveco vertegenwoordigt de belangen van alle studenten die een richting studeren aan onze faculteit.', true, true, true, true, true, true, null, 'https://unsplash.com/photos/KTfAuP8gtYM/download?force=true&w=1920', false, false),
+    // (1, 'STURA', true, '{stura.staging.gentsestudentenraad.be}', 'https://www.facebook.com/StuRaPSW', 'https://twitter.com/gentsestud', 'https://www.instagram.com/sturapsw/?hl=nl', null, null, null, null, null, 'stura@ugent.be', '#8AC94A', '#8AC94A', 'https://stura.ugent.be/static/persistent/images/0f9bc674-d47d-47d0-aee0-106902cd8eba-footer_logowHITE.png', 'StuRa', 'StuRa is de studentenraad van de faculteit Politieke en Sociale Wetenschappen aan de Universiteit Gent.', true, true, true, true, true, true, null, 'https://unsplash.com/photos/KTfAuP8gtYM/download?force=true&w=1920', false, false),
+    // (7, 'BSR', true, '{bsr.staging.gentsestudentenraad.be}', 'https://www.facebook.com/BiomedischeStudentenraad/', 'https://twitter.com/gentsestud', null, null, null, 'https://discord.gg/FwrySrmb', null, null, 'bsr@ugent.be', '#5b5b5b', '#5b5b5b', 'https://bsr.ugent.be/static/footer_logo.png', 'BSR', 'De Biomedische Studentenraad of BSR is de studentenraad van alle studenten Biomedische Wetenschappen aan de Universiteit Gent. We vertegenwoordigen de stem van de studenten bij verschillende raden en commissies.', true, true, true, true, true, true, null, 'https://unsplash.com/photos/KTfAuP8gtYM/download?force=true&w=1920', false, false),
+    // (9, 'STUBIO', true, '{stubio.staging.gentsestudentenraad.be}', 'https://facebook.com/stubio.gent', 'https://twitter.com/gentsestud', 'https://www.instagram.com/fbwugent/', null, null, null, null, null, 'stubio@ugent.be', '#006400', '#006400', 'https://stubio.ugent.be/static/persistent/images/logo.png', 'Stubio', 'StuBio is de Facultaire Studentenraad van de Bio-ingenieurswetenschappen van de UGent. Stubio vertegenwoordigt en verdedigt (de belangen van) de studenten.', true, true, true, true, true, true, null, 'https://unsplash.com/photos/KTfAuP8gtYM/download?force=true&w=1920', false, false),
+    // (3, 'FRIS', true, '{fris.staging.gentsestudentenraad.be}', 'https://www.facebook.com/FEA.FRIS', 'https://www.youtube.com/watch?v=dQw4w9WgXcQ', 'https://www.instagram.com/fea.fris/', null, null, null, 'Jozef Plateaustraat 22, 9000 Gent', null, 'fris@ugent.be', '#669A2F', '#669A2F', 'https://fris.ugent.be/static/persistent/images/logo.png', 'FRIS', 'FRiS staat voor Facultaire Raad van Ingenieursstudenten, ofwel de overkoepelende raad van alle studentenvertegenwoordigers van de Faculteit Ingenieurswetenschappen en Architectuur.', false, true, true, true, true, true, null, 'https://unsplash.com/photos/KTfAuP8gtYM/download?force=true&w=1920', false, false);`);
+
+    console.log("Done");
+    process.exit(0);
 })();
-console.log("Done");
-process.exit(0);

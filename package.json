@@ -43,7 +43,7 @@
     "dependencies": {
         "@fullcalendar/google-calendar": "^6.1.9",
         "@fullcalendar/icalendar": "^6.1.8",
-        "@prisma/client": "5.18.0",
+        "@prisma/client": "5.12.1",
         "@sveltejs/adapter-node": "^5.2.2",
         "@tabler/core": "^1.0.0-beta13",
         "@tadashi/svelte-editor-quill": "^2.2.0",
