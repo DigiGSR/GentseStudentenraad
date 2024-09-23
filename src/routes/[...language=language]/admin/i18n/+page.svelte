@@ -29,13 +29,6 @@
                         <i class="bi bi-chevron-down" />
                     </div>
                 </th>
-                <th>
-                    <div class="flex items-center">
-                        <p>Type</p>
-                        <div class="grow" />
-                        <i class="bi bi-chevron-down" />
-                    </div>
-                </th>
                 <th>Nederlands</th>
                 <th>Engels</th>
                 <th />
@@ -46,7 +39,6 @@
             {#each data.texts as text}
                 <tr>
                     <td>{text.key}</td>
-                    <td>{text.markup}</td>
                     <td>{text.dutch?.substring(0, 50)}</td>
                     <td>{text.english?.substring(0, 50)}</td>
                     <td>
@@ -66,10 +58,12 @@
 
     <NewButton href="/admin/i18n/create" />
 
-    <p class="text-[24px] pt-8 opacity-50 font-semibold uppercase">Missing tags</p>
+    <p class="text-[24px] pt-8 opacity-50 font-semibold uppercase">
+        Missing tags ({data.missingKeys.length})
+    </p>
     <div class="flex flex-col">
         {#each data.missingKeys as missingKey}
-            <div>{missingKey}</div>
+            <li class="ml-4">{missingKey}</li>
         {/each}
     </div>
 </div>

@@ -1,9 +1,9 @@
 <script lang="ts">
-    import LongTextField from "$lib/components/admin/LongTextField.svelte";
     import ActionButton from "$lib/components/admin/ActionButton.svelte";
     import type { PageData } from "./$types";
     import { goto } from "$app/navigation";
     import { Prisma } from "@prisma/client";
+    import Quill from "$lib/components/admin/Quill.svelte";
 
     export let data: PageData;
 
@@ -48,7 +48,8 @@
             {/each}
         </select>
     </div>
-    <LongTextField description="Nederlands" bind:value={newI18n.dutch} />
-    <LongTextField description="Engels" bind:value={newI18n.english} />
+
+    <Quill bind:value={newI18n.dutch} description="Nederlands" />
+    <Quill bind:value={newI18n.english} description="Engels" />
     <ActionButton action={post} />
 </div>
