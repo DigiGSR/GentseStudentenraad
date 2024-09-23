@@ -1,5 +1,4 @@
 <script lang="ts">
-    import "chance";
     import type { PageData } from "./$types";
     import Tag from "$lib/components/Tag.svelte";
 
