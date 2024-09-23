@@ -1,7 +1,7 @@
 <script lang="ts">
     import type { PageData } from "./$types";
     import NewButton from "$lib/components/admin/NewButton.svelte";
-    import { i18n } from "@prisma/client";
+    import type { i18n } from "@prisma/client";
 
     export let data: PageData;
 

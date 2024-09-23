@@ -3,7 +3,7 @@
     import ActionButton from "$lib/components/admin/ActionButton.svelte";
     import TextField from "$lib/components/admin/TextField.svelte";
     import { goto } from "$app/navigation";
-    import MarkDownEditor from "$lib/components/admin/MarkDownEditor.svelte";
+    import Quill from "$lib/components/admin/Quill.svelte";
 
     async function post() {
         const res = await fetch(`/api/page/`, {
@@ -36,8 +36,8 @@
     <TextField bind:value={data.page.slug} description="Slug" />
     <TextField bind:value={data.page.nav_name_dutch} description="Titel (NL)" />
     <TextField bind:value={data.page.nav_name_english} description="Titel (EN)" />
-    <MarkDownEditor bind:value={data.page.content_dutch} description="Inhoud (NL)" />
-    <MarkDownEditor bind:value={data.page.content_english} description="Inhoud (EN)" />
+    <Quill bind:value={data.page.content_dutch} description="Inhoud (NL)" />
+    <Quill bind:value={data.page.content_english} description="Inhoud (EN)" />
 
     <ActionButton action={post} />
 </div>

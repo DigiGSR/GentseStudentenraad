@@ -60,7 +60,7 @@ model Page {
 
 model i18n {
   id           Int          @id @default(autoincrement())
-  key          String?
+  key          String
   dutch        String
   english      String?
   organization Organization

@@ -1,5 +1,4 @@
 <script lang="ts">
-    import TextField from "$lib/components/admin/TextField.svelte";
     import LongTextField from "$lib/components/admin/LongTextField.svelte";
     import ActionButton from "$lib/components/admin/ActionButton.svelte";
     import type { PageData } from "./$types";
@@ -9,7 +8,7 @@
     export let data: PageData;
 
     let newI18n: Prisma.i18nCreateInput = {
-        key: "",
+        key: data.missingKeys[0] ?? "",
         dutch: "",
         english: "",
         markup: "PLAIN_TEXT",
@@ -41,7 +40,14 @@
             <option>PLAIN_TEXT</option>
         </select>
     </div>
-    <TextField description="Identificatie" bind:value={newI18n.key} />
+    <div>
+        <p class="text-[12px] opacity-50 font-semibold uppercase">Identificatie</p>
+        <select bind:value={newI18n.key} class="px-3 py-2">
+            {#each data.missingKeys as currKey}
+                <option>{currKey}</option>
+            {/each}
+        </select>
+    </div>
     <LongTextField description="Nederlands" bind:value={newI18n.dutch} />
     <LongTextField description="Engels" bind:value={newI18n.english} />
     <ActionButton action={post} />

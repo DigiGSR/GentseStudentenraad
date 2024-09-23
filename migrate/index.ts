@@ -93,6 +93,18 @@ async function opinionGroup(org: Organization, maria: mariadb.Connection) {
         }),
     });
 }
+async function admins(org: Organization, maria: mariadb.Connection) {
+    const rows = await maria.query(`
+
+        SELECT u.id, u.email 
+        FROM \`${org.name}-prod\`.user u 
+        INNER JOIN \`${org.name}-prod\`.roles_users ru 
+        ON u.id = ru.user_id 
+        WHERE ru.role_id = 1;
+    `);
+    console.log(`"rows admins ${org.name}":`, rows);
+}
+
 async function opinion(org: Organization, maria: mariadb.Connection) {
     const rows = await maria.query(`
         SELECT
@@ -420,7 +432,43 @@ const tables = [
 
 // Reset tables in Postgres
 
-(async () => {
+async function adminsge() {
+    await Promise.all(
+        tables.map((table) => {
+            return prisma.$queryRawUnsafe(`TRUNCATE TABLE ${table} RESTART IDENTITY CASCADE;`);
+        }),
+    );
+
+    // Fill tables
+    await Promise.all(
+        organizations.map(async (org) => {
+            const maria = await mariadb.createConnection({
+                host: "localhost",
+                user: "root", //used to be org.name, which is consistent with authentication of mariadb container on the server, had to change it so it works with my backup style
+                password: "pass", //used to be org.name, which is consistent with authentication of mariadb container on the server, had to change it so it works with my backup style
+                database: `${org.name}-prod`,
+                port: 3306,
+            });
+
+            //console.log(`${org.name.toUpperCase()}: admins`);
+            await admins(org, maria);
+        }),
+    );
+
+    // Update incrementer
+    await Promise.all(
+        tables.map((table) => {
+            return prisma.$queryRawUnsafe(
+                `SELECT setval(pg_get_serial_sequence('${table}', 'id'), coalesce(max(id)+1, 1), false) FROM ${table};`,
+            );
+        }),
+    );
+
+    console.log("Done");
+    process.exit(0);
+}
+
+async function doEverything() {
     await Promise.all(
         tables.map((table) => {
             return prisma.$queryRawUnsafe(`TRUNCATE TABLE ${table} RESTART IDENTITY CASCADE;`);
@@ -485,47 +533,50 @@ const tables = [
         }),
     );
 
-    //     await prisma.$queryRawUnsafe(`INSERT INTO public.configuration (
-    //     id,
-    //     organization,
-    //     active,
-    //     hostnames,
-    //     facebook_url,
-    //     twitter_url,
-    //     instagram_url,
-    //     tiktok_url,
-    //     linkedin_url,
-    //     discord_url,
-    //     adres,
-    //     phone,
-    //     email_adres,
-    //     brand_color_primary,
-    //     brand_color_secondary,
-    //     logo_url,
-    //     name,
-    //     short_description,
-    //     i18n,
-    //     who_section,
-    //     news_section,
-    //     faq_section,
-    //     opinions_section,
-    //     elections_section,
-    //     github_url,
-    //     group_photo,
-    //     feedback_section,
-    //     project_section
-    // ) VALUES
-    // (5, 'STUART', true, '{stuart.staging.gentsestudentenraad.be}', 'https://www.facebook.com/StudentenraadStuArt/', 'https://twitter.com/StuArt_UGent', null, null, null, null, null, null, 'stuart@ugent.be', '#1974D2', '#1974D2', 'https://stuart.ugent.be/static/persistent/images/logo.png', 'StuArt', 'StuArt is de facultaire studentenraad van de Faculteit Letteren en Wijsbegeerte. Deze raad bestaat uit studentenvertegenwoordigers die de belangen van de student aan onze faculteit verdedigen.', true, true, true, true, true, true, null, 'https://unsplash.com/photos/KTfAuP8gtYM/download?force=true&w=1920', false, false),
-    // (4, 'STUREC', true, '{sturec.staging.gentsestudentenraad.be}', 'https://www.facebook.com/sturecugent', null, 'https://www.instagram.com/sturecugent/', null, 'https://www.linkedin.com/company/sturec-ugent', 'https://discord.com/invite/RPJJg4P', 'StuReC-lokaal @ Campus Aula', null, 'sturec@ugent.be', '#DC4E28', '#DC4E28', 'https://sturec.ugent.be/static/persistent/images/d9e06d91-5b76-494b-9ff2-5007a54df41f-logo2.png', 'StuReC', 'De Studentenraad Recht en Criminologie (StuReC) is hét platform voor studentenvertegenwoordiging aan de Faculteit Recht en Criminologie van de Universiteit Gent.', true, true, true, true, true, true, null, 'https://unsplash.com/photos/KTfAuP8gtYM/download?force=true&w=1920', true, true),
-    // (10, 'STUFF', true, '{stuff.staging.gentsestudentenraad.be}', 'https://www.facebook.com/StudentenraadFaculteitFarmacie', null, null, null, null, null, null, null, 'stuff@ugent.be', '#4D1B4D', '#4D1B4D', 'https://stuff.ugent.be/static/footer_logo.png', 'StuFF', 'StuFF is de Studentenraad van de Faculteit Farmaceutische Wetenschappen aan de Universiteit Gent.', true, true, true, true, true, true, null, 'https://unsplash.com/photos/KTfAuP8gtYM/download?force=true&w=1920', false, false),
-    // (6, 'GSR', true, '{gsr.staging.gentsestudentenraad.be}', 'https://www.facebook.com/gentsestudentenraad', 'https://twitter.com/gentsestud', 'https://www.instagram.com/gentsestudentenraad/', null, null, 'https://discord.gg/7gk3fdZ5wm', 'Hoveniersberg 24, 9000 Gent', '041234567', 'info@studentenraad.be', '#550123', '#550123', 'https://gentsestudentenraad.be/static/persistent/images/logo.png', 'Gentse Studentenraad', 'De Gentse Studentenraad is de centrale studentenraad van de Universiteit Gent', true, true, true, true, true, true, null, 'https://gentsestudentenraad.be/static/persistent/images/7a2e803a-f3c1-47c2-bfe6-298aca6b09b1-DB-GSR-2.jpg', true, true),
-    // (2, 'PPSR', true, '{ppsr.staging.gentsestudentenraad.be}', 'https://facebook.com/studentFPPW', 'https://www.instagram.com/ppsr_ugent', null, null, null, null, null, null, 'ppsrugent@gmail.com', '#6F0105', '#6F0105', 'https://ppsr.ugent.be/static/persistent/images/dba6f6f0-846f-401d-8d78-65b80c775c95-LogoPPSRA2white.png', 'PPSR', 'De Psychologische en Pedagogische Studentenraad (PPSR) is de facultaire studentenraad van de Faculteit Psychologie en Pedagogische Wetenschappen.', true, true, true, true, true, true, null, 'https://unsplash.com/photos/KTfAuP8gtYM/download?force=true&w=1920', true, false),
-    // (8, 'STUVECO', true, '{stuveco.staging.gentsestudentenraad.be}', 'https://www.facebook.com/studentenraadstuveco', null, 'https://instagram.com/studentenraad.stuveco', null, null, null, 'Tweekerkenstraat 2, 9000 Gent', null, 'stuveco@ugent.be', '#AEB050', '#AEB050', 'https://stuveco.ugent.be/static/persistent/images/c93b7b54-806a-49d1-8f09-e33c21aaacd1-Kopie_van_Logo_stuveco.png', 'Stuveco', 'Stuveco is de facultaire studentenraad van de Faculteit Economie en Bedrijfskunde. Stuveco vertegenwoordigt de belangen van alle studenten die een richting studeren aan onze faculteit.', true, true, true, true, true, true, null, 'https://unsplash.com/photos/KTfAuP8gtYM/download?force=true&w=1920', false, false),
-    // (1, 'STURA', true, '{stura.staging.gentsestudentenraad.be}', 'https://www.facebook.com/StuRaPSW', 'https://twitter.com/gentsestud', 'https://www.instagram.com/sturapsw/?hl=nl', null, null, null, null, null, 'stura@ugent.be', '#8AC94A', '#8AC94A', 'https://stura.ugent.be/static/persistent/images/0f9bc674-d47d-47d0-aee0-106902cd8eba-footer_logowHITE.png', 'StuRa', 'StuRa is de studentenraad van de faculteit Politieke en Sociale Wetenschappen aan de Universiteit Gent.', true, true, true, true, true, true, null, 'https://unsplash.com/photos/KTfAuP8gtYM/download?force=true&w=1920', false, false),
-    // (7, 'BSR', true, '{bsr.staging.gentsestudentenraad.be}', 'https://www.facebook.com/BiomedischeStudentenraad/', 'https://twitter.com/gentsestud', null, null, null, 'https://discord.gg/FwrySrmb', null, null, 'bsr@ugent.be', '#5b5b5b', '#5b5b5b', 'https://bsr.ugent.be/static/footer_logo.png', 'BSR', 'De Biomedische Studentenraad of BSR is de studentenraad van alle studenten Biomedische Wetenschappen aan de Universiteit Gent. We vertegenwoordigen de stem van de studenten bij verschillende raden en commissies.', true, true, true, true, true, true, null, 'https://unsplash.com/photos/KTfAuP8gtYM/download?force=true&w=1920', false, false),
-    // (9, 'STUBIO', true, '{stubio.staging.gentsestudentenraad.be}', 'https://facebook.com/stubio.gent', 'https://twitter.com/gentsestud', 'https://www.instagram.com/fbwugent/', null, null, null, null, null, 'stubio@ugent.be', '#006400', '#006400', 'https://stubio.ugent.be/static/persistent/images/logo.png', 'Stubio', 'StuBio is de Facultaire Studentenraad van de Bio-ingenieurswetenschappen van de UGent. Stubio vertegenwoordigt en verdedigt (de belangen van) de studenten.', true, true, true, true, true, true, null, 'https://unsplash.com/photos/KTfAuP8gtYM/download?force=true&w=1920', false, false),
-    // (3, 'FRIS', true, '{fris.staging.gentsestudentenraad.be}', 'https://www.facebook.com/FEA.FRIS', 'https://www.youtube.com/watch?v=dQw4w9WgXcQ', 'https://www.instagram.com/fea.fris/', null, null, null, 'Jozef Plateaustraat 22, 9000 Gent', null, 'fris@ugent.be', '#669A2F', '#669A2F', 'https://fris.ugent.be/static/persistent/images/logo.png', 'FRIS', 'FRiS staat voor Facultaire Raad van Ingenieursstudenten, ofwel de overkoepelende raad van alle studentenvertegenwoordigers van de Faculteit Ingenieurswetenschappen en Architectuur.', false, true, true, true, true, true, null, 'https://unsplash.com/photos/KTfAuP8gtYM/download?force=true&w=1920', false, false);`);
+    await prisma.$queryRawUnsafe(`INSERT INTO public.configuration (
+        id,
+        organization,
+        active,
+        hostnames,
+        facebook_url,
+        twitter_url,
+        instagram_url,
+        tiktok_url,
+        linkedin_url,
+        discord_url,
+        adres,
+        phone,
+        email_adres,
+        brand_color_primary,
+        brand_color_secondary,
+        logo_url,
+        name,
+        short_description,
+        i18n,
+        who_section,
+        news_section,
+        faq_section,
+        opinions_section,
+        elections_section,
+        github_url,
+        group_photo,
+        feedback_section,
+        project_section
+    ) VALUES
+    (5, 'STUART', true, '{stuart.staging.gentsestudentenraad.be}', 'https://www.facebook.com/StudentenraadStuArt/', 'https://twitter.com/StuArt_UGent', null, null, null, null, null, null, 'stuart@ugent.be', '#1974D2', '#1974D2', 'https://stuart.ugent.be/static/persistent/images/logo.png', 'StuArt', 'StuArt is de facultaire studentenraad van de Faculteit Letteren en Wijsbegeerte. Deze raad bestaat uit studentenvertegenwoordigers die de belangen van de student aan onze faculteit verdedigen.', true, true, true, true, true, true, null, 'https://unsplash.com/photos/KTfAuP8gtYM/download?force=true&w=1920', false, false),
+    (4, 'STUREC', true, '{sturec.staging.gentsestudentenraad.be}', 'https://www.facebook.com/sturecugent', null, 'https://www.instagram.com/sturecugent/', null, 'https://www.linkedin.com/company/sturec-ugent', 'https://discord.com/invite/RPJJg4P', 'StuReC-lokaal @ Campus Aula', null, 'sturec@ugent.be', '#DC4E28', '#DC4E28', 'https://sturec.ugent.be/static/persistent/images/d9e06d91-5b76-494b-9ff2-5007a54df41f-logo2.png', 'StuReC', 'De Studentenraad Recht en Criminologie (StuReC) is hét platform voor studentenvertegenwoordiging aan de Faculteit Recht en Criminologie van de Universiteit Gent.', true, true, true, true, true, true, null, 'https://unsplash.com/photos/KTfAuP8gtYM/download?force=true&w=1920', true, true),
+    (10, 'STUFF', true, '{stuff.staging.gentsestudentenraad.be}', 'https://www.facebook.com/StudentenraadFaculteitFarmacie', null, null, null, null, null, null, null, 'stuff@ugent.be', '#4D1B4D', '#4D1B4D', 'https://stuff.ugent.be/static/footer_logo.png', 'StuFF', 'StuFF is de Studentenraad van de Faculteit Farmaceutische Wetenschappen aan de Universiteit Gent.', true, true, true, true, true, true, null, 'https://unsplash.com/photos/KTfAuP8gtYM/download?force=true&w=1920', false, false),
+    (6, 'GSR', true, '{gsr.staging.gentsestudentenraad.be}', 'https://www.facebook.com/gentsestudentenraad', 'https://twitter.com/gentsestud', 'https://www.instagram.com/gentsestudentenraad/', null, null, 'https://discord.gg/7gk3fdZ5wm', 'Hoveniersberg 24, 9000 Gent', '041234567', 'info@studentenraad.be', '#550123', '#550123', 'https://gentsestudentenraad.be/static/persistent/images/logo.png', 'Gentse Studentenraad', 'De Gentse Studentenraad is de centrale studentenraad van de Universiteit Gent', true, true, true, true, true, true, null, 'https://gentsestudentenraad.be/static/persistent/images/7a2e803a-f3c1-47c2-bfe6-298aca6b09b1-DB-GSR-2.jpg', true, true),
+    (2, 'PPSR', true, '{ppsr.staging.gentsestudentenraad.be}', 'https://facebook.com/studentFPPW', 'https://www.instagram.com/ppsr_ugent', null, null, null, null, null, null, 'ppsrugent@gmail.com', '#6F0105', '#6F0105', 'https://ppsr.ugent.be/static/persistent/images/dba6f6f0-846f-401d-8d78-65b80c775c95-LogoPPSRA2white.png', 'PPSR', 'De Psychologische en Pedagogische Studentenraad (PPSR) is de facultaire studentenraad van de Faculteit Psychologie en Pedagogische Wetenschappen.', true, true, true, true, true, true, null, 'https://unsplash.com/photos/KTfAuP8gtYM/download?force=true&w=1920', true, false),
+    (8, 'STUVECO', true, '{stuveco.staging.gentsestudentenraad.be}', 'https://www.facebook.com/studentenraadstuveco', null, 'https://instagram.com/studentenraad.stuveco', null, null, null, 'Tweekerkenstraat 2, 9000 Gent', null, 'stuveco@ugent.be', '#AEB050', '#AEB050', 'https://stuveco.ugent.be/static/persistent/images/c93b7b54-806a-49d1-8f09-e33c21aaacd1-Kopie_van_Logo_stuveco.png', 'Stuveco', 'Stuveco is de facultaire studentenraad van de Faculteit Economie en Bedrijfskunde. Stuveco vertegenwoordigt de belangen van alle studenten die een richting studeren aan onze faculteit.', true, true, true, true, true, true, null, 'https://unsplash.com/photos/KTfAuP8gtYM/download?force=true&w=1920', false, false),
+    (1, 'STURA', true, '{stura.staging.gentsestudentenraad.be}', 'https://www.facebook.com/StuRaPSW', 'https://twitter.com/gentsestud', 'https://www.instagram.com/sturapsw/?hl=nl', null, null, null, null, null, 'stura@ugent.be', '#8AC94A', '#8AC94A', 'https://stura.ugent.be/static/persistent/images/0f9bc674-d47d-47d0-aee0-106902cd8eba-footer_logowHITE.png', 'StuRa', 'StuRa is de studentenraad van de faculteit Politieke en Sociale Wetenschappen aan de Universiteit Gent.', true, true, true, true, true, true, null, 'https://unsplash.com/photos/KTfAuP8gtYM/download?force=true&w=1920', false, false),
+    (7, 'BSR', true, '{bsr.staging.gentsestudentenraad.be}', 'https://www.facebook.com/BiomedischeStudentenraad/', 'https://twitter.com/gentsestud', null, null, null, 'https://discord.gg/FwrySrmb', null, null, 'bsr@ugent.be', '#5b5b5b', '#5b5b5b', 'https://bsr.ugent.be/static/footer_logo.png', 'BSR', 'De Biomedische Studentenraad of BSR is de studentenraad van alle studenten Biomedische Wetenschappen aan de Universiteit Gent. We vertegenwoordigen de stem van de studenten bij verschillende raden en commissies.', true, true, true, true, true, true, null, 'https://unsplash.com/photos/KTfAuP8gtYM/download?force=true&w=1920', false, false),
+    (9, 'STUBIO', true, '{stubio.staging.gentsestudentenraad.be}', 'https://facebook.com/stubio.gent', 'https://twitter.com/gentsestud', 'https://www.instagram.com/fbwugent/', null, null, null, null, null, 'stubio@ugent.be', '#006400', '#006400', 'https://stubio.ugent.be/static/persistent/images/logo.png', 'Stubio', 'StuBio is de Facultaire Studentenraad van de Bio-ingenieurswetenschappen van de UGent. Stubio vertegenwoordigt en verdedigt (de belangen van) de studenten.', true, true, true, true, true, true, null, 'https://unsplash.com/photos/KTfAuP8gtYM/download?force=true&w=1920', false, false),
+    (3, 'FRIS', true, '{fris.staging.gentsestudentenraad.be}', 'https://www.facebook.com/FEA.FRIS', 'https://www.youtube.com/watch?v=dQw4w9WgXcQ', 'https://www.instagram.com/fea.fris/', null, null, null, 'Jozef Plateaustraat 22, 9000 Gent', null, 'fris@ugent.be', '#669A2F', '#669A2F', 'https://fris.ugent.be/static/persistent/images/logo.png', 'FRIS', 'FRiS staat voor Facultaire Raad van Ingenieursstudenten, ofwel de overkoepelende raad van alle studentenvertegenwoordigers van de Faculteit Ingenieurswetenschappen en Architectuur.', false, true, true, true, true, true, null, 'https://unsplash.com/photos/KTfAuP8gtYM/download?force=true&w=1920', false, false);`);
 
     console.log("Done");
     process.exit(0);
-})();
+}
+
+doEverything();
+adminsge();
