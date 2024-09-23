@@ -3,8 +3,8 @@ import type { PageServerLoad } from "./$types";
 export const prerender = false;
 export const ssr = false;
 export const csr = true;
-import { _TRANSLATION_STRINGS } from "../+page.server";
-import type { TranslationString } from "../+page.server";
+import { _TRANSLATION_STRINGS } from "../../../+layout.server";
+import type { TranslationString } from "../../../+layout.server";
 
 export const load = (async ({ locals }) => {
     const texts = await prisma.i18n.findMany({

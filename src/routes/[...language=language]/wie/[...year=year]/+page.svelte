@@ -1,5 +1,4 @@
 <script lang="ts">
-    import "chance";
     import { goto } from "$app/navigation";
     import PositionCard from "$lib/components/PositionCard.svelte";
     import type { PageData } from "./$types";

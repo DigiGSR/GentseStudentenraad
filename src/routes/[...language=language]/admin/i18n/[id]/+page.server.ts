@@ -1,6 +1,6 @@
 import { prisma } from "$lib/Prisma";
-import { _TRANSLATION_STRINGS, type TranslationString } from "../+page.server";
-
+import { _TRANSLATION_STRINGS } from "../../../+layout.server";
+import type { TranslationString } from "../../../+layout.server";
 import type { PageServerLoad } from "./$types";
 export const prerender = false;
 export const ssr = false;

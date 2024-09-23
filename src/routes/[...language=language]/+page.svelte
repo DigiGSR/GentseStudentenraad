@@ -1,7 +1,5 @@
 <script lang="ts">
     import NewsItemVertical from "$lib/components/NewsItemVertical.svelte";
-    import "chance";
-    import { Chance } from "chance";
     import SeparatedBanner from "$lib/components/SeparatedBanner.svelte";
     import type { PageData } from "./$types";
     import { onMount } from "svelte";
@@ -80,20 +78,16 @@
         <div class="container space-y-2">
             <div class="gap-10 grid md:grid-cols-2">
                 <div>
-                    <p class="font-bold text-xl opacity-90">{Chance().sentence({ words: 3 })}</p>
-                    <p class="opacity-75">{Chance().paragraph()}</p>
+                    <p class="font-bold text-xl opacity-90">
+                        {data.i18n.get("home-paragraph-1-body")}
+                    </p>
+                    <p class="opacity-75">{data.i18n.get("home-paragraph-1-body")}</p>
                 </div>
                 <div>
-                    <p class="font-bold text-xl opacity-90">{Chance().sentence({ words: 3 })}</p>
-                    <p class="opacity-75">{Chance().paragraph()}</p>
-                </div>
-                <div>
-                    <p class="font-bold text-xl opacity-90">{Chance().sentence({ words: 3 })}</p>
-                    <p class="opacity-75">{Chance().paragraph()}</p>
-                </div>
-                <div>
-                    <p class="font-bold text-xl opacity-90">{Chance().sentence({ words: 3 })}</p>
-                    <p class="opacity-75">{Chance().paragraph()}</p>
+                    <p class="font-bold text-xl opacity-90">
+                        {data.i18n.get("home-paragraph-2-title")}
+                    </p>
+                    <p class="opacity-75">{data.i18n.get("home-paragraph-2-body")}</p>
                 </div>
             </div>
         </div>
