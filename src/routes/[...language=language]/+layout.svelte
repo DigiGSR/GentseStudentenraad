@@ -8,11 +8,11 @@
     let showLinks = false;
     export let data: LayoutData;
 
-    let isdropDownHidden = false;
+    console.log(data.admin);
+
     let navBarHeight: number;
 
     let parentWidth = Array(50).fill(0);
-    let childWidth = Array(50).fill(0);
     let navelemheight = 0;
 
     let navbarRoutes = [...data.configuration.navbar];

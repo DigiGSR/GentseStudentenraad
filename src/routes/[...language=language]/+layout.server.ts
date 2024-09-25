@@ -2,7 +2,6 @@ import { Language } from "$lib/Language";
 import { prisma } from "$lib/Prisma";
 import { Organization } from "@prisma/client";
 import type { LayoutServerLoad } from "./$types";
-import sanitizeHtml from "sanitize-html";
 
 export const prerender = false;
 export const ssr = true;
@@ -139,15 +138,16 @@ export const load = (async ({ params, locals }) => {
     const translations = new Map();
 
     _TRANSLATION_STRINGS.forEach((e) => {
-        translations.set(e, e); //set key value as default value
+        translations.set(e, `missing i18n: "${e}"`); //set key value as default value
     });
 
     i18n.forEach((e) => {
         const raw = locals.language == Language.DUTCH ? e.dutch : e.english;
         if (raw) {
-            const value = sanitizeHtml(raw);
-            translations.set(e.key, value);
-        } //if key does not have a value, set the value to key
+            //const value = sanitizeHtml(raw);
+            // het is probably fine om dit uit te zetten lol maybe niet (het is WYSIWYG output dus moet niet eeeecht sanitized worden)
+            translations.set(e.key, raw);
+        }
     });
 
     if (JSON.stringify(locals.configuration.navbar) == JSON.stringify({})) {

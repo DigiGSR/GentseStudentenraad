@@ -15,18 +15,23 @@
             <p class="font-semibold">{news_item.title}</p>
             <p class="text-sm opacity-75">{news_item.synopsis}</p>
             <div class="flex gap-2 pt-2 flex-wrap">
-                <div class="tag">
-                    <i class="bi bi-calendar-event" />
-                    <p>
-                        {news_item.published_at.toLocaleDateString().toUpperCase()}
-                    </p>
-                </div>
-                <div class="tag">
-                    <i class="bi bi-person-fill" />
-                    <p>
-                        {news_item.author}
-                    </p>
-                </div>
+                {#if news_item.published_at}
+                    <!-- this is sometimes null and causes some fuckery -->
+                    <div class="tag">
+                        <i class="bi bi-calendar-event" />
+                        <p>
+                            {news_item.published_at.toLocaleDateString().toUpperCase()}
+                        </p>
+                    </div>
+                {/if}
+                {#if news_item.author}
+                    <div class="tag">
+                        <i class="bi bi-person-fill" />
+                        <p>
+                            {news_item.author}
+                        </p>
+                    </div>
+                {/if}
             </div>
         </div>
     </a>
