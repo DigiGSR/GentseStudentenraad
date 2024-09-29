@@ -5,7 +5,7 @@
     import LongTextField from "$lib/components/admin/LongTextField.svelte";
     import Checkbox from "$lib/components/admin/Checkbox.svelte";
     import DatePicker from "$lib/components/admin/DatePicker.svelte";
-    import ImageUploader from "$lib/components/admin/ImageUploader.svelte";
+    import Uploader from "$lib/components/admin/Uploader.svelte";
     import { goto } from "$app/navigation";
 
     async function put() {
@@ -37,6 +37,7 @@
     }
 
     export let data: PageData;
+    let submitUploader: () => Promise<void>;
 </script>
 
 <svelte:head>
@@ -52,7 +53,12 @@
 
     <TextField bind:value={data.news_item.synopsis} description="Synopsis" />
 
-    <ImageUploader description="Coverfoto" source={data.news_item.banner_image} />
+    <Uploader
+        bind:submitUploader
+        type="image"
+        description="Coverfoto"
+        source={data.news_item.banner_image}
+    />
 
     <LongTextField bind:value={data.news_item.content} description="Inhoud" />
 
@@ -62,5 +68,11 @@
 
     <Checkbox label="Publiek" bind:value={data.news_item.published} description="Opties" />
 
-    <ActionButton action={put} {remove} />
+    <ActionButton
+        action={async () => {
+            await submitUploader();
+            put();
+        }}
+        {remove}
+    />
 </div>

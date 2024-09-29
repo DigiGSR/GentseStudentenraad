@@ -3,7 +3,7 @@
     import ActionButton from "$lib/components/admin/ActionButton.svelte";
     import TextField from "$lib/components/admin/TextField.svelte";
     import LongTextField from "$lib/components/admin/LongTextField.svelte";
-    import ImageUploader from "$lib/components/admin/ImageUploader.svelte";
+    import Uploader from "$lib/components/admin/Uploader.svelte";
     import { goto } from "$app/navigation";
     import { Project } from "@prisma/client";
 
@@ -47,7 +47,7 @@
 
     <LongTextField bind:value={newProject.about} description="Beschrijving" />
 
-    <ImageUploader description="Coverfoto" source={newProject.aimage} />
+    <Uploader description="Coverfoto" source={newProject.aimage} />
 
     <ActionButton action={post} />
 </div>

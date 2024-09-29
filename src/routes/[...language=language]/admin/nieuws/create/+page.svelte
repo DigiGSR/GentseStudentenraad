@@ -5,7 +5,7 @@
     import LongTextField from "$lib/components/admin/LongTextField.svelte";
     import Checkbox from "$lib/components/admin/Checkbox.svelte";
     import DatePicker from "$lib/components/admin/DatePicker.svelte";
-    import ImageUploader from "$lib/components/admin/ImageUploader.svelte";
+    import Uploader from "$lib/components/admin/Uploader.svelte";
     import { goto } from "$app/navigation";
     import { News } from "@prisma/client";
 
@@ -43,7 +43,7 @@
 
     <TextField bind:value={data.news_item.synopsis} description="Synopsis" />
 
-    <ImageUploader description="Coverfoto" source={data.news_item.banner_image} />
+    <Uploader description="Coverfoto" source={data.news_item.banner_image} />
 
     <LongTextField bind:value={data.news_item.content} description="Inhoud" />
 

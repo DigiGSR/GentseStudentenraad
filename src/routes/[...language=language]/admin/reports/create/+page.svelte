@@ -4,6 +4,7 @@
     import ActionButton from "$lib/components/admin/ActionButton.svelte";
     import { goto } from "$app/navigation";
     import { Prisma } from "@prisma/client";
+    import Uploader from "$lib/components/admin/Uploader.svelte";
 
     export let data: PageData;
     export let newReport: Prisma.ReportUncheckedCreateInput = {
@@ -52,7 +53,8 @@
         bind:value={newReport.workgroup}
     />
 
-    <TextField placeholder={"https://example.com"} description="Url" bind:value={newReport.url} />
+    <Uploader type="file" bind:source={newReport.url} />
+
     <!--todo, make this an image upload-->
 
     <ActionButton action={postReport} />

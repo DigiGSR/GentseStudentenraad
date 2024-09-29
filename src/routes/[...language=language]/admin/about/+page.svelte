@@ -4,7 +4,7 @@
     import LongTextField from "$lib/components/admin/LongTextField.svelte";
     import ActionButton from "$lib/components/admin/ActionButton.svelte";
     import { goto } from "$app/navigation";
-    import ImageUploader from "$lib/components/admin/ImageUploader.svelte";
+    import Uploader from "$lib/components/admin/Uploader.svelte";
     export let data: PageData;
 
     async function put() {
@@ -22,6 +22,8 @@
             alert(JSON.stringify(res, null, 2));
         }
     }
+
+    let submitUploader: () => Promise<void>;
 </script>
 
 <svelte:head>
@@ -62,11 +64,16 @@
         bind:value={data.configuration.email_adres}
         description="E-mailadres"
     />
-
-    <ActionButton action={put} />
-    <ImageUploader
-        org={data.configuration.organization}
-        dir={"person"}
+    <Uploader
+        description="Cover"
+        type="image"
         bind:source={data.configuration.group_photo}
+        bind:submitUploader
+    />
+    <ActionButton
+        action={async () => {
+            await submitUploader();
+            put();
+        }}
     />
 </div>

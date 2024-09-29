@@ -1,7 +1,7 @@
 <script lang="ts">
     import type { PageData } from "./$types";
     import TextField from "$lib/components/admin/TextField.svelte";
-    import ImageUploader from "$lib/components/admin/ImageUploader.svelte";
+    import Uploader from "$lib/components/admin/Uploader.svelte";
     import ActionButton from "$lib/components/admin/ActionButton.svelte";
     import { goto } from "$app/navigation";
     import { Prisma } from "@prisma/client";
@@ -45,7 +45,7 @@
 <div class="space-y-6">
     <TextField description="Naam" bind:value={newPerson.name} />
 
-    <ImageUploader description="Portretfoto" source={newPerson.image} />
+    <Uploader description="Portretfoto" source={newPerson.image} />
 
     <TextField description="Afbeelding" bind:value={newPerson.image} />
 

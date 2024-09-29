@@ -3,13 +3,10 @@
     import TextField from "$lib/components/admin/TextField.svelte";
     import Divider from "$lib/components/Divider.svelte";
     import LongTextField from "$lib/components/admin/LongTextField.svelte";
-    import ImageUploader from "$lib/components/admin/ImageUploader.svelte";
+    import Uploader from "$lib/components/admin/Uploader.svelte";
     import ActionButton from "$lib/components/admin/ActionButton.svelte";
     import { goto } from "$app/navigation";
     import { Person, Prisma, PersonPosition } from "@prisma/client";
-
-    import { enhance } from "$app/forms"; //todo make sure this doesnt break other forms that might be present on the page
-
     export let data: PageData;
     export let description =
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.";
@@ -102,6 +99,8 @@
             alert(JSON.stringify(res, null, 2));
         }
     }
+
+    let submitUploader: () => Promise<void>;
 </script>
 
 <svelte:head>
@@ -115,16 +114,22 @@
 <div class="space-y-6">
     <TextField description="Naam" bind:value={data.person.name} />
 
-    <ImageUploader
-        org={data.configuration.organization}
-        dir={"cover"}
+    <Uploader
+        bind:submitUploader
         description="Portretfoto"
+        type="image"
         bind:source={data.person.image}
     />
 
     <TextField description="E-mailadres" bind:value={data.person.mail} />
 
-    <ActionButton action={putPerson} remove={() => remove(data.person)} />
+    <ActionButton
+        action={async () => {
+            await submitUploader();
+            putPerson();
+        }}
+        remove={() => remove(data.person)}
+    />
 
     {#each data.person.positions as position}
         <Divider text="Positie" />
@@ -141,7 +146,7 @@
             <div class="flex flex-row">
                 <p class="text-[12px] opacity-50 font-semibold uppercase">Plaatsvervangers:</p>
                 <div class="flex flex-col gap-y-1">
-                    {#each position.substitutes as person_id, index}
+                    {#each position.substitutes as index}
                         <div class="flex flex-row ml-2 gap-x-2 items-center">
                             <select
                                 class="rounded-md"
@@ -177,7 +182,9 @@
         <LongTextField description="Functiebeschrijving" bind:value={description} />
 
         <ActionButton
-            action={() => putPosition(position)}
+            action={async () => {
+                putPosition(position);
+            }}
             remove={() => removePosition(position)}
         />
     {/each}

@@ -4,7 +4,7 @@
     import ActionButton from "$lib/components/admin/ActionButton.svelte";
     import { goto } from "$app/navigation";
     import { Report } from "@prisma/client";
-    import FileUploader from "$lib/components/admin/FileUploader.svelte";
+    import Uploader from "$lib/components/admin/Uploader.svelte";
 
     export let data: PageData;
 
@@ -35,6 +35,8 @@
             alert(JSON.stringify(res, null, 2));
         }
     }
+
+    let submitUploader: () => Promise<void>;
 </script>
 
 <svelte:head>
@@ -52,7 +54,7 @@
         bind:value={data.report.name}
     />
 
-    <FileUploader description="Verslag" bind:source={data.report.url} />
+    <Uploader bind:submitUploader type="file" description="Verslag" bind:source={data.report.url} />
 
     <TextField
         placeholder={"Algemene vergadering"}
@@ -62,5 +64,11 @@
 
     <!--todo, make this an image upload-->
 
-    <ActionButton action={putReport} remove={() => remove(data.report)} />
+    <ActionButton
+        action={async () => {
+            await submitUploader();
+            putReport();
+        }}
+        remove={() => remove(data.report)}
+    />
 </div>

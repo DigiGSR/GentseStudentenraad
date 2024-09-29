@@ -3,7 +3,7 @@
     import ActionButton from "$lib/components/admin/ActionButton.svelte";
     import TextField from "$lib/components/admin/TextField.svelte";
     import LongTextField from "$lib/components/admin/LongTextField.svelte";
-    import ImageUploader from "$lib/components/admin/ImageUploader.svelte";
+    import Uploader from "$lib/components/admin/Uploader.svelte";
     import { goto } from "$app/navigation";
 
     async function post() {
@@ -35,6 +35,7 @@
     }
 
     export let data: PageData;
+    let submitUploader: () => Promise<void>;
 </script>
 
 <svelte:head>
@@ -50,7 +51,18 @@
 
     <LongTextField bind:value={data.project.about} description="Beschrijving" />
 
-    <ImageUploader description="Coverfoto" source={data.project.image} />
+    <Uploader
+        bind:submitUploader
+        type="image"
+        description="Coverfoto"
+        bind:source={data.project.image}
+    />
 
-    <ActionButton action={post} {remove} />
+    <ActionButton
+        action={async () => {
+            await submitUploader();
+            post();
+        }}
+        {remove}
+    />
 </div>

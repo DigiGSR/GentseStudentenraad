@@ -3,7 +3,7 @@
     import TextField from "$lib/components/admin/TextField.svelte";
     import Divider from "$lib/components/Divider.svelte";
     import LongTextField from "$lib/components/admin/LongTextField.svelte";
-    import ImageUploader from "$lib/components/admin/ImageUploader.svelte";
+    import Uploader from "$lib/components/admin/Uploader.svelte";
     import ActionButton from "$lib/components/admin/ActionButton.svelte";
     import { goto } from "$app/navigation";
 
@@ -61,7 +61,7 @@
 <div class="space-y-6">
     <TextField description="Naam" bind:value={data.person.name} />
 
-    <ImageUploader description="Portretfoto" source={data.person.image} />
+    <Uploader description="Portretfoto" source={data.person.image} />
 
     <TextField description="Afbeelding" bind:value={data.person.image} />
 
