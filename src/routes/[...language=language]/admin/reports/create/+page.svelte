@@ -30,6 +30,7 @@
             alert(JSON.stringify(res, null, 2));
         }
     }
+    let submitUploader: () => Promise<void>;
 </script>
 
 <svelte:head>
@@ -53,11 +54,16 @@
         bind:value={newReport.workgroup}
     />
 
-    <Uploader type="file" bind:source={newReport.url} />
+    <Uploader bind:submitUploader type="file" bind:source={newReport.url} />
 
     <!--todo, make this an image upload-->
 
-    <ActionButton action={postReport} />
+    <ActionButton
+        action={async () => {
+            await submitUploader();
+            postReport();
+        }}
+    />
 </div>
 
 <style lang="postcss">
