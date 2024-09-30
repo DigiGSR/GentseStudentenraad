@@ -65,7 +65,7 @@
     }
 
     $: uploadFilename = fileList
-        ? `uploads/${getFileName(fileList[0].name)}-${generateRandomFilename(8)}.${getFileExtension(fileList[0].name)}`
+        ? `api/uploads/${getFileName(fileList[0].name)}-${generateRandomFilename(8)}.${getFileExtension(fileList[0].name)}`
         : "";
 
     $: console.log("uploadFilename", uploadFilename);

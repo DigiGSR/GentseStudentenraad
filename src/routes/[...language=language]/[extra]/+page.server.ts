@@ -9,6 +9,9 @@ export const ssr = true;
 export const csr = true;
 
 export const load = (async ({ params, locals }) => {
+    if (params.extra === "getfile") {
+        return {};
+    }
     const post = await prisma.page.findFirstOrThrow({
         where: {
             slug: params.extra,
