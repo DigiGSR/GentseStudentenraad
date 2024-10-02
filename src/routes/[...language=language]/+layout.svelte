@@ -210,7 +210,7 @@
             <div />
 
             <a
-                class="flex items-center gap-2 bg-neutral-800 px-3 py-1 rounded-full justify-center max-w-fit"
+                class="flex md:self-start self-center items-center gap-2 bg-neutral-800 px-3 py-1 rounded-full justify-center max-w-fit"
                 href={data.user
                     ? data.admin
                         ? "/admin"
@@ -222,7 +222,9 @@
                 {:else}
                     <i class="bi bi-person" />
                 {/if}
-                <p class="text-xs font-semibold">{data.user ? data.user.username : "Inloggen"}</p>
+                <p class="text-xs font-semibold">
+                    {data.user ? data.user.username : "Inloggen"}
+                </p>
             </a>
 
             <!-- {#if data.configuration.i18n}

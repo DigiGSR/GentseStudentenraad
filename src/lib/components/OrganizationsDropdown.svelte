@@ -9,15 +9,17 @@
     on:mouseleave={() => (isOpen = false)}
     on:click={() => (isOpen = !isOpen)}
 >
-    <i class="bi bi-diagram-3{isOpen ? '-fill' : ''} text-lg translate-y-0.25" />
+    <i class="bi bi-diagram-3 {isOpen ? '-fill' : ''} hidden md:block text-lg translate-y-0.25" />
 
     <div
         class="group flex-col {isOpen
             ? 'flex'
-            : 'hidden'} relative md:absolute md:top-[40px] w-64 pb-2 py-4 space-y-2 shadow-lg mx-auto z-50"
+            : 'md:hidden'} relative md:absolute md:top-[40px] md:w-64 pb-2 py-4 space-y-2 md:shadow-lg mx-auto z-50"
         style:background-color={bgColor}
     >
-        <div class="grid grid-cols-2 p-3 gap-3 justify-between border-t-white border-t-2">
+        <div
+            class=" flex flex-row px-24 md:grid md:grid-cols-2 md:p-3 gap-3 justify-between md:border-t-white md:border-t-2"
+        >
             <slot />
         </div>
     </div>
