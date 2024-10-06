@@ -18,7 +18,7 @@
         style:background-color={bgColor}
     >
         <div
-            class=" flex flex-row px-24 md:grid md:grid-cols-2 md:p-3 gap-3 justify-between md:border-t-white md:border-t-2"
+            class="flex justify-center px-24 md:grid md:grid-cols-2 md:p-3 gap-3 md:border-t-white md:border-t-2"
         >
             <slot />
         </div>

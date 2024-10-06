@@ -104,16 +104,6 @@
             {#if data.configuration.organization == "GSR"}
                 <OrganizationsDropdown bgColor={data.configuration.brand_color_primary}>
                     <a
-                        href="https://epione.sittool.net/"
-                        class="flex flex-col justify-center items-center hover:cursor-pointer hover:opacity-70 opacity-100 transition duration-150"
-                    >
-                        <div
-                            class="w-16 bg-center bg-contain bg-no-repeat h-16"
-                            style="background-image: url(/img/epione.png)"
-                        />
-                        <p class="mt-1">Epione</p>
-                    </a>
-                    <a
                         href="http://cultour.be/"
                         class="flex flex-col justify-center items-center hover:cursor-pointer hover:opacity-70 opacity-100 transition duration-150"
                     >
