@@ -129,7 +129,7 @@ async function opinion(org: Organization, maria: mariadb.Connection) {
                 document_link: `${org.files}/files/${row.document_link}`,
                 organization: org.enum,
                 published: row.published > 0,
-                published_at: row.published_at,
+                published_at: row.published_at || new Date(),
                 opinion_group_id: row.opinion_group + org.offset,
             };
         }),
@@ -351,6 +351,8 @@ async function position(org: Organization, maria: mariadb.Connection) {
                 };
             }),
     });
+
+    console.log(rows.length, "rows length");
 }
 
 async function elections(org: Organization, maria: mariadb.Connection) {
@@ -533,7 +535,7 @@ async function doEverything() {
         }),
     );
 
-    await prisma.$queryRawUnsafe(`INSERT INTO public.configuration (
+    /*await prisma.$queryRawUnsafe(`INSERT INTO public.configuration (
         id,
         organization,
         active,
@@ -573,6 +575,8 @@ async function doEverything() {
     (7, 'BSR', true, '{bsr.staging.gentsestudentenraad.be}', 'https://www.facebook.com/BiomedischeStudentenraad/', 'https://twitter.com/gentsestud', null, null, null, 'https://discord.gg/FwrySrmb', null, null, 'bsr@ugent.be', '#5b5b5b', '#5b5b5b', 'https://bsr.ugent.be/static/footer_logo.png', 'BSR', 'De Biomedische Studentenraad of BSR is de studentenraad van alle studenten Biomedische Wetenschappen aan de Universiteit Gent. We vertegenwoordigen de stem van de studenten bij verschillende raden en commissies.', true, true, true, true, true, true, null, 'https://unsplash.com/photos/KTfAuP8gtYM/download?force=true&w=1920', false, false),
     (9, 'STUBIO', true, '{stubio.staging.gentsestudentenraad.be}', 'https://facebook.com/stubio.gent', 'https://twitter.com/gentsestud', 'https://www.instagram.com/fbwugent/', null, null, null, null, null, 'stubio@ugent.be', '#006400', '#006400', 'https://stubio.ugent.be/static/persistent/images/logo.png', 'Stubio', 'StuBio is de Facultaire Studentenraad van de Bio-ingenieurswetenschappen van de UGent. Stubio vertegenwoordigt en verdedigt (de belangen van) de studenten.', true, true, true, true, true, true, null, 'https://unsplash.com/photos/KTfAuP8gtYM/download?force=true&w=1920', false, false),
     (3, 'FRIS', true, '{fris.staging.gentsestudentenraad.be}', 'https://www.facebook.com/FEA.FRIS', 'https://www.youtube.com/watch?v=dQw4w9WgXcQ', 'https://www.instagram.com/fea.fris/', null, null, null, 'Jozef Plateaustraat 22, 9000 Gent', null, 'fris@ugent.be', '#669A2F', '#669A2F', 'https://fris.ugent.be/static/persistent/images/logo.png', 'FRIS', 'FRiS staat voor Facultaire Raad van Ingenieursstudenten, ofwel de overkoepelende raad van alle studentenvertegenwoordigers van de Faculteit Ingenieurswetenschappen en Architectuur.', false, true, true, true, true, true, null, 'https://unsplash.com/photos/KTfAuP8gtYM/download?force=true&w=1920', false, false);`);
+
+    */
 
     console.log("Done");
     process.exit(0);
