@@ -3,17 +3,21 @@
     import PositionCard from "$lib/components/PositionCard.svelte";
     import type { PageData } from "./$types";
 
-    let selected = "2022";
-
     const sections: { id: string; name: string }[] = [];
 
+    let selected = "2024";
+
     $: {
+        data.groups.sort((a, b) =>
+            a.name === "Dagelijks Bestuur" ? -1 : b.name === "Dagelijks Bestuur" ? 1 : 0,
+        );
         for (const group of data.groups) {
             sections.push({ id: group.id.toString(), name: group.name });
         }
     }
 
     export let data: PageData;
+    //make it so that the group with name "Dagelijks Bestuur" is always on top
 </script>
 
 {#if data.configuration.group_photo}
@@ -25,9 +29,9 @@
     />
 {/if}
 
-<div class="hidden absolute top-[600px] left-10 md:flex flex-col max-w-fit space-y-2">
-    <p class="text-sm text-black text-opacity-60">Raden & Comissies</p>
-    <div class="flex flex-col space-y-2 pl-4">
+<div class="hidden absolute top-[600px] left-3 xl:flex xl:pr-12 flex-col max-w-fit space-y-2">
+    <p class="text-md font-bold text-black text-opacity-60">Raden & Comissies</p>
+    <div class="flex flex-col space-y-2 text-xs">
         {#each sections as section}
             <a href="#{section.id}" class="text-black text-opacity-70 hover:text-opacity-100"
                 >{section.name}</a
@@ -36,7 +40,7 @@
     </div>
 </div>
 
-<div class="container flex text-lg -mt-32 translate-y-10 justify-start md:justify-end gap-4">
+<div class="container flex text-lg xl:pl-12 -mt-32 translate-y-10 justify-start gap-4">
     <p>Bekijk historische data:</p>
     <!--TODO translation-->
     <select
@@ -52,12 +56,12 @@
 </div>
 
 {#if data.i18n.get("who-about")}
-    <div class="container md pt-10 md:pt-0 grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-2">
+    <div class="container xl:pl-12 pt-12 grid grid-cols-1 gap-x-8 gap-y-2">
         {@html data.i18n.get("who-about")}
     </div>
 {/if}
 
-<div class="space-y-12 py-12">
+<div class="space-y-12 xl:pl-12 py-12">
     <!-- {#each data.groups.filter((e) => e.positions.length > 0) as group} NOTE: this filters out all of the groups without members. Is this the desired behaviour?-->
     {#each data.groups as group}
         <div class="odd:bg-neutral-100" id={group.id.toString()}>

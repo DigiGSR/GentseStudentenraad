@@ -7,22 +7,22 @@
     let substituteDropdown = false;
 </script>
 
-<div class="rounded-lg p-6 space-y-4 bg-white h-fit">
+<div class="rounded-lg p-5 shadow-md space-y-4 bg-white">
     <div class="flex items-center gap-4 overflow-hidden">
         {#if position.person.image}
             <img
                 src={position.person.image}
                 alt="Portrait of {position.person.name}"
-                class="h-16 w-16 object-cover rounded-full"
+                class="h-28 w-28 object-cover rounded-full"
             />
         {:else}
             <i class="bi bi-person-circle text-6xl text-center h-16" />
         {/if}
         <div>
-            <p class="opacity-90 text-ellipsis">
+            <p class="opacity-80 text-xl text-ellipsis">
                 {position.name}
             </p>
-            <p class="font-semibold text-xl">{position.person.name}</p>
+            <p class="font-semibold text-2xl">{position.person.name}</p>
         </div>
 
         <div class="grow" />
@@ -67,6 +67,8 @@
 
         {#if position.person.mail !== null}
             <Tag link="mailto:{position.person.mail}" value={position.person.mail} icon="mailbox" />
+        {:else}
+            <div class="pb-[1.75rem]"></div>
         {/if}
     </div>
 </div>

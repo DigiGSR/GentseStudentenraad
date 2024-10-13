@@ -293,7 +293,7 @@
     </div>
 
     <footer class="bg-neutral-900 py-20 text-white">
-        <div class="container grid md:grid-cols-3 gap-12">
+        <div class="container grid md:grid-cols-2 gap-12">
             <div class="flex flex-col gap-2">
                 <p class="font-semibold">{@html data.i18n.get("footer-social-media")}</p>
                 <div class="w-full h-[2px] bg-white/20" />
@@ -395,11 +395,6 @@
                         >{data.configuration.email_adres}</a
                     >
                 </div>
-            </div>
-
-            <div class="space-y-2">
-                <p class="font-semibold">{@html data.i18n.get("footer-varia")}</p>
-                <p class="">{@html data.i18n.get("footer-complaints")}</p>
             </div>
         </div>
     </footer>

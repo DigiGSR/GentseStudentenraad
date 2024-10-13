@@ -3,7 +3,7 @@ import { prisma } from "$lib/Prisma";
 import { Language } from "$lib/Language";
 import { XMLParser } from "fast-xml-parser";
 import jwt from "jsonwebtoken";
-import type { Prisma, User } from "@prisma/client";
+import type { Prisma } from "@prisma/client";
 import * as cookie from "cookie";
 
 const secret = "insecure";
@@ -122,7 +122,8 @@ export const handle = (async ({ event, resolve }) => {
         // TODO: Better authentication for API routes.
         if (
             event.url.pathname.startsWith("/api") &&
-            !event.url.pathname.startsWith("/api/calendar")
+            !event.url.pathname.startsWith("/api/calendar") &&
+            !event.url.pathname.startsWith("/api/uploads")
         ) {
             if (!event.locals.user) {
                 throw error(401, "Unauthorized");
