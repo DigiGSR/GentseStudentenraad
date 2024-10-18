@@ -56,6 +56,12 @@
         <div class="space-y-1">
             <p class="category">Inhoud</p>
             <SideBarIcon
+                icon="file-earmark-text"
+                value="Reglementen"
+                badgeNeutral={data.rulesCount}
+                link="/admin/rules"
+            />
+            <SideBarIcon
                 icon="newspaper"
                 value="Nieuwsberichten"
                 badgeNeutral={data.newsCount}

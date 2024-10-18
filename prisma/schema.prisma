@@ -144,6 +144,17 @@ model Opinion {
   @@map("opinion")
 }
 
+model Rules {
+  id            Int          @id @default(autoincrement())
+  published_at  DateTime?
+  title         String
+  link          String
+  description   String?
+  organization  Organization?
+
+  @@map("rules")
+}
+
 model News {
   id               Int          @id @default(autoincrement())
   title            String

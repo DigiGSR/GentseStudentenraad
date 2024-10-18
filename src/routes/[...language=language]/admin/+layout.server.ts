@@ -27,6 +27,8 @@ export const load = (async ({ locals }) => {
         },
     });
 
+    const rulesCount = await prisma.rules.count();
+
     const newsCount = await prisma.news.count();
 
     const userCount = await prisma.user.count();
@@ -85,5 +87,6 @@ export const load = (async ({ locals }) => {
         groupCount,
         personCount,
         questionCount,
+        rulesCount,
     };
 }) satisfies LayoutServerLoad;

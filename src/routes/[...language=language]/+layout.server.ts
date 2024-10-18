@@ -39,6 +39,7 @@ export const _TRANSLATION_STRINGS = [
     "filter-op-werkgroep",
     "elections-title",
     "hier-vind-je-verslagen",
+    "hier-vind-je-reglementen",
     "werkgroep-geen-verslagen",
     "who-about",
 ] as const;

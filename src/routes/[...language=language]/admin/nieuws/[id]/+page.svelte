@@ -57,7 +57,7 @@
         bind:submitUploader
         type="image"
         description="Coverfoto"
-        source={data.news_item.banner_image}
+        bind:source={data.news_item.banner_image}
     />
 
     <LongTextField bind:value={data.news_item.content} description="Inhoud" />

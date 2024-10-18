@@ -17,7 +17,7 @@
     };
 </script>
 
-<a class="widget {classes()}" href={link}>
+<a class="widget {classes()}" href={link} download>
     {#if icon !== null && position === "left"}
         <i class="bi bi-{icon}" />
     {/if}
