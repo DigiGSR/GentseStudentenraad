@@ -25,6 +25,7 @@ enum Organization {
   DSR
   STUGG
   STUFF
+  SWOP
 
   @@map("organization")
 }

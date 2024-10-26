@@ -72,22 +72,21 @@
             imageAlt="UGent Flag"
             css="bg-neutral-900 text-white"
             imagePosition="left"
-            isHtml={true}
         />
 
         <div class="container space-y-2">
             <div class="gap-10 grid md:grid-cols-2">
                 <div>
                     <p class="font-bold text-xl opacity-90">
-                        {data.i18n.get("home-paragraph-1-body")}
+                        {@html data.i18n.get("home-paragraph-1-body")}
                     </p>
-                    <p class="opacity-75">{data.i18n.get("home-paragraph-1-body")}</p>
+                    <p class="opacity-75">{@html data.i18n.get("home-paragraph-1-body")}</p>
                 </div>
                 <div>
                     <p class="font-bold text-xl opacity-90">
-                        {data.i18n.get("home-paragraph-2-title")}
+                        {@html data.i18n.get("home-paragraph-2-title")}
                     </p>
-                    <p class="opacity-75">{data.i18n.get("home-paragraph-2-body")}</p>
+                    <p class="opacity-75">{@html data.i18n.get("home-paragraph-2-body")}</p>
                 </div>
             </div>
         </div>
@@ -100,7 +99,6 @@
             css="text-white"
             color={data.configuration.brand_color_primary}
             imagePosition="right"
-            isHtml={true}
         />
 
         <p class="container">{@html data.i18n.get("home-events")}</p>

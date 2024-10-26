@@ -6,7 +6,6 @@
     export let css = "";
     export let imagePosition: "left" | "right";
     export let color = "";
-    export let isHtml = false;
 </script>
 
 <div class="container">
@@ -19,10 +18,10 @@
         {/if}
         <div class="md:col-span-2 p-12 space-y-2">
             <p class="font-bold text-xl">
-                {#if !isHtml} {title} {:else} {@html title} {/if}
+                {@html title}
             </p>
             <p class="opacity-90">
-                {#if !isHtml} {body} {:else} {@html body} {/if}
+                {@html body}
             </p>
         </div>
         {#if imagePosition === "right"}
