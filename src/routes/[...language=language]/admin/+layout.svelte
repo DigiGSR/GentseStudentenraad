@@ -3,11 +3,13 @@
     import type { LayoutData } from "./$types";
 
     export let data: LayoutData;
+    import { page } from "$app/stores";
+    let selectedLanguage: string = $page.url.toString().includes("/nl") ? "nl" : "en";
 </script>
 
 <div class="flex gap-12">
     <div class="gap-4 p-8 bg-neutral-50 shadow-md flex flex-col h-full grow">
-        <a href="/admin">
+        <a href="/{selectedLanguage}/admin">
             <p class="text-3xl font-semibold">Administratie</p>
         </a>
         <div class="space-y-1">

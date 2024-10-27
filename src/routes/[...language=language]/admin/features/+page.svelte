@@ -26,18 +26,8 @@
 
 <div class="space-y-6">
     <Checkbox
-        bind:value={data.configuration.active}
-        label="Website is publiek"
-        description={null}
-    />
-    <Checkbox
         bind:value={data.configuration.news_section}
         label="Nieuwssectie"
-        description={null}
-    />
-    <Checkbox
-        bind:value={data.configuration.feedback_section}
-        label="Vakfeedback"
         description={null}
     />
     <Checkbox
@@ -46,12 +36,8 @@
         description={null}
     />
     <Checkbox bind:value={data.configuration.who_section} label="Wie-sectie" description={null} />
-    <Checkbox bind:value={data.configuration.faq_section} label="FAQ-sectie" description={null} />
-    <Checkbox
-        bind:value={data.configuration.elections_section}
-        label="Verkiezingensectie"
-        description={null}
-    />
+
+    <Checkbox bind:value={data.configuration.report_section} label="Verslagen" description={null} />
     <Checkbox
         bind:value={data.configuration.opinions_section}
         label="Standpuntensectie"
@@ -62,7 +48,6 @@
         label="Kalendersectie"
         description={null}
     />
-    <Checkbox bind:value={data.configuration.i18n} label="Vertalingen" description={null} />
     <Checkbox bind:value={data.configuration.info_bar} label="Info bar" description={null} />
 
     <div>

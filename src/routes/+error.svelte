@@ -1,5 +1,6 @@
 <script>
     import "../app.scss";
+
     import { page } from "$app/stores";
 </script>
 
@@ -77,8 +78,12 @@
     }
     h1,
     h2 {
-        -webkit-transition: opacity 0.5s linear, margin-top 0.5s linear; /* Safari */
-        transition: opacity 0.5s linear, margin-top 0.5s linear;
+        -webkit-transition:
+            opacity 0.5s linear,
+            margin-top 0.5s linear; /* Safari */
+        transition:
+            opacity 0.5s linear,
+            margin-top 0.5s linear;
     }
     .loading h1,
     .loading h2 {

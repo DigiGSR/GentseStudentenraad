@@ -7,6 +7,7 @@
     import OrganizationsDropdown from "$lib/components/OrganizationsDropdown.svelte";
     let showLinks = false;
     export let data: LayoutData;
+    let selectedLanguage: string = $page.url.toString().includes("/nl") ? "nl" : "en";
 
     console.log(data.admin);
 
@@ -42,7 +43,7 @@
             bind:clientHeight={navBarHeight}
             class="flex items-center gap-1 justify-between md:justify-normal flex-row"
         >
-            <a href="/nl" class="flex flex-row md:hidden">
+            <a href="/{selectedLanguage}/nl" class="flex flex-row md:hidden">
                 <img src={data.configuration.logo_url} class="h-8" alt="Logo" />
             </a>
 
@@ -75,7 +76,7 @@
                 ? 'flex'
                 : 'hidden'}"
         >
-            <a href="/nl" class="flex-row hidden md:flex">
+            <a href="/{selectedLanguage}/nl" class="flex-row hidden md:flex">
                 <img src={data.configuration.logo_url} class="h-8" alt="Logo" />
             </a>
             {#each navbarRoutes as route, i}
@@ -89,14 +90,15 @@
                         {#each route.childRoutes as childRoute}
                             <a
                                 class="hover:opacity-70 opacity-100 transition duration-150 py-1 min-w-full"
-                                href={`${childRoute.route}`}>{childRoute.name}</a
+                                href={`/${selectedLanguage}/${childRoute.route}`}
+                                >{childRoute.name}</a
                             >
                         {/each}
                     </Dropdown>
                 {:else}
                     <a
                         class="pb-1 hover:opacity-70 opacity-100 transition duration-150"
-                        href={route.route}>{route.name}</a
+                        href={`/${selectedLanguage}/${route.route}`}>{route.name}</a
                     >
                 {/if}
             {/each}
@@ -217,29 +219,27 @@
                 </p>
             </a>
 
-            <!-- {#if data.configuration.i18n}
-                {#if $page.url.toString().includes("/en")}
-                    <a
-                        class="flex items-center gap-2 bg-neutral-800 px-3 py-1 rounded-full"
-                        href={$page.url.toString().replace("/en", "/nl")}
-                    >
-                        <i
-                            class="bi bi-translate hover:opacity-70 opacity-100 transition duration-150"
-                        />
-                        <p class="text-xs font-semibold">NL</p>
-                    </a>
-                {:else}
-                    <a
-                        class="flex items-center gap-2 bg-neutral-800 px-3 py-1 rounded-full"
-                        href={$page.url.toString().includes("/nl")
-                            ? $page.url.toString().replace("/nl", "/en")
-                            : ($page.url.pathname = `en${$page.url.pathname}`)}
-                    >
-                        <i class="bi bi-translate" />
-                        <p class="text-xs font-semibold">EN</p>
-                    </a>
-                {/if}
-            {/if} -->
+            {#if $page.url.toString().includes("/nl")}
+                <a
+                    class="flex items-center gap-2 bg-neutral-800 px-3 py-1 rounded-full"
+                    href={$page.url.toString().replace("/nl", "/en")}
+                >
+                    <i
+                        class="bi bi-translate hover:opacity-70 opacity-100 transition duration-150"
+                    />
+                    <p class="text-xs font-semibold">NL</p>
+                </a>
+            {:else}
+                <a
+                    class="flex items-center gap-2 bg-neutral-800 px-3 py-1 rounded-full"
+                    href={$page.url.toString().includes("/en")
+                        ? $page.url.toString().replace("/en", "/nl")
+                        : ($page.url.pathname = `en${$page.url.pathname}`)}
+                >
+                    <i class="bi bi-translate" />
+                    <p class="text-xs font-semibold">EN</p>
+                </a>
+            {/if}
         </div>
     </nav>
 

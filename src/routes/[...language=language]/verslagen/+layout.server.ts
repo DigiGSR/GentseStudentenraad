@@ -11,6 +11,9 @@ export const load = (async ({ locals }) => {
         if (!locals.user) {
             throw error(403, "Unauthorized");
         }
+        if (!locals.configuration.report_section) {
+            throw error(404, "Not Found");
+        }
     }
     return {};
 }) satisfies LayoutServerLoad;

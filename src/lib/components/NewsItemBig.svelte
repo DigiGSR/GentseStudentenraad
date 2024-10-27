@@ -1,7 +1,10 @@
 <script lang="ts">
     import type { News } from "@prisma/client";
+    import { page } from "$app/stores";
 
     export let news_item: News;
+    let selectedLanguage = $page.params.language;
+    console.log(selectedLanguage);
 </script>
 
 <svelte:head>
@@ -12,7 +15,7 @@
 </svelte:head>
 
 <div class="rounded-lg bg-white overflow-clip">
-    <a href="/nieuws/{news_item.id}">
+    <a href="/{selectedLanguage}/nieuws/{news_item.id}">
         <div class="grid md:grid-cols-2 items-center">
             <img
                 src={news_item.banner_image}

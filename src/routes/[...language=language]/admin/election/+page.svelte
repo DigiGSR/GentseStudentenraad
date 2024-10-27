@@ -2,7 +2,6 @@
     import type { PageData } from "./$types";
     import { ElectionGroup } from "@prisma/client";
     import NewButton from "$lib/components/admin/NewButton.svelte";
-
     export let data: PageData;
 
     async function remove(element: ElectionGroup) {
