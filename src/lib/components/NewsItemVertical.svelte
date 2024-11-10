@@ -3,12 +3,11 @@
 
     export let news_item: News;
 
-    import { page } from "$app/stores";
-    let selectedLanguage: string = $page.url.toString().includes("/nl") ? "nl" : "en";
+    import { selectedLanguage } from "$lib/Language";
 </script>
 
 <div class="bg-white rounded-md">
-    <a href="/{selectedLanguage}/nieuws/{news_item.id}">
+    <a href="/{$selectedLanguage}/nieuws/{news_item.id}">
         <img
             src={news_item.banner_image}
             class="object-cover overflow-hidden aspect-square w-full rounded-t-md"

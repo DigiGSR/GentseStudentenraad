@@ -96,7 +96,7 @@ export const handle = (async ({ event, resolve }) => {
         });
     }
 
-    //todo remove, this is for dev environment so that if ?host is not supplied we default to gsr config
+    //this is for dev environment so that if ?host is not supplied we default to gsr config
 
     const language = event.params.language === "en" ? Language.ENGLISH : Language.DUTCH;
 

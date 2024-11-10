@@ -1,15 +1,13 @@
 <script lang="ts">
     import SideBarIcon from "$lib/components/admin/SideBarIcon.svelte";
     import type { LayoutData } from "./$types";
-
     export let data: LayoutData;
-    import { page } from "$app/stores";
-    let selectedLanguage: string = $page.url.toString().includes("/nl") ? "nl" : "en";
+    import { selectedLanguage } from "$lib/Language";
 </script>
 
 <div class="flex gap-12">
     <div class="gap-4 p-8 bg-neutral-50 shadow-md flex flex-col h-full grow">
-        <a href="/{selectedLanguage}/admin">
+        <a href="/{$selectedLanguage}/admin">
             <p class="text-3xl font-semibold">Administratie</p>
         </a>
         <div class="space-y-1">

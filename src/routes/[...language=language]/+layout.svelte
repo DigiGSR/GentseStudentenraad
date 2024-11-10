@@ -7,7 +7,17 @@
     import OrganizationsDropdown from "$lib/components/OrganizationsDropdown.svelte";
     let showLinks = false;
     export let data: LayoutData;
-    let selectedLanguage: string = $page.url.toString().includes("/nl") ? "nl" : "en";
+
+    import { selectedLanguage } from "$lib/Language";
+
+    export async function toggleLanguage() {
+        const oldSelectedLanguage = $selectedLanguage;
+        selectedLanguage.update((language) => (language === "nl" ? "en" : "nl"));
+        await new Promise((resolve) => setTimeout(resolve, 200)); //todo maybe unnecessary
+        window.location.href = $page.url
+            .toString()
+            .replace(`/${oldSelectedLanguage}`, `/${$selectedLanguage}`);
+    }
 
     console.log(data.admin);
 
@@ -43,7 +53,7 @@
             bind:clientHeight={navBarHeight}
             class="flex items-center gap-1 justify-between md:justify-normal flex-row"
         >
-            <a href="/{selectedLanguage}/nl" class="flex flex-row md:hidden">
+            <a href="/{$selectedLanguage}/nl" class="flex flex-row md:hidden">
                 <img src={data.configuration.logo_url} class="h-8" alt="Logo" />
             </a>
 
@@ -76,7 +86,7 @@
                 ? 'flex'
                 : 'hidden'}"
         >
-            <a href="/{selectedLanguage}/nl" class="flex-row hidden md:flex">
+            <a href="/{$selectedLanguage}" class="flex-row hidden md:flex">
                 <img src={data.configuration.logo_url} class="h-8" alt="Logo" />
             </a>
             {#each navbarRoutes as route, i}
@@ -90,7 +100,7 @@
                         {#each route.childRoutes as childRoute}
                             <a
                                 class="hover:opacity-70 opacity-100 transition duration-150 py-1 min-w-full"
-                                href={`/${selectedLanguage}/${childRoute.route}`}
+                                href={`/${$selectedLanguage}/${childRoute.route}`}
                                 >{childRoute.name}</a
                             >
                         {/each}
@@ -98,7 +108,7 @@
                 {:else}
                     <a
                         class="pb-1 hover:opacity-70 opacity-100 transition duration-150"
-                        href={`/${selectedLanguage}/${route.route}`}>{route.name}</a
+                        href={`/${$selectedLanguage}/${route.route}`}>{route.name}</a
                     >
                 {/if}
             {/each}
@@ -219,26 +229,24 @@
                 </p>
             </a>
 
-            {#if $page.url.toString().includes("/nl")}
-                <a
+            {#if $selectedLanguage === "nl"}
+                <button
                     class="flex items-center gap-2 bg-neutral-800 px-3 py-1 rounded-full"
-                    href={$page.url.toString().replace("/nl", "/en")}
+                    on:click={toggleLanguage}
                 >
                     <i
                         class="bi bi-translate hover:opacity-70 opacity-100 transition duration-150"
                     />
                     <p class="text-xs font-semibold">NL</p>
-                </a>
+                </button>
             {:else}
-                <a
+                <button
                     class="flex items-center gap-2 bg-neutral-800 px-3 py-1 rounded-full"
-                    href={$page.url.toString().includes("/en")
-                        ? $page.url.toString().replace("/en", "/nl")
-                        : ($page.url.pathname = `en${$page.url.pathname}`)}
+                    on:click={toggleLanguage}
                 >
                     <i class="bi bi-translate" />
                     <p class="text-xs font-semibold">EN</p>
-                </a>
+                </button>
             {/if}
         </div>
     </nav>
