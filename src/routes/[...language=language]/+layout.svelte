@@ -11,12 +11,12 @@
     import { selectedLanguage } from "$lib/Language";
 
     export async function toggleLanguage() {
-        const oldSelectedLanguage = $selectedLanguage;
+        //const oldSelectedLanguage = $selectedLanguage;
         selectedLanguage.update((language) => (language === "nl" ? "en" : "nl"));
-        await new Promise((resolve) => setTimeout(resolve, 200)); //todo maybe unnecessary
+        /*await new Promise((resolve) => setTimeout(resolve, 200)); //todo maybe unnecessary
         window.location.href = $page.url
             .toString()
-            .replace(`/${oldSelectedLanguage}`, `/${$selectedLanguage}`);
+            .replace(`/${oldSelectedLanguage}`, `/${$selectedLanguage}`);*/
     }
 
     console.log(data.admin);
@@ -31,7 +31,7 @@
     if (data.user || env.PUBLIC_ENV == "dev") {
         //verslagen is CAS only, todo verslagen route zelf ook checken voor login
         navbarRoutes.push({
-            name: "Verslagen",
+            name: { nl: "Verslagen", en: "Reports" },
             route: "/nl/verslagen",
             hierarchyRoute: false,
         });
@@ -92,7 +92,7 @@
             {#each navbarRoutes as route, i}
                 {#if route.hierarchyRoute === true}
                     <Dropdown
-                        text={route.name}
+                        text={route.name[$selectedLanguage]}
                         bind:parentWidth={parentWidth[i]}
                         bind:navElemHeight={navelemheight}
                         bgColor={data.configuration.brand_color_primary}
@@ -101,14 +101,15 @@
                             <a
                                 class="hover:opacity-70 opacity-100 transition duration-150 py-1 min-w-full"
                                 href={`/${$selectedLanguage}/${childRoute.route}`}
-                                >{childRoute.name}</a
+                                >{childRoute.name[$selectedLanguage]}</a
                             >
                         {/each}
                     </Dropdown>
                 {:else}
                     <a
                         class="pb-1 hover:opacity-70 opacity-100 transition duration-150"
-                        href={`/${$selectedLanguage}/${route.route}`}>{route.name}</a
+                        href={`/${$selectedLanguage}/${route.route}`}
+                        >{route.name[$selectedLanguage]}</a
                     >
                 {/if}
             {/each}

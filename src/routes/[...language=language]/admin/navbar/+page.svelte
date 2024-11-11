@@ -8,6 +8,28 @@
 
     //todo i18n for navbar editor
 
+    $: console.log(data.configuration.navbar);
+
+    for (let i = 0; i < data.configuration.navbar.length; i++) {
+        if (!("nl" in data.configuration.navbar[i].name)) {
+            data.configuration.navbar[i].name = {
+                nl: data.configuration.navbar[i].name,
+                en: data.configuration.navbar[i].name,
+            };
+        }
+
+        if (data.configuration.navbar[i].hierarchyRoute === true) {
+            for (let j = 0; j < data.configuration.navbar[i].childRoutes.length; j++) {
+                if (!("nl" in data.configuration.navbar[i].childRoutes[j])) {
+                    data.configuration.navbar[i].childRoutes[j].name = {
+                        nl: data.configuration.navbar[i].childRoutes[j].name,
+                        en: data.configuration.navbar[i].childRoutes[j].name,
+                    };
+                }
+            }
+        }
+    }
+
     const setNewChildRoutes = (currName, newRoutes) => {
         for (let i = 0; i < data.configuration.navbar.length; i++) {
             if (
@@ -86,8 +108,8 @@
             on:click={() => {
                 data.configuration.navbar.push({
                     hierarchyRoute: false,
-                    name: "titel",
-                    route: "nl/slug",
+                    name: { nl: "titel", en: "title" },
+                    route: "slug",
                 });
                 data.configuration.navbar = data.configuration.navbar;
             }}
@@ -97,13 +119,13 @@
             on:click={() => {
                 data.configuration.navbar.push({
                     hierarchyRoute: true,
-                    name: "titel",
-                    route: "nl/slug",
+                    name: { nl: "titel", en: "title" },
+                    route: "slug",
                     childRoutes: [
                         {
                             id: uniqid(),
-                            name: "titel",
-                            route: "nl/slug",
+                            name: { nl: "titel", en: "title" },
+                            route: "slug",
                         },
                     ],
                 });
@@ -143,7 +165,13 @@
                 <div class="flex flex-row p-1.5 rounded-xl border border-gray-400">
                     <input
                         class="bg-transparent rounded-md w-40 p-1 focus:bg-white"
-                        bind:value={route.name}
+                        placeholder="nederlandse naam"
+                        bind:value={route.name.nl}
+                    />
+                    <input
+                        class="bg-transparent rounded-md w-40 p-1 focus:bg-white"
+                        placeholder="english name"
+                        bind:value={route.name.en}
                     />
                     <input
                         class="bg-transparent rounded-md w-32 p-1 focus:bg-white"
