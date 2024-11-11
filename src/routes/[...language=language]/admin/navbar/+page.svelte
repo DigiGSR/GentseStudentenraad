@@ -11,7 +11,7 @@
     $: console.log(data.configuration.navbar);
 
     for (let i = 0; i < data.configuration.navbar.length; i++) {
-        if (!(typeof data.configuration.navbar[i].name === "string")) {
+        if (typeof data.configuration.navbar[i].name === "string") {
             data.configuration.navbar[i].name = {
                 nl: data.configuration.navbar[i].name,
                 en: data.configuration.navbar[i].name,
@@ -20,7 +20,7 @@
 
         if (data.configuration.navbar[i].hierarchyRoute === true) {
             for (let j = 0; j < data.configuration.navbar[i].childRoutes.length; j++) {
-                if (!(typeof data.configuration.navbar[i].childRoutes[j] === "string")) {
+                if (typeof data.configuration.navbar[i].childRoutes[j] === "string") {
                     data.configuration.navbar[i].childRoutes[j].name = {
                         nl: data.configuration.navbar[i].childRoutes[j].name,
                         en: data.configuration.navbar[i].childRoutes[j].name,
