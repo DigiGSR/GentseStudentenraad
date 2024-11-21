@@ -32,7 +32,7 @@
         //verslagen is CAS only, todo verslagen route zelf ook checken voor login
         navbarRoutes.push({
             name: { nl: "Verslagen", en: "Reports" },
-            route: "/nl/verslagen",
+            route: "verslagen",
             hierarchyRoute: false,
         });
     }
