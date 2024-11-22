@@ -32,6 +32,8 @@
             alert(JSON.stringify(res, null, 2));
         }
     }
+
+    let submitUploader: () => Promise<void>;
 </script>
 
 <svelte:head>
@@ -45,13 +47,21 @@
 <div class="space-y-6">
     <TextField description="Naam" bind:value={newPerson.name} />
 
-    <Uploader description="Portretfoto" source={newPerson.image} />
-
-    <TextField description="Afbeelding" bind:value={newPerson.image} />
+    <Uploader
+        bind:submitUploader
+        type="image"
+        description="Portretfoto"
+        bind:source={newPerson.image}
+    />
 
     <TextField description="E-mailadres" bind:value={newPerson.mail} />
 
-    <ActionButton action={postPerson} />
+    <ActionButton
+        action={async () => {
+            await submitUploader();
+            postPerson();
+        }}
+    />
 </div>
 
 <style lang="postcss">
