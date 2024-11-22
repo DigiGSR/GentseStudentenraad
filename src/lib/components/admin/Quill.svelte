@@ -30,6 +30,7 @@
         });
         quill.on("text-change", () => {
             value = quill.getSemanticHTML();
+            console.log(value);
         });
     });
 </script>

@@ -11,6 +11,10 @@ body {
     overflow-x: hidden;
 }
 
+p {
+    min-height: 1.5em;
+}
+
 :root {
     @apply bg-neutral-100;
 
