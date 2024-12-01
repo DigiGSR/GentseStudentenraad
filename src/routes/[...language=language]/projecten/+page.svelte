@@ -2,13 +2,16 @@
     //import Tag from "$lib/components/Tag.svelte";
     import type { PageData } from "./$types";
     export let data: PageData;
+    import { selectedLanguage } from "$lib/Language";
 </script>
 
 <template>
     <div class="container space-y-4 py-12">
-        <div class="text-5xl font-serif font-bold">{@html data.i18n.get("projecten-titel")}</div>
+        <div class="text-5xl font-serif font-bold">
+            {@html data.i18n[$selectedLanguage].get("projecten-titel")}
+        </div>
         <p>
-            {@html data.i18n.get("projecten-tekstje")}
+            {@html data.i18n[$selectedLanguage].get("projecten-tekstje")}
         </p>
         <div class="space-y-4">
             {#each data.projects as project}

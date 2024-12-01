@@ -43,7 +43,7 @@
 
     <TextField bind:value={data.news_item.synopsis} description="Synopsis" />
 
-    <Uploader description="Coverfoto" source={data.news_item.banner_image} />
+    <Uploader type="image" description="Coverfoto" source={data.news_item.banner_image} />
 
     <LongTextField bind:value={data.news_item.content} description="Inhoud" />
 

@@ -7,6 +7,7 @@
     import iCalendarPlugin from "@fullcalendar/icalendar";
     import googleCalendarPlugin from "@fullcalendar/google-calendar";
     import { env } from "$env/dynamic/public";
+    import { selectedLanguage } from "$lib/Language";
 
     export let data: PageData;
 
@@ -54,7 +55,7 @@
 
     <div class="space-y-12 py-12">
         <div class="container md space-y-1">
-            {@html data.i18n.get("home-about")}
+            {@html data.i18n[$selectedLanguage].get("home-about")}
         </div>
 
         <div class="grid md:grid-cols-4 container w-full gap-4">
@@ -63,11 +64,11 @@
             {/each}
         </div>
 
-        <p class="container">{@html data.i18n.get("home-stuver")}</p>
+        <p class="container">{@html data.i18n[$selectedLanguage].get("home-stuver")}</p>
 
         <SeparatedBanner
-            title={data.i18n.get("home-stuver-frame-title")}
-            body={data.i18n.get("home-stuver-frame-body")}
+            title={data.i18n[$selectedLanguage].get("home-stuver-frame-title")}
+            body={data.i18n[$selectedLanguage].get("home-stuver-frame-body")}
             imageUrl="https://www.ugent.be/img/dcom/logos/ugentflag.jpg"
             imageAlt="UGent Flag"
             css="bg-neutral-900 text-white"
@@ -78,22 +79,26 @@
             <div class="gap-10 grid md:grid-cols-2">
                 <div>
                     <p class="font-bold text-xl opacity-90">
-                        {@html data.i18n.get("home-paragraph-1-body")}
+                        {@html data.i18n[$selectedLanguage].get("home-paragraph-1-body")}
                     </p>
-                    <p class="opacity-75">{@html data.i18n.get("home-paragraph-1-body")}</p>
+                    <p class="opacity-75">
+                        {@html data.i18n[$selectedLanguage].get("home-paragraph-1-body")}
+                    </p>
                 </div>
                 <div>
                     <p class="font-bold text-xl opacity-90">
-                        {@html data.i18n.get("home-paragraph-2-title")}
+                        {@html data.i18n[$selectedLanguage].get("home-paragraph-2-title")}
                     </p>
-                    <p class="opacity-75">{@html data.i18n.get("home-paragraph-2-body")}</p>
+                    <p class="opacity-75">
+                        {@html data.i18n[$selectedLanguage].get("home-paragraph-2-body")}
+                    </p>
                 </div>
             </div>
         </div>
 
         <SeparatedBanner
-            title={data.i18n.get("home-projects-title")}
-            body={data.i18n.get("home-projects-body")}
+            title={data.i18n[$selectedLanguage].get("home-projects-title")}
+            body={data.i18n[$selectedLanguage].get("home-projects-body")}
             imageUrl="https://unsplash.com/photos/ewGMqs2tmJI/download?ixid=MnwxMjA3fDB8MXxzZWFyY2h8MjJ8fHVuaXZlcnNpdHl8ZW58MHx8fHwxNjYzNzYzMzI3&force=true&w=1920"
             imageAlt="Classroom"
             css="text-white"
@@ -101,7 +106,7 @@
             imagePosition="right"
         />
 
-        <p class="container">{@html data.i18n.get("home-events")}</p>
+        <p class="container">{@html data.i18n[$selectedLanguage].get("home-events")}</p>
 
         {#if data.calendars.length > 0}
             <div class="container">
@@ -113,6 +118,6 @@
             </div>
         {/if}
 
-        <p class="container">{@html data.i18n.get("home-contact")}</p>
+        <p class="container">{@html data.i18n[$selectedLanguage].get("home-contact")}</p>
     </div>
 </main>

@@ -304,7 +304,9 @@
     <footer class="bg-neutral-900 py-20 text-white">
         <div class="container grid md:grid-cols-2 gap-12">
             <div class="flex flex-col gap-2">
-                <p class="font-semibold">{@html data.i18n.get("footer-social-media")}</p>
+                <p class="font-semibold">
+                    {@html data.i18n[$selectedLanguage].get("footer-social-media")}
+                </p>
                 <div class="w-full h-[2px] bg-white/20" />
 
                 {#if data.configuration.facebook_url}
@@ -386,7 +388,9 @@
             </div>
 
             <div class="space-y-2">
-                <p class="font-semibold">{@html data.i18n.get("footer-contact")}</p>
+                <p class="font-semibold">
+                    {@html data.i18n[$selectedLanguage].get("footer-contact")}
+                </p>
                 <div class="w-full h-[2px] bg-white/20" />
 
                 {#if data.configuration.adres}

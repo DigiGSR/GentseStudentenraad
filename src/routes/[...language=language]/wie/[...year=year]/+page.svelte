@@ -2,6 +2,7 @@
     import { goto } from "$app/navigation";
     import PositionCard from "$lib/components/PositionCard.svelte";
     import type { PageData } from "./$types";
+    import { selectedLanguage } from "$lib/Language";
 
     const sections: { id: string; name: string }[] = [];
 
@@ -55,9 +56,9 @@
     </select>
 </div>
 
-{#if data.i18n.get("who-about")}
+{#if data.i18n[$selectedLanguage].get("who-about")}
     <div class="container xl:pl-12 pt-12 grid grid-cols-1 gap-x-8 gap-y-2">
-        {@html data.i18n.get("who-about")}
+        {@html data.i18n[$selectedLanguage].get("who-about")}
     </div>
 {/if}
 

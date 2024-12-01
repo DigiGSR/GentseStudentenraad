@@ -138,9 +138,9 @@
 
         <TextField description="Richting" bind:value={position.education} />
 
-        <TextField description="Sorteerindex" bind:value={position.sort_index} />
+        <TextField description="Sorteerindex" number bind:value={position.sort_index} />
 
-        <TextField description="Academiejaar" bind:value={position.year} />
+        <TextField description="Academiejaar" number bind:value={position.year} />
 
         {#if position.substitutes.length > 0}
             <div class="flex flex-row">

@@ -3,6 +3,7 @@
     import { browser } from "$app/environment";
     import type { Prisma } from "@prisma/client";
     import type { PageData } from "./$types";
+    import { selectedLanguage } from "$lib/Language";
 
     type QuestionCategoryJoined = Prisma.QuestionCategoryGetPayload<{
         include: { questions: true };
@@ -30,11 +31,15 @@
         alt="Books in a library."
     />
     <div class="space-y-3 p-12">
-        <p class="text-4xl font-serif font-bold shadow">{@html data.i18n.get("faq-title")}</p>
-        <p>{@html data.i18n.get("faq-about")}</p>
+        <p class="text-4xl font-serif font-bold shadow">
+            {@html data.i18n[$selectedLanguage].get("faq-title")}
+        </p>
+        <p>{@html data.i18n[$selectedLanguage].get("faq-about")}</p>
         <div class="pt-1">
             <select bind:value={selected}>
-                <option value={null}>{@html data.i18n.get("faq-selector")}</option>
+                <option value={null}
+                    >{@html data.i18n[$selectedLanguage].get("faq-selector")}</option
+                >
                 {#each data.faq as category}
                     <option value={category}>{category.title}</option>
                 {/each}
@@ -82,7 +87,9 @@
         </div>
     {/each}
 
-    <p class="text-center opacity-75 font-medium font-lg">{@html data.i18n.get("faq-not-found")}</p>
+    <p class="text-center opacity-75 font-medium font-lg">
+        {@html data.i18n[$selectedLanguage].get("faq-not-found")}
+    </p>
 </div>
 
 <style lang="postcss">

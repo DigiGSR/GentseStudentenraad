@@ -203,10 +203,8 @@ model Person {
   image        String?
   mail         String?
   organization Organization
-
   substitute_for_positions SubstituteForPosition[] @relation("Person_to_SubstitutePosition")
   positions PersonPosition[] @relation("person")
-
   @@map("person")
 }
 
@@ -257,7 +255,7 @@ model PersonPosition {
   substitutes     SubstituteForPosition[] @relation("SubstitutePosition_to_PersonPosition")
 
   person_id Int
-  person    Person @relation("person", fields: [person_id], references: [id])
+  person    Person @relation("person", fields: [person_id], references: [id], onDelete: Cascade)
 
   person_group_id Int
   person_group    PersonGroup @relation(fields: [person_group_id], references: [id])

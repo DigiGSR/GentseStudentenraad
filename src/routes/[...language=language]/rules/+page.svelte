@@ -2,6 +2,7 @@
     import Tag from "$lib/components/Tag.svelte";
     import type { PageData } from "./$types";
     export let data: PageData;
+    import { selectedLanguage } from "$lib/Language";
 </script>
 
 <template>
@@ -10,7 +11,7 @@
             <div class="text-5xl font-serif font-bold">Reglementen</div>
         </div>
 
-        <p>{@html data.i18n.get("hier-vind-je-reglementen")}</p>
+        <p>{@html data.i18n[$selectedLanguage].get("hier-vind-je-reglementen")}</p>
         <div class="space-y-4 w-full">
             {#each data.rules as rule}
                 <div class="bg-white grid items-center rounded-md overflow-clip">

@@ -14,7 +14,7 @@
         {#if number}
             <input type="number" class="textfield" {placeholder} bind:value />
         {:else}
-            <input type="text" class="textfield" {placeholder} bind:value />
+            <input type="year" class="textfield" {placeholder} bind:value />
         {/if}
     </div>
 </template>

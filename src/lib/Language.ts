@@ -3,6 +3,6 @@ export enum Language {
     ENGLISH = "en",
 }
 
-import { persisted } from "svelte-persisted-store";
+import { persisted, type Persisted } from "svelte-persisted-store";
 
-export const selectedLanguage = persisted("selectedLanguage", "nl");
+export const selectedLanguage: Persisted<"nl" | "en"> = persisted("selectedLanguage", "nl");

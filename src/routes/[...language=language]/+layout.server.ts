@@ -114,8 +114,8 @@ export const load = (async ({ params, locals }) => {
     const i18n = await prisma.i18n.findMany({
         select: {
             key: true,
-            dutch: locals.language == Language.DUTCH,
-            english: locals.language == Language.ENGLISH,
+            dutch: true,
+            english: true,
             markup: true,
         },
         where: {
@@ -136,19 +136,19 @@ export const load = (async ({ params, locals }) => {
         }
     }
 
-    const translations = new Map();
+    const translations: Record<"nl" | "en", Map<TranslationString, string>> = {
+        nl: new Map(),
+        en: new Map(),
+    };
 
     _TRANSLATION_STRINGS.forEach((e) => {
-        translations.set(e, `missing i18n: "${e}"`); //set key value as default value
+        translations.nl.set(e, `missing i18n: "${e}"`); //set key value as default value
+        translations.en.set(e, `missing i18n: "${e}"`); //set key value as default value
     });
 
-    i18n.forEach((e) => {
-        const raw = locals.language == Language.DUTCH ? e.dutch : e.english;
-        if (raw) {
-            //const value = sanitizeHtml(raw);
-            // het is probably fine om dit uit te zetten lol maybe niet (het is WYSIWYG output dus moet niet eeeecht sanitized worden)
-            translations.set(e.key, raw);
-        }
+    i18n.forEach(({ key, dutch, english }) => {
+        translations.nl.set(key, dutch);
+        translations.en.set(key, english);
     });
 
     if (JSON.stringify(locals.configuration.navbar) == JSON.stringify({})) {

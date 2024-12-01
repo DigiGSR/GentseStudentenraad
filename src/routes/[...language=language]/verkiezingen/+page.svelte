@@ -1,12 +1,13 @@
 <script lang="ts">
     import type { PageData } from "./$types";
     import Tag from "$lib/components/Tag.svelte";
+    import { selectedLanguage } from "$lib/Language";
 
     export let data: PageData;
 </script>
 
 <div class="container space-y-6 py-12">
-    {@html data.i18n.get("elections-title")}
+    {@html data.i18n[$selectedLanguage].get("elections-title")}
 
     {#each data.electionGroups as group}
         <div>

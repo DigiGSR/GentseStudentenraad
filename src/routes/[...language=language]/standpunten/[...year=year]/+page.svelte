@@ -2,6 +2,7 @@
     import Tag from "$lib/components/Tag.svelte";
     import type { PageData } from "./$types";
     import { goto } from "$app/navigation";
+    import { selectedLanguage } from "$lib/Language";
 
     export let data: PageData;
 
@@ -9,11 +10,11 @@
 </script>
 
 <div class="container md py-4 justify-center text-center min-w-full">
-    {@html data.i18n.get("standpunten-info")}
+    {@html data.i18n[$selectedLanguage].get("standpunten-info")}
 </div>
 
 <div class="flex items-center justify-center gap-4">
-    <p>{@html data.i18n.get("filter-op-werkgroep")}</p>
+    <p>{@html data.i18n[$selectedLanguage].get("filter-op-werkgroep")}</p>
     <select
         name="year"
         id="year"

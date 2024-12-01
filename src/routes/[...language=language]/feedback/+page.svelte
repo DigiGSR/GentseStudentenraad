@@ -1,5 +1,6 @@
 <script lang="ts">
     import type { PageData } from "./$types";
+    import { selectedLanguage } from "$lib/Language";
 
     type ArrayType<T> = T extends Array<infer Base> ? Base : never;
 
@@ -30,18 +31,22 @@
 <div class="container py-16 space-y-8">
     <div class="grid grid-cols-2 gap-16 items-center">
         <div class="md">
-            {@html data.i18n.get("feedback-about")}
+            {@html data.i18n[$selectedLanguage].get("feedback-about")}
         </div>
 
         <div class="space-y-4">
             <select class="w-full p-2 rounded-md font-bold" bind:value={course}>
-                <option value={null}>{@html data.i18n.get("feedback-major-selector")}</option>
+                <option value={null}
+                    >{@html data.i18n[$selectedLanguage].get("feedback-major-selector")}</option
+                >
                 {#each data.courses as course}
                     <option value={course}>{course.name}</option>
                 {/each}
             </select>
             <select class="w-full p-2 rounded-md font-bold">
-                <option>{@html data.i18n.get("feedback-subject-selector")}</option>
+                <option
+                    >{@html data.i18n[$selectedLanguage].get("feedback-subject-selector")}</option
+                >
                 {#if course}
                     {#each course.subjects as subject}
                         <option>{subject.subject.name} ({subject.subject_code})</option>
@@ -52,7 +57,7 @@
                 class="order-1 row-span-2"
                 rows="10"
                 bind:value={text}
-                placeholder={data.i18n.get("feedback-placeholder")}
+                placeholder={data.i18n[$selectedLanguage].get("feedback-placeholder")}
             />
 
             <p
@@ -60,7 +65,7 @@
                 style:background-color={data.configuration.brand_color_primary}
             >
                 <i class="bi bi-send-fill pr-2" />
-                {data.i18n.get("vakfeedback-verzenden")}
+                {data.i18n[$selectedLanguage].get("vakfeedback-verzenden")}
             </p>
         </div>
     </div>
