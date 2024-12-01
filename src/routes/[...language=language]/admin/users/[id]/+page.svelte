@@ -78,7 +78,7 @@
 
         <TextField description="Sorteerindex" bind:value={position.sort_index} />
 
-        <TextField description="Academiejaar" bind:value={position.year} />
+        <TextField description="Academiejaar" number bind:value={position.year} />
 
         <div>
             <p class="text-[12px] opacity-50 font-semibold uppercase">GROEP</p>
