@@ -1,5 +1,7 @@
 # Gentse Studentenraad
 
+**DISCLAIMER: DEZE DOCUMENTATIE IS ERG OUT OF DATE!!! CHECK DE WIKI**
+
 [![Build Status](https://ci.gentsestudentenraad.be/api/badges/GentseStudentenraad/website/status.svg?ref=refs/heads/main)](https://ci.gentsestudentenraad.be/GentseStudentenraad/website)
 
 > Deze readme is een _work-in-progress_.
