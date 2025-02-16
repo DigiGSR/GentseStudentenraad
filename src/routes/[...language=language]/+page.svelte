@@ -11,6 +11,8 @@
 
     export let data: PageData;
 
+    console.log(data.calendars);
+
     let brandColor = data.configuration.brand_color_secondary;
     // Initialize the interactive calendar
     onMount(async () => {
@@ -66,36 +68,37 @@
 
         <p class="container">{@html data.i18n[$selectedLanguage].get("home-stuver")}</p>
 
-        <SeparatedBanner
-            title={data.i18n[$selectedLanguage].get("home-stuver-frame-title")}
-            body={data.i18n[$selectedLanguage].get("home-stuver-frame-body")}
-            imageUrl="https://www.ugent.be/img/dcom/logos/ugentflag.jpg"
-            imageAlt="UGent Flag"
-            css="bg-neutral-900 text-white"
-            imagePosition="left"
-        />
+        {#if data.configuration.extra_banner_home}
+            <SeparatedBanner
+                title={data.i18n[$selectedLanguage].get("home-stuver-frame-title")}
+                body={data.i18n[$selectedLanguage].get("home-stuver-frame-body")}
+                imageUrl="https://www.ugent.be/img/dcom/logos/ugentflag.jpg"
+                imageAlt="UGent Flag"
+                css="bg-neutral-900 text-white"
+                imagePosition="left"
+            />
 
-        <div class="container space-y-2">
-            <div class="gap-10 grid md:grid-cols-2">
-                <div>
-                    <p class="font-bold text-xl opacity-90">
-                        {@html data.i18n[$selectedLanguage].get("home-paragraph-1-body")}
-                    </p>
-                    <p class="opacity-75">
-                        {@html data.i18n[$selectedLanguage].get("home-paragraph-1-body")}
-                    </p>
-                </div>
-                <div>
-                    <p class="font-bold text-xl opacity-90">
-                        {@html data.i18n[$selectedLanguage].get("home-paragraph-2-title")}
-                    </p>
-                    <p class="opacity-75">
-                        {@html data.i18n[$selectedLanguage].get("home-paragraph-2-body")}
-                    </p>
+            <div class="container space-y-2">
+                <div class="gap-10 grid md:grid-cols-2">
+                    <div>
+                        <p class="font-bold text-xl opacity-90">
+                            {@html data.i18n[$selectedLanguage].get("home-paragraph-1-body")}
+                        </p>
+                        <p class="opacity-75">
+                            {@html data.i18n[$selectedLanguage].get("home-paragraph-1-body")}
+                        </p>
+                    </div>
+                    <div>
+                        <p class="font-bold text-xl opacity-90">
+                            {@html data.i18n[$selectedLanguage].get("home-paragraph-2-title")}
+                        </p>
+                        <p class="opacity-75">
+                            {@html data.i18n[$selectedLanguage].get("home-paragraph-2-body")}
+                        </p>
+                    </div>
                 </div>
             </div>
-        </div>
-
+        {/if}
         <SeparatedBanner
             title={data.i18n[$selectedLanguage].get("home-projects-title")}
             body={data.i18n[$selectedLanguage].get("home-projects-body")}
@@ -108,7 +111,7 @@
 
         <p class="container">{@html data.i18n[$selectedLanguage].get("home-events")}</p>
 
-        {#if data.calendars.length > 0}
+        {#if data.configuration.calendars.length > 0}
             <div class="container">
                 <div
                     style="--fc-button-bg-color: {brandColor}; --fc-today-button-bg-color: {brandColor};"

@@ -50,6 +50,12 @@
     />
     <Checkbox bind:value={data.configuration.info_bar} label="Info bar" description={null} />
 
+    <Checkbox
+        bind:value={data.configuration.extra_banner_home}
+        label="Extra banner home scherm"
+        description={null}
+    />
+
     <div>
         <div class="flex flex-row items-start">
             <p class="text-[18px] opacity-50 font-semibold uppercase">Kalenders</p>
