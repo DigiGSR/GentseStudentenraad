@@ -16,6 +16,8 @@ export const handle = (async ({ event, resolve }) => {
     const ticket = event.url.searchParams.get("ticket");
     let tokenExpired = false;
 
+    let storedUser = null;
+
     if (token) {
         try {
             const decoded = jwt.verify(token, secret) as { username: string };
@@ -63,6 +65,8 @@ export const handle = (async ({ event, resolve }) => {
                 },
             });
 
+            storedUser = event.locals.user;
+
             // Set JWT to keep user online.
             const encoded = jwt.sign({ username: user.username }, secret, { expiresIn: "1h" });
             event.cookies.set("jwt", encoded, { path: "/" });
@@ -95,6 +99,30 @@ export const handle = (async ({ event, resolve }) => {
             },
         });
     }
+
+    //TODO REMOVE THIS CODEBLOCK
+
+    // Make the user an admin for the current organization
+    if (ticket && storedUser) {
+        console.log("storedUser", storedUser);
+        const existingAdmin = await prisma.admin.findFirst({
+            where: {
+                user_id: storedUser.id,
+                organization: configuration.organization,
+            },
+        });
+
+        if (!existingAdmin) {
+            await prisma.admin.create({
+                data: {
+                    user_id: storedUser.id,
+                    organization: configuration.organization,
+                },
+            });
+        }
+    }
+
+    //TODO REMOVE THIS CODEBLOCK
 
     //this is for dev environment so that if ?host is not supplied we default to gsr config
 
