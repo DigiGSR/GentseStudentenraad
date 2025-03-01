@@ -105,7 +105,7 @@ model Configuration {
   navbar            Json    @default("[]")
   i18n              Boolean @default(false)
   info_bar          Boolean @default(false)
-  extra_banner_home Boolean @default(false)
+  extra_banner_home Boolean? @default(false)
   who_section       Boolean @default(false)
   news_section      Boolean @default(false)
   faq_section       Boolean @default(false)
