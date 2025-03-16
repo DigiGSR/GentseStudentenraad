@@ -1,4 +1,27 @@
 <script lang="ts">
+    import type { PageData } from "./$types";
+
+    export let data: PageData;
+
+    async function deleteFeedback(id: number) {
+        if (confirm("Are you sure you want to delete this feedback?")) {
+            try {
+                const response = await fetch(`/api/feedback/${id}`, {
+                    method: "DELETE",
+                });
+
+                if (response.ok) {
+                    // Reload the page to refresh the data
+                    window.location.reload();
+                } else {
+                    alert("Failed to delete feedback");
+                }
+            } catch (error) {
+                console.error("Error deleting feedback:", error);
+                alert("An error occurred while deleting feedback");
+            }
+        }
+    }
 </script>
 
 <table class="table-auto text-left w-full">
@@ -38,29 +61,33 @@
     </thead>
 
     <tbody>
-        {#each [0, 0, 0, 0, 0, 0, 0, 0] as _}
+        {#if data.feedback && data.feedback.length > 0}
+            {#each data.feedback as item}
+                <tr>
+                    <td>{item.email || "Anoniem"}</td>
+                    <td>{item.subject?.name || item.subject_code}</td>
+                    <td>{new Date(item.submitted_at).toLocaleDateString()}</td>
+                    <td class="max-w-md truncate">{item.content}</td>
+                    <td>
+                        <a href="/admin/feedback/{item.id}">
+                            <i class="bi bi-eye" />
+                        </a>
+                    </td>
+                    <td>
+                        <button
+                            on:click={() => deleteFeedback(item.id)}
+                            class="text-red-500 hover:text-red-700"
+                        >
+                            <i class="bi bi-trash3-fill" />
+                        </button>
+                    </td>
+                </tr>
+            {/each}
+        {:else}
             <tr>
-                <td>Anoniem</td>
-                <td>Algoritmen en Datastructuren III</td>
-                <td>{new Date().toLocaleDateString()}</td>
-                <td
-                    >Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                    incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
-                    nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                    Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-                    culpa qui officia deserunt mollit anim id est laborum.</td
-                >
-                <td>
-                    <a href="/admin/feedback/001">
-                        <i class="bi bi-eye" />
-                    </a>
-                </td>
-                <td>
-                    <i class="bi bi-trash3-fill" />
-                </td>
+                <td colspan="6" class="text-center py-4">No feedback entries found</td>
             </tr>
-        {/each}
+        {/if}
     </tbody>
 </table>
 
@@ -73,4 +100,7 @@
 
     th, td
         @apply border border-neutral-200 px-3 py-2
+        
+    td:nth-child(4)
+        @apply max-w-md overflow-hidden text-ellipsis
 </style>

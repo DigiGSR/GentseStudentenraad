@@ -8,6 +8,8 @@ node_modules
 .env.example
 .prettierignore
 
+flake.nix
+
 # Ignore files for PNPM, NPM and YARN
 pnpm-lock.yaml
 package-lock.json

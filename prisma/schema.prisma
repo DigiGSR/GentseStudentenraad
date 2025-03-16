@@ -288,7 +288,8 @@ model Course {
   code    String  @id
 
   subjects CourseSubject[]
-
+  feedback  Feedback[] 
+  
   @@map("course")
 }
 
@@ -298,6 +299,7 @@ model Subject {
   teacher String
 
   courses CourseSubject[]
+  feedback  Feedback[] 
 
   @@map("subject")
 }
@@ -387,4 +389,22 @@ model ElectionGroup {
   updated_at DateTime @updatedAt
 
   @@map("election_group")
+}
+
+model Feedback {
+  id             Int       @id @default(autoincrement())
+  email          String
+  content        String
+  markup         Markup    @default(MARKDOWN)
+  submitted_at   DateTime  @default(now())
+  
+  course_code    String
+  course         Course    @relation(fields: [course_code], references: [code])
+  
+  subject_code   String
+  subject        Subject   @relation(fields: [subject_code], references: [code])
+  
+  organization   Organization?
+
+  @@map("feedback")
 }
