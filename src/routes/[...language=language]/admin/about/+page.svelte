@@ -70,6 +70,12 @@
         bind:source={data.configuration.group_photo}
         bind:submitUploader
     />
+    <Uploader
+        description="Logo"
+        type="image"
+        bind:source={data.configuration.logo_url}
+        bind:submitUploader
+    />
     <ActionButton
         action={async () => {
             await submitUploader();
