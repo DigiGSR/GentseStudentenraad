@@ -82,7 +82,7 @@
         </div>
 
         <div
-            class="flex-col h-max mt-8 space-y-4 md:flex md:space-y-0 md:flex-row md:items-center md:space-x-10 md:mt-0 {showMenu
+            class="flex-col h-max mt-8 space-y-4 md:flex md:space-y-0 md:flex-row md:items-center md:space-x-2 lg:space-x-5 md:mt-0 {showMenu
                 ? 'flex'
                 : 'hidden'}"
         >
@@ -152,7 +152,7 @@
             <div class="grow lg:flex hidden" />
 
             <!--bi class is bootstrap icons-->
-            <div class="hidden 2xl:flex flex-row gap-x-4">
+            <div class="hidden lg:flex text-xs xl:text-sm flex-row gap-x-2 xl:gap-x-4">
                 {#if data.configuration.facebook_url}
                     <a href={data.configuration.facebook_url}>
                         <i
@@ -210,10 +210,8 @@
                 {/if}
             </div>
 
-            <div />
-
             <a
-                class="flex md:self-start self-center items-center gap-2 bg-neutral-800 px-3 py-1 rounded-full justify-center max-w-fit"
+                class="flex self-center items-center gap-2 bg-neutral-800 px-3 py-1 rounded-full justify-center max-w-fit"
                 href={data.user
                     ? data.admin
                         ? "/admin"
