@@ -5,15 +5,49 @@
     import type { PageData } from "./$types";
     export let data: PageData;
 
-    //data.users.admin will only include your organization
+    let sortColumn: "email" | "student" | "admin" = "email";
+    let sortDirection: "asc" | "desc" = "asc";
 
-    //on value change of admin to true we need to store the mutation of appending
-    //an admin entry to the current admin table and then finally call put to execute the mutations
+    let emailSortedToggle = true;
+    let studentSortedToggle = true;
+    let adminSortedToggle = true;
 
-    for (let user of data.users) {
-        if (user.admin.length > 0) {
-            console.log(user, user.admin);
+    $: sortedUsers = [...data.users].sort((a, b) => {
+        let valueA, valueB;
+        switch (sortColumn) {
+            case "email":
+                valueA = a.email.toLowerCase();
+                valueB = b.email.toLowerCase();
+                break;
+            case "student":
+                valueA = a.student ? 1 : 0;
+                valueB = b.student ? 1 : 0;
+                break;
+            case "admin":
+                valueA = a.admin.length > 0 ? 1 : 0;
+                valueB = b.admin.length > 0 ? 1 : 0;
+                break;
+            default:
+                valueA = a.email.toLowerCase();
+                valueB = b.email.toLowerCase();
         }
+
+        if (valueA < valueB) return sortDirection === "asc" ? -1 : 1;
+        if (valueA > valueB) return sortDirection === "asc" ? 1 : -1;
+        return 0;
+    });
+
+    function sortTable(column: "email" | "student" | "admin") {
+        if (sortColumn === column) {
+            sortDirection = sortDirection === "asc" ? "desc" : "asc";
+        } else {
+            sortColumn = column;
+            sortDirection = "desc";
+        }
+
+        if (column === "email") emailSortedToggle = !emailSortedToggle;
+        else if (column === "student") studentSortedToggle = !studentSortedToggle;
+        else if (column === "admin") adminSortedToggle = !adminSortedToggle;
     }
 
     async function put() {
@@ -46,34 +80,44 @@
     <table class="table-auto text-left w-full">
         <thead>
             <tr>
-                <th>
+                <th on:click={() => sortTable("email")} class="cursor-pointer">
                     <div class="flex items-center">
                         <p>Email</p>
                         <div class="grow" />
-                        <i class="bi bi-chevron-down" />
+                        <i
+                            class={`bi ${emailSortedToggle ? "bi-chevron-down" : "bi-chevron-up"}`}
+                        />
                     </div>
                 </th>
-                <th>
-                    <p>Student</p>
+                <th on:click={() => sortTable("student")} class="cursor-pointer">
+                    <div class="flex items-center">
+                        <p>Student</p>
+                        <div class="grow" />
+                        <i
+                            class={`bi ${studentSortedToggle ? "bi-chevron-down" : "bi-chevron-up"}`}
+                        />
+                    </div>
                 </th>
-                <th>
-                    <p>Admin</p>
+                <th on:click={() => sortTable("admin")} class="cursor-pointer">
+                    <div class="flex items-center">
+                        <p>Admin</p>
+                        <div class="grow" />
+                        <i
+                            class={`bi ${adminSortedToggle ? "bi-chevron-down" : "bi-chevron-up"}`}
+                        />
+                    </div>
                 </th>
             </tr>
         </thead>
 
         <tbody>
-            {#each data.users as user}
+            {#each sortedUsers as user}
                 <tr>
-                    <td>
-                        <p>{user.email}</p>
-                    </td>
-                    <td>
-                        <p>{user.student ? "True" : "False"}</p>
-                    </td>
+                    <td><p>{user.email}</p></td>
+                    <td><p>{user.student ? "True" : "False"}</p></td>
                     <td>
                         <select
-                            on:change={(e) => setAdmin(user.id, e.target.value)}
+                            on:change={(e) => setAdmin(user.id, e.target.value === "True")}
                             value={user.admin.length > 0 ? "True" : "False"}
                             class="px-1 py-0.5 rounded-md"
                         >
@@ -97,4 +141,7 @@
 
     th, td
         @apply border border-neutral-200 px-3 py-2
+
+    th.cursor-pointer
+        @apply hover:bg-gray-100
 </style>
