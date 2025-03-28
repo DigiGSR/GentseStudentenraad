@@ -22,8 +22,8 @@
             alert(JSON.stringify(res, null, 2));
         }
     }
-
-    let submitUploader: () => Promise<void>;
+    let submitUploaderCover: () => Promise<void>;
+    let submitUploaderLogo: () => Promise<void>;
 </script>
 
 <svelte:head>
@@ -68,17 +68,18 @@
         description="Cover"
         type="image"
         bind:source={data.configuration.group_photo}
-        bind:submitUploader
+        bind:submitUploader={submitUploaderCover}
     />
     <Uploader
         description="Logo"
         type="image"
         bind:source={data.configuration.logo_url}
-        bind:submitUploader
+        bind:submitUploader={submitUploaderLogo}
     />
     <ActionButton
         action={async () => {
-            await submitUploader();
+            await submitUploaderCover();
+            await submitUploaderLogo();
             put();
         }}
     />
