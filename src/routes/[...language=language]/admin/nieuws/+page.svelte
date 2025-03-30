@@ -5,6 +5,51 @@
 
     export let data: PageData;
 
+    let sortColumn: "title" | "author" | "published_at" = "published_at";
+    let sortDirection: "asc" | "desc" = "desc";
+
+    let titleSortedToggle = true;
+    let authorSortedToggle = true;
+    let publishedSortedToggle = true;
+
+    $: sortedNews = [...data.news].sort((a, b) => {
+        let valueA, valueB;
+        switch (sortColumn) {
+            case "title":
+                valueA = a.title.toLowerCase();
+                valueB = b.title.toLowerCase();
+                break;
+            case "author":
+                valueA = (a.author || "").toLowerCase();
+                valueB = (b.author || "").toLowerCase();
+                break;
+            case "published_at":
+                valueA = new Date(a.published_at).getTime();
+                valueB = new Date(b.published_at).getTime();
+                break;
+            default:
+                valueA = new Date(a.published_at).getTime();
+                valueB = new Date(b.published_at).getTime();
+        }
+
+        if (valueA < valueB) return sortDirection === "asc" ? -1 : 1;
+        if (valueA > valueB) return sortDirection === "asc" ? 1 : -1;
+        return 0;
+    });
+
+    function sortTable(column: "title" | "author" | "published_at") {
+        if (sortColumn === column) {
+            sortDirection = sortDirection === "asc" ? "desc" : "asc";
+        } else {
+            sortColumn = column;
+            sortDirection = "desc";
+        }
+
+        if (column === "title") titleSortedToggle = !titleSortedToggle;
+        else if (column === "author") authorSortedToggle = !authorSortedToggle;
+        else if (column === "published_at") publishedSortedToggle = !publishedSortedToggle;
+    }
+
     async function remove(news: News) {
         const res = await fetch(`/api/news/${news.id}`, {
             method: "DELETE",
@@ -34,25 +79,31 @@
     <table class="table-auto mb-6">
         <thead>
             <tr>
-                <th>
+                <th on:click={() => sortTable("title")} class="cursor-pointer">
                     <div class="flex items-center">
                         <p>Titel/Synopsis</p>
                         <div class="grow" />
-                        <i class="bi bi-chevron-down" />
+                        <i
+                            class={`bi ${titleSortedToggle ? "bi-chevron-down" : "bi-chevron-up"}`}
+                        />
                     </div>
                 </th>
-                <th>
+                <th on:click={() => sortTable("author")} class="cursor-pointer">
                     <div class="flex items-center">
                         <p>Auteur</p>
                         <div class="grow" />
-                        <i class="bi bi-chevron-down" />
+                        <i
+                            class={`bi ${authorSortedToggle ? "bi-chevron-down" : "bi-chevron-up"}`}
+                        />
                     </div>
                 </th>
-                <th>
+                <th on:click={() => sortTable("published_at")} class="cursor-pointer">
                     <div class="flex items-center">
                         <p>Publicatiedatum</p>
                         <div class="grow" />
-                        <i class="bi bi-chevron-down" />
+                        <i
+                            class={`bi ${publishedSortedToggle ? "bi-chevron-down" : "bi-chevron-up"}`}
+                        />
                     </div>
                 </th>
                 <th />
@@ -60,9 +111,9 @@
             </tr>
         </thead>
         <tbody>
-            {#each data.news as news_item}
+            {#each sortedNews as news_item}
                 <tr>
-                    <td>
+                    <td class="max-w-[16rem]">
                         <p class="font-medium">{news_item.title}</p>
                         <p class="opacity-75 text-xs truncate max-w-fit">
                             {news_item.synopsis}
@@ -102,4 +153,7 @@
 
     th, td
         @apply border border-neutral-200 px-3 py-2
+        
+    th.cursor-pointer
+        @apply hover:bg-gray-100
 </style>

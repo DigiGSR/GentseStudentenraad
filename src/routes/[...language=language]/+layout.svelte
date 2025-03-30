@@ -2,7 +2,6 @@
     import "../../app.scss";
     import { page } from "$app/stores";
     import type { LayoutData } from "./$types";
-    import { env } from "$env/dynamic/public";
     import Dropdown from "$lib/components/Dropdown.svelte";
     import OrganizationsDropdown from "$lib/components/OrganizationsDropdown.svelte";
     let showLinks = false;
@@ -28,14 +27,15 @@
 
     let navbarRoutes = [...data.configuration.navbar];
 
-    if (data.user || env.PUBLIC_ENV == "dev") {
+    //dit was ooit gewenst gedrag, niet meer, nu moet verslagen zelf toegevoegd worden als slug en krijg je een unauthenticated error als je probeert ernaar toe te gaan
+    /*if (data.user || env.PUBLIC_ENV == "dev") {
         //verslagen is CAS only, todo verslagen route zelf ook checken voor login
         navbarRoutes.push({
             name: { nl: "Verslagen", en: "Reports" },
             route: "verslagen",
             hierarchyRoute: false,
         });
-    }
+    }*/
 
     let showMenu = false;
 
