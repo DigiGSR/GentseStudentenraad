@@ -25,6 +25,7 @@ export const load = (async ({ params, locals }) => {
     const news_item = await prisma.news.findUniqueOrThrow({
         where: {
             id: parseInt(params.id),
+            published: true,
         },
     });
 

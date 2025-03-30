@@ -14,6 +14,7 @@ export const load = (async ({ locals, url }) => {
         ],
         where: {
             organization: locals.configuration.organization,
+            published: true,
         },
         take: 4,
     });
