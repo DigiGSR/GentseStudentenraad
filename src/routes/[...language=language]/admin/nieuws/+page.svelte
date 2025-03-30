@@ -1,6 +1,5 @@
 <script lang="ts">
     import type { PageData } from "./$types";
-    import { goto } from "$app/navigation";
     import { News } from "@prisma/client";
     import NewButton from "$lib/components/admin/NewButton.svelte";
 
@@ -65,7 +64,9 @@
                 <tr>
                     <td>
                         <p class="font-medium">{news_item.title}</p>
-                        <p class="opacity-75 text-xs truncate">{news_item.synopsis}</p>
+                        <p class="opacity-75 text-xs truncate max-w-fit">
+                            {news_item.synopsis}
+                        </p>
                     </td>
                     <td class:opacity-50={news_item.author === null} class="text-sm">
                         {news_item.author ?? "/"}
