@@ -17,7 +17,7 @@
         <div class="grid md:grid-cols-2 items-center">
             <img
                 src={news_item.banner_image}
-                class="object-cover aspect-[3/2] w-full"
+                class="object-cover aspect-square w-full"
                 alt={news_item.banner_image_alt}
             />
 
