@@ -30,12 +30,15 @@
     />
 {/if}
 
-<div class="hidden absolute top-[600px] left-3 xl:flex xl:pr-12 flex-col max-w-fit space-y-2">
-    <p class="text-md font-bold text-black text-opacity-60">Raden & Comissies</p>
-    <div class="flex flex-col space-y-2 text-xs">
+<div
+    class="hidden fixed top-20 left-3 bottom-0 right-0 xl:flex xl:pr-4 xl:pt-4 flex-col xl:max-w-[10rem] 2xl:max-w-[18rem] space-y-2 overflow-scroll"
+>
+    <p class="text-md font-bold text-black text-opacity-60 truncate">Raden & Comissies</p>
+    <div class="flex flex-col space-y-2 text-xs max-w-fit">
         {#each sections as section}
-            <a href="#{section.id}" class="text-black text-opacity-70 hover:text-opacity-100"
-                >{section.name}</a
+            <a
+                href="#{section.id}"
+                class="text-black truncate text-opacity-70 hover:text-opacity-100">{section.name}</a
             >
         {/each}
     </div>
