@@ -6,18 +6,16 @@
     export let number = false;
 </script>
 
-<template>
-    <div class="">
-        {#if description !== null}
-            <p class="text-[12px] opacity-50 font-semibold uppercase">{description}</p>
-        {/if}
-        {#if number}
-            <input type="number" class="textfield" {placeholder} bind:value />
-        {:else}
-            <input type="year" class="textfield" {placeholder} bind:value />
-        {/if}
-    </div>
-</template>
+<div class="">
+    {#if description !== null}
+        <p class="text-[12px] opacity-50 font-semibold uppercase">{description}</p>
+    {/if}
+    {#if number}
+        <input type="number" class="textfield" {placeholder} bind:value />
+    {:else}
+        <input type="text" class="textfield" {placeholder} bind:value />
+    {/if}
+</div>
 
 <style lang="postcss">
     input {

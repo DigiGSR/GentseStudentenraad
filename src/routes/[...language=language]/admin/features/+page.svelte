@@ -69,18 +69,18 @@
         </div>
 
         {#if data.configuration.calendar_section}
-            {#each data.configuration.calendars as calendar, index (calendar)}
+            {#each data.configuration.calendars as calendar, index (index)}
                 <div class="flex flex-row items-start">
                     <button
                         on:click={() => {
                             data.configuration.calendars.splice(index, 1);
-                            data.configuration.calendars = data.configuration.calendars; //yes this is actual svelte syntax that is needed
+                            data.configuration.calendars = [...data.configuration.calendars]; // Force update
                         }}
                         class="text-[12px] mr-1 bi bi-dash-circle opacity-50 hover:opacity-80 hover:cursor-pointer transition duration-150"
                     />
                     <TextField
                         placeholder={calendar}
-                        bind:value={data.configuration.calendars[index]}
+                        bind:value={calendar}
                         description={`kalender ${index + 1}`}
                     />
                 </div>
