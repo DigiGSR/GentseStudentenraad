@@ -11,7 +11,9 @@
     export let toolbarOptions = [
         [{ header: 1 }, { header: 2 }, "blockquote", "link", "image", "video"],
         ["bold", "italic", "underline", "strike"],
-        [{ list: "ordered" }, { list: "ordered" }],
+
+        [{ color: [] }, { background: [] }],
+        [{ list: "ordered" }],
         [{ align: [] }],
         ["clean"],
     ];
