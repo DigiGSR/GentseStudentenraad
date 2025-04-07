@@ -3,6 +3,7 @@
     import PositionCard from "$lib/components/PositionCard.svelte";
     import type { PageData } from "./$types";
     import { selectedLanguage } from "$lib/Language";
+    import { onMount } from "svelte";
 
     const sections: { id: string; name: string }[] = [];
 
@@ -16,6 +17,17 @@
             sections.push({ id: group.id.toString(), name: group.name });
         }
     }
+
+    let isFixed = false;
+
+    function handleScroll() {
+        isFixed = window.scrollY > 600;
+    }
+
+    onMount(() => {
+        window.addEventListener("scroll", handleScroll);
+        return () => window.removeEventListener("scroll", handleScroll);
+    });
 
     export let data: PageData;
     //make it so that the group with name "Dagelijks Bestuur" is always on top
@@ -31,8 +43,10 @@
 {/if}
 
 <div
-    class="hidden fixed top-20 left-3 bottom-0 right-0 xl:flex xl:pr-4 xl:pt-4 flex-col xl:max-w-[10rem] 2xl:max-w-[18rem] space-y-2 overflow-scroll"
+    class={`hidden ${isFixed ? "fixed top-0" : "absolute top-[600px]"}  left-3 bottom-0 right-0 xl:flex xl:pr-4 xl:pt-4 flex-col xl:max-w-[10rem] 2xl:max-w-[18rem] space-y-2 overflow-scroll`}
 >
+    <!-- Theoretically this should be sticky. but that didnt work. I think its some height fuckery. Oh well! -->
+
     <p class="text-md font-bold text-black text-opacity-60 truncate">Raden & Comissies</p>
     <div class="flex flex-col space-y-2 text-xs max-w-fit">
         {#each sections as section}
