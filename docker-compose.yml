@@ -27,7 +27,7 @@ services:
             - "traefik.http.routers.staging.tls.certresolver=letsencrypt"
             - "traefik.http.services.staging.loadbalancer.server.port=3000"
         volumes:
-            - "/home/celeste/gsr-site-persistent/uploads:/app/uploads"
+            - "/home/celeste/nfs-volume/gsr-site-persistent/uploads:/app/uploads"
         networks:
             server_default:
             web2022:
@@ -45,7 +45,7 @@ services:
             POSTGRES_PASSWORD: gsr
             PGDATA: /var/lib/postgresql/data/pgdata
         volumes:
-            - "/home/jens/volumes/staging/postgresql:/var/lib/postgresql/data"
+            - "/home/celeste/nfs-volume/volumes/staging/postgresql:/var/lib/postgresql/data"
         restart: always
         networks:
             web2022:
