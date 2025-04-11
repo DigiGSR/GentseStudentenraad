@@ -127,24 +127,24 @@
                         <p class="mt-1">Cultour</p>
                     </a>
                     <a
-                        href="https://durfdoen.be/"
+                        href="https://freudbot.org/"
                         class="flex flex-col justify-center items-center hover:cursor-pointer hover:opacity-70 opacity-100 transition duration-150"
                     >
                         <div
                             class="w-16 bg-center bg-contain bg-no-repeat h-16"
-                            style="background-image: url(/img/durfdoen.png)"
+                            style="background-image: url(/img/freudbot.png)"
                         />
-                        <p class="mt-1">Durfdoen</p>
+                        <p class="mt-1">Freudbot</p>
                     </a>
                     <a
-                        href="https://deelplatform.ugent.be/"
+                        href="https://studium.gent/"
                         class="flex flex-col justify-center items-center hover:cursor-pointer hover:opacity-70 opacity-100 transition duration-150"
                     >
                         <div
                             class="w-16 bg-center bg-contain bg-no-repeat h-16"
-                            style="background-image: url(/img/deelplatform.png)"
+                            style="background-image: url(/img/studium.png)"
                         />
-                        <p class="mt-1">Deelplatform</p>
+                        <p class="mt-1">Studium</p>
                     </a>
                 </OrganizationsDropdown>
             {/if}
