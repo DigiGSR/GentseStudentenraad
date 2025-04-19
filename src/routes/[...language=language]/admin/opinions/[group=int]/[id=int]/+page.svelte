@@ -37,17 +37,29 @@
             alert(JSON.stringify(res, null, 2));
         }
     }
+    let submitUploader: () => Promise<void>;
 </script>
 
 <div class="container space-y-4">
     <TextField description="Vraag" bind:value={data.opinion.title} />
     <LongTextField description="Antwoord" bind:value={data.opinion.about} />
     <TextField description="Document" bind:value={data.opinion.document_link} />
-    <Uploader description="Afbeelding" source={data.opinion.image} />
+    <Uploader
+        bind:submitUploader
+        type="image"
+        description="Afbeelding"
+        bind:source={data.opinion.image}
+    />
     <TextField description="Afbeelding" bind:value={data.opinion.image} />
     <DatePicker description="Publicatiedatum" bind:value={data.opinion.published_at} />
     <Checkbox label="Publiek" bind:value={data.opinion.published} description="Opties" />
-    <ActionButton action={put} {remove} />
+    <ActionButton
+        action={async () => {
+            await submitUploader();
+            put();
+        }}
+        {remove}
+    />
 </div>
 
 <style lang="sass">
