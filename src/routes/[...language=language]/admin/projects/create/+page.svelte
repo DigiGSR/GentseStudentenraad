@@ -2,10 +2,10 @@
     import type { PageData } from "./$types";
     import ActionButton from "$lib/components/admin/ActionButton.svelte";
     import TextField from "$lib/components/admin/TextField.svelte";
-    import LongTextField from "$lib/components/admin/LongTextField.svelte";
     import Uploader from "$lib/components/admin/Uploader.svelte";
     import { goto } from "$app/navigation";
     import { Project } from "@prisma/client";
+    import Quill from "$lib/components/admin/Quill.svelte";
 
     async function post() {
         const res = await fetch(`/api/project/`, {
@@ -32,6 +32,8 @@
         image: "",
         about: "",
     };
+
+    let submitUploader: () => Promise<void>;
 </script>
 
 <svelte:head>
@@ -45,9 +47,14 @@
 <div class="space-y-6">
     <TextField bind:value={newProject.title} description="Titel" />
 
-    <LongTextField bind:value={newProject.about} description="Beschrijving" />
+    <Quill bind:value={newProject.about} description="Beschrijving" />
 
-    <Uploader description="Coverfoto" source={newProject.aimage} />
+    <Uploader
+        bind:submitUploader
+        type="image"
+        description="Coverfoto"
+        bind:source={newProject.image}
+    />
 
     <ActionButton action={post} />
 </div>

@@ -1,6 +1,6 @@
 <script lang="ts">
     export let placeholder = "";
-    export let value: string | null;
+    export let value: string | null | undefined;
     export let description: string | null = null;
 
     import { onMount } from "svelte";

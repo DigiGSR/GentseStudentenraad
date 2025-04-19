@@ -7,5 +7,11 @@
 <svelte:head></svelte:head>
 
 <div class="container md py-24 markdown-content">
-    <div class="">{@html data.contents}</div>
+    <div class="hobbes">{@html data.contents}</div>
 </div>
+
+<style>
+    .hobbes {
+        white-space: pre-line;
+    }
+</style>
