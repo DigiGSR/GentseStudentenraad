@@ -82,7 +82,11 @@
         <div>
             <p class="text-xl font-bold">Te vroeg!</p>
             <p class="mb-2">Voor dit jaar zijn nog geen standpunten vrijgegeven.</p>
-            <Tag link="/standpunten/2021" value="Bekijk academiejaar 2021-2022" />
+            <Tag
+                isDownload={false}
+                link="/standpunten/2021"
+                value="Bekijk academiejaar 2021-2022"
+            />
         </div>
     </div>
     <div class="grow" />
