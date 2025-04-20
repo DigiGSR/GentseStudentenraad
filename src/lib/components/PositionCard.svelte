@@ -65,7 +65,7 @@
             </div>
         {/if}
 
-        {#if position.person.mail !== null}
+        {#if position.person.mail !== null && position.person.mail.trim().length > 0}
             <Tag link="mailto:{position.person.mail}" value={position.person.mail} icon="mailbox" />
         {:else}
             <div class="pb-[1.75rem]"></div>
