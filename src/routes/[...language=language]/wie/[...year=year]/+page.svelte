@@ -43,11 +43,10 @@
 {/if}
 
 <div
-    class={`hidden ${isFixed ? "fixed top-0" : "absolute top-[600px]"}  left-3 bottom-0 right-0 xl:flex xl:pr-4 xl:pt-4 flex-col xl:max-w-[10rem] 2xl:max-w-[18rem] space-y-2 overflow-scroll`}
+    class={`hidden ${isFixed ? "fixed top-0" : "absolute top-[600px]"} no-scrollbar left-3 bottom-0 right-0 xl:flex xl:pr-4 xl:pt-4 flex-col xl:max-w-[10rem] 2xl:max-w-[18rem] space-y-2 overflow-scroll`}
 >
     <!-- Theoretically this should be sticky. but that didnt work. I think its some height fuckery. Oh well! -->
 
-    <p class="text-md font-bold text-black text-opacity-60 truncate">Raden & Comissies</p>
     <div class="flex flex-col space-y-2 text-xs max-w-fit">
         {#each sections as section}
             <a
@@ -97,3 +96,13 @@
         </div>
     {/each}
 </div>
+
+<style>
+    .no-scrollbar::-webkit-scrollbar {
+        display: none;
+    }
+    .no-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+</style>
