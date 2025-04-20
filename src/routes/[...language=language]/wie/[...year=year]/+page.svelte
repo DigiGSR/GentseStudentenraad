@@ -82,28 +82,17 @@
 <div class="space-y-12 xl:pl-12 py-12">
     <!-- {#each data.groups.filter((e) => e.positions.length > 0) as group} NOTE: this filters out all of the groups without members. Is this the desired behaviour?-->
     {#each data.groups as group}
-        <div class="odd:bg-neutral-100" id={group.id.toString()}>
-            <div class="container grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="space-y-1 md:col-span-2">
-                    <p class="font-bold text-3xl">{group.name}</p>
-                    {#if group.description}
-                        <p class="opacity-90">{@html group.description}</p>
-                    {/if}
-                </div>
-                <div class="space-y-6">
-                    {#each group.positions as position, j}
-                        {#if j % 2 === 0}
-                            <PositionCard {position} />
-                        {/if}
-                    {/each}
-                </div>
-                <div class="space-y-6">
-                    {#each group.positions as position, j}
-                        {#if j % 2 === 1}
-                            <PositionCard {position} />
-                        {/if}
-                    {/each}
-                </div>
+        <div class="odd:bg-neutral-100 container" id={group.id.toString()}>
+            <div class="mb-6">
+                <p class="font-bold text-3xl">{group.name}</p>
+                {#if group.description}
+                    <p class="opacity-90">{@html group.description}</p>
+                {/if}
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {#each group.positions as position}
+                    <PositionCard {position} />
+                {/each}
             </div>
         </div>
     {/each}
