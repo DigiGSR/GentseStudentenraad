@@ -8,14 +8,21 @@
     import googleCalendarPlugin from "@fullcalendar/google-calendar";
     import { env } from "$env/dynamic/public";
     import { selectedLanguage } from "$lib/Language";
+    //import { browser } from "$app/environment";
 
     export let data: PageData;
 
     console.log(data.calendars);
 
     let brandColor = data.configuration.brand_color_secondary;
+    //let hostUrl = "";
+
     // Initialize the interactive calendar
     onMount(async () => {
+        // if (browser) {
+        //     hostUrl = window.location.host;
+        // }
+
         if (data.configuration.calendar_section) {
             const calendarEl = document.getElementById("calendar");
             const calendar = new FullCalendar.Calendar(calendarEl, {
@@ -118,6 +125,52 @@
                     id="calendar"
                     class="max-h-full"
                 />
+                <div class="flex flex-row justify-center w-full mt-8">
+                    <button
+                        class="flex items-center px-4 py-2 rounded-l font-medium transition-colors duration-200 ease-in-out text-white shadow"
+                        style="background-color: {brandColor};"
+                    >
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            class="h-5 w-5 mr-2"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                            />
+                        </svg>
+                    </button>
+                    <ul class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
+                        {#each data.configuration.calendars as calendar, i}
+                            <li>
+                                <a
+                                    class="hover:cursor-pointer hover:opacity-65"
+                                    href={`https://calendar.google.com/calendar/r?cid=${encodeURIComponent(calendar)}`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    Voeg Kalender {i + 1} Toe
+                                </a>
+                            </li>
+                        {/each}
+                        <!-- {#if browser}
+                            <li>
+                                <a
+                                    href={`webcal://${hostUrl}/api/calendar/combined.ics`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    Apple/Outlook Calendar
+                                </a>
+                            </li>
+                        {/if} -->
+                    </ul>
+                </div>
             </div>
         {/if}
 
