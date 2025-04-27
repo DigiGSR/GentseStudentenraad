@@ -11,6 +11,12 @@
 
 <div class="container md py-4 justify-center text-center min-w-full">
     {@html data.i18n[$selectedLanguage].get("standpunten-info")}
+
+    <p>
+        <span class="text-red-600 font-bold">Opgelet! </span>
+        Standpunten van de <span class="font-bold">laatste 5 jaar</span> zijn geldig, oudere standpunten
+        kan je terugvinden via de knop/link
+    </p>
 </div>
 
 <div class="flex items-center justify-center gap-4">
@@ -19,10 +25,11 @@
         name="year"
         id="year"
         bind:value={selected}
-        on:change={() => goto(`/standpunten/${selected}`)}
+        on:change={() => goto(`/standpunten/${selected.toString().substring(0, 4)}`)}
     >
+        <!--VERY IMPORTANT: THIS WILL BREAK IN THE YEAR 10 000-->
         {#each data.years as year}
-            <option value={year}>{year}</option>
+            <option value={`${year}-${year + 1}`}>{`${year}-${year + 1}`}</option>
         {/each}
     </select>
 </div>
