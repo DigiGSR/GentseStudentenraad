@@ -22,7 +22,7 @@ services:
             - "traefik.enable=true"
             - "traefik.http.middlewares.limit.buffering.maxRequestBodyBytes=25728640"
             #- "traefik.http.routers.staging.rule=Host(`gentsestudentenraad.be`, `stura.ugent.be`,`stuart.ugent.be`,`fris.ugent.be`,`stuveco.ugent.be`,`sturec.ugent.be`,`stubio.ugent.be`,`ppsr.ugent.be`,`stuff.ugent.be`,`bsr.ugent.be`, `stugg.ugent.be`, `swop.ugent.be`)"
-            - "traefik.http.routers.staging.rule=Host(`gsr.staging.gentsestudentenraad.be`,`stura.staging.gentsestudentenraad.be`,`stuart.staging.gentsestudentenraad.be`,`fris.staging.gentsestudentenraad.be`,`stuveco.staging.gentsestudentenraad.be`,`sturec.staging.gentsestudentenraad.be`,`stubio.staging.gentsestudentenraad.be`,`ppsr.staging.gentsestudentenraad.be`,`stuff.staging.gentsestudentenraad.be`,`bsr.staging.gentsestudentenraad.be`, `stugg.staging.gentsestudentenraad.be`, `swop.staging.gentsestudentenraad.be`)"
+            - "traefik.http.routers.staging.rule=Host(`gentsestudentenraad.be`,`stura.staging.gentsestudentenraad.be`,`stuart.staging.gentsestudentenraad.be`,`fris.staging.gentsestudentenraad.be`,`stuveco.staging.gentsestudentenraad.be`,`sturec.staging.gentsestudentenraad.be`,`stubio.staging.gentsestudentenraad.be`,`ppsr.staging.gentsestudentenraad.be`,`stuff.staging.gentsestudentenraad.be`,`bsr.staging.gentsestudentenraad.be`, `stugg.staging.gentsestudentenraad.be`, `swop.staging.gentsestudentenraad.be`)"
             - "traefik.http.routers.staging.entrypoints=websecure"
             - "traefik.http.routers.staging.tls.certresolver=letsencrypt"
             - "traefik.http.services.staging.loadbalancer.server.port=3000"
