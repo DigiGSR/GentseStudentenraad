@@ -12,15 +12,15 @@ services:
             args:
                 DATABASE_URL: "postgresql://gsr:gsr@10.0.0.3:5432/mydb?schema=public"
                 UPLOAD_DIR: "/app/uploads"
-                BODY_SIZE_LIMIT: "15728640"
+                BODY_SIZE_LIMIT: "Infinity"
         environment:
             DATABASE_URL: "postgresql://gsr:gsr@10.0.0.3:5432/mydb?schema=public"
             UPLOAD_DIR: "/app/uploads"
             PUBLIC_GOOGLE_CALENDAR_API_KEY: "${PUBLIC_GOOGLE_CALENDAR_API_KEY}"
-            BODY_SIZE_LIMIT: "15728640"
+            BODY_SIZE_LIMIT: "Infinity"
         labels:
             - "traefik.enable=true"
-            - "traefik.http.middlewares.limit.buffering.maxRequestBodyBytes=15728640"
+            - "traefik.http.middlewares.limit.buffering.maxRequestBodyBytes=25728640"
             #- "traefik.http.routers.staging.rule=Host(`gentsestudentenraad.be`, `stura.ugent.be`,`stuart.ugent.be`,`fris.ugent.be`,`stuveco.ugent.be`,`sturec.ugent.be`,`stubio.ugent.be`,`ppsr.ugent.be`,`stuff.ugent.be`,`bsr.ugent.be`, `stugg.ugent.be`, `swop.ugent.be`)"
             - "traefik.http.routers.staging.rule=Host(`gsr.staging.gentsestudentenraad.be`,`stura.staging.gentsestudentenraad.be`,`stuart.staging.gentsestudentenraad.be`,`fris.staging.gentsestudentenraad.be`,`stuveco.staging.gentsestudentenraad.be`,`sturec.staging.gentsestudentenraad.be`,`stubio.staging.gentsestudentenraad.be`,`ppsr.staging.gentsestudentenraad.be`,`stuff.staging.gentsestudentenraad.be`,`bsr.staging.gentsestudentenraad.be`, `stugg.staging.gentsestudentenraad.be`, `swop.staging.gentsestudentenraad.be`)"
             - "traefik.http.routers.staging.entrypoints=websecure"

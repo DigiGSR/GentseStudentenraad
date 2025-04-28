@@ -16,7 +16,7 @@ export const handle = (async ({ event, resolve }) => {
     const ticket = event.url.searchParams.get("ticket");
     let tokenExpired = false;
 
-    let storedUser = null;
+    //let storedUser = null;
 
     if (token) {
         try {
@@ -100,29 +100,29 @@ export const handle = (async ({ event, resolve }) => {
         });
     }
 
-    //TODO REMOVE THIS CODEBLOCK
+    //START AUTOADMIN
 
     // Make the user an admin for the current organization
-    if (ticket && storedUser) {
-        console.log("storedUser", storedUser);
-        const existingAdmin = await prisma.admin.findFirst({
-            where: {
-                user_id: storedUser.id,
-                organization: configuration.organization,
-            },
-        });
+    // if (ticket && storedUser) {
+    //     console.log("storedUser", storedUser);
+    //     const existingAdmin = await prisma.admin.findFirst({
+    //         where: {
+    //             user_id: storedUser.id,
+    //             organization: configuration.organization,
+    //         },
+    //     });
 
-        if (!existingAdmin) {
-            await prisma.admin.create({
-                data: {
-                    user_id: storedUser.id,
-                    organization: configuration.organization,
-                },
-            });
-        }
-    }
+    //     if (!existingAdmin) {
+    //         await prisma.admin.create({
+    //             data: {
+    //                 user_id: storedUser.id,
+    //                 organization: configuration.organization,
+    //             },
+    //         });
+    //     }
+    // }
 
-    //TODO REMOVE THIS CODEBLOCK
+    //STOP AUTOADMIN
 
     //this is for dev environment so that if ?host is not supplied we default to gsr config
 

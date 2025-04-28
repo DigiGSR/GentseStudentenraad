@@ -10,6 +10,7 @@
     let submitting = false;
     let submitSuccess = false;
     let submitError = "";
+    let anonymous = false; // Add state for anonymity toggle
 
     export let data: PageData;
 
@@ -31,11 +32,12 @@
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                    email: data.user?.email,
+                    email: anonymous ? null : data.user?.email, // Don't send email if anonymous
                     content: text,
                     course_code: course.code,
                     subject_code: subject.subject_code,
                     organization: data.configuration.organization,
+                    anonymous: anonymous, // Add anonymous flag
                 }),
             });
 
@@ -128,6 +130,17 @@
                     bind:value={text}
                     placeholder={data.i18n[$selectedLanguage].get("feedback-placeholder")}
                 />
+
+                <!-- Add anonymity toggle -->
+                <div class="flex items-center space-x-2 py-2">
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" bind:checked={anonymous} />
+                        <span class="ml-3 text-sm font-medium">
+                            {data.i18n[$selectedLanguage].get("feedback-anonymous") ||
+                                "Verzend anoniem"}
+                        </span>
+                    </label>
+                </div>
 
                 <button
                     on:click={submitFeedback}
