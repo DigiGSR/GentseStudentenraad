@@ -20,7 +20,9 @@ export const handle = (async ({ event, resolve }) => {
 
     if (token) {
         try {
+            console.log("decoded");
             const decoded = jwt.verify(token, secret) as { username: string };
+            console.log("decoded", decoded);
             event.locals.user = await prisma.user.findUniqueOrThrow({
                 where: {
                     username: decoded.username,
@@ -65,7 +67,7 @@ export const handle = (async ({ event, resolve }) => {
                 },
             });
 
-            storedUser = event.locals.user;
+            // storedUser = event.locals.user;
 
             // Set JWT to keep user online.
             const encoded = jwt.sign({ username: user.username }, secret, { expiresIn: "1h" });
@@ -131,6 +133,7 @@ export const handle = (async ({ event, resolve }) => {
     event.locals.configuration = configuration;
     event.locals.language = language;
 
+    console.log("storeduser", event.locals.user);
     // Authorisation
     if (process.env.PUBLIC_ENV !== "dev") {
         if (event.locals.user) {
@@ -145,12 +148,12 @@ export const handle = (async ({ event, resolve }) => {
 
         // TODO: Better authentication for API routes.
         console.log("pathnameee", event.url.pathname);
+
         if (
             (event.url.pathname.startsWith("/api") &&
                 !event.url.pathname.startsWith("/api/calendar")) ||
             event.url.pathname.includes("/admin")
         ) {
-            console.log(event.locals.user);
             if (!event.locals.user) {
                 throw error(401, "Unauthorized");
             } else if (!event.locals.admin) {
