@@ -6,7 +6,7 @@ import jwt from "jsonwebtoken";
 import type { Prisma } from "@prisma/client";
 import * as cookie from "cookie";
 
-const secret = "insecure";
+const secret = process.env.JWT_SECRET;
 
 export const handle = (async ({ event, resolve }) => {
     const start = new Date();
@@ -143,16 +143,9 @@ export const handle = (async ({ event, resolve }) => {
             event.locals.admin = count > 0;
         }
 
-        if (!configuration.active && !event.locals.admin) {
-            throw error(401, "Unauthorized");
-        }
-
         // TODO: Better authentication for API routes.
-        if (
-            event.url.pathname.startsWith("/api") &&
-            !event.url.pathname.startsWith("/api/calendar") &&
-            !event.url.pathname.startsWith("/api/uploads")
-        ) {
+        console.log("pathnameee", event.url.pathname);
+        if (event.url.pathname.startsWith("/api") || event.url.pathname.startsWith("/admin")) {
             if (!event.locals.user) {
                 throw error(401, "Unauthorized");
             } else if (!event.locals.admin) {
