@@ -6,7 +6,7 @@ import jwt from "jsonwebtoken";
 import type { Prisma } from "@prisma/client";
 import * as cookie from "cookie";
 
-const secret = process.env.JWT_SECRET;
+const secret = "insecure";
 
 export const handle = (async ({ event, resolve }) => {
     const start = new Date();
