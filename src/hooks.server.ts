@@ -150,6 +150,7 @@ export const handle = (async ({ event, resolve }) => {
                 !event.url.pathname.startsWith("/api/calendar")) ||
             event.url.pathname.includes("/admin")
         ) {
+            console.log(event.locals.user);
             if (!event.locals.user) {
                 throw error(401, "Unauthorized");
             } else if (!event.locals.admin) {
