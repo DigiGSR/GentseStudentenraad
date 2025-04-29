@@ -145,7 +145,11 @@ export const handle = (async ({ event, resolve }) => {
 
         // TODO: Better authentication for API routes.
         console.log("pathnameee", event.url.pathname);
-        if (event.url.pathname.startsWith("/api") || event.url.pathname.startsWith("/admin")) {
+        if (
+            (event.url.pathname.startsWith("/api") &&
+                !event.url.pathname.startsWith("/api/calendar")) ||
+            event.url.pathname.includes("/admin")
+        ) {
             if (!event.locals.user) {
                 throw error(401, "Unauthorized");
             } else if (!event.locals.admin) {
