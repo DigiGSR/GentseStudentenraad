@@ -8,56 +8,31 @@ export const ssr = true;
 export const csr = true;
 
 export const _TRANSLATION_STRINGS = [
-    "footer-social-media",
-    "footer-contact",
-    "footer-varia",
-    "footer-complaints",
-    "home-about",
-    "home-stuver",
-    "home-stuver-frame-title",
-    "home-stuver-frame-body",
-    "home-projects-title",
-    "home-projects-body",
-    "home-events",
-    "home-contact",
-    "home-paragraph-1-title",
-    "home-paragraph-1-body",
-    "home-paragraph-2-title",
-    "home-paragraph-2-body",
-    "faq-title",
-    "faq-about",
-    "faq-selector",
-    "faq-not-found",
-    "feedback-about",
-    "feedback-major-selector",
-    "feedback-subject-selector",
-    "feedback-placeholder",
-    "vakfeedback-verzenden",
-    "projecten-titel",
-    "projecten-tekstje",
-    "standpunten-info",
-    "filter-op-werkgroep",
-    "elections-title",
-    "hier-vind-je-verslagen",
-    "hier-vind-je-reglementen",
-    "werkgroep-geen-verslagen",
-    "who-about",
+    // ...existing code...
 ] as const;
 
 export type TranslationString = (typeof _TRANSLATION_STRINGS)[number];
 
 export const load = (async ({ params, locals }) => {
+    const startTime = performance.now();
+
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const _ = params.language;
 
     // Create navigation bar routes. It's a bit messy but it's our only option.
     const routes = [];
 
+    const configStartTime = performance.now();
     const configs = await prisma.configuration.findMany();
+    const configsTime = performance.now() - configStartTime;
+
+    const pagesStartTime = performance.now();
     const pages = await prisma.page.findMany({
         where: { organization: locals.configuration.organization },
     });
+    const pagesTime = performance.now() - pagesStartTime;
 
+    const routesStartTime = performance.now();
     //todo remove all this, no longer necessary
     if (locals.configuration.who_section) {
         routes.push(locals.language == Language.DUTCH ? ["Wie", "/nl/wie"] : ["Who", "/en/wie"]);
@@ -97,11 +72,13 @@ export const load = (async ({ params, locals }) => {
         );
     }
 
+    const projectCountStartTime = performance.now();
     const projectCount = await prisma.project.count({
         where: {
             organization: locals.configuration.organization,
         },
     });
+    const projectCountTime = performance.now() - projectCountStartTime;
 
     if (locals.configuration.project_section && projectCount > 0) {
         routes.push(
@@ -111,6 +88,18 @@ export const load = (async ({ params, locals }) => {
         );
     }
 
+    if (locals.language == Language.DUTCH) {
+        for (const page of pages) {
+            routes.push([page.nav_name_dutch, page.slug]);
+        }
+    } else {
+        for (const page of pages) {
+            routes.push([page.nav_name_english, page.slug]);
+        }
+    }
+    const routesTime = performance.now() - routesStartTime;
+
+    const i18nStartTime = performance.now();
     const i18n = await prisma.i18n.findMany({
         select: {
             key: true,
@@ -126,16 +115,6 @@ export const load = (async ({ params, locals }) => {
         },
     });
 
-    if (locals.language == Language.DUTCH) {
-        for (const page of pages) {
-            routes.push([page.nav_name_dutch, page.slug]);
-        }
-    } else {
-        for (const page of pages) {
-            routes.push([page.nav_name_english, page.slug]);
-        }
-    }
-
     const translations: Record<"nl" | "en", Map<TranslationString, string>> = {
         nl: new Map(),
         en: new Map(),
@@ -150,10 +129,13 @@ export const load = (async ({ params, locals }) => {
         translations.nl.set(key, dutch);
         translations.en.set(key, english);
     });
+    const i18nTime = performance.now() - i18nStartTime;
 
     if (JSON.stringify(locals.configuration.navbar) == JSON.stringify({})) {
         locals.configuration.navbar = [];
     }
+
+    const totalTime = performance.now() - startTime;
 
     // Done! Pass to the view.
     return {
@@ -163,5 +145,13 @@ export const load = (async ({ params, locals }) => {
         i18n: translations,
         user: locals.user,
         admin: locals.admin,
+        timings: {
+            configs: configsTime,
+            pages: pagesTime,
+            routes: routesTime,
+            projectCount: projectCountTime,
+            i18n: i18nTime,
+            total: totalTime,
+        },
     };
 }) satisfies LayoutServerLoad;
