@@ -3,6 +3,14 @@ import { prisma } from "$lib/Prisma";
 import { Organization } from "@prisma/client";
 import type { LayoutServerLoad } from "./$types";
 
+export const config = {
+    // Enable caching for this route
+    isr: {
+        // Cache expiration in seconds (e.g., 60 seconds)
+        expiration: 60,
+    },
+};
+
 export const prerender = false;
 export const ssr = true;
 export const csr = true;
@@ -47,30 +55,24 @@ export const _TRANSLATION_STRINGS = [
 export type TranslationString = (typeof _TRANSLATION_STRINGS)[number];
 
 export const load = (async ({ params, locals }) => {
-    console.time("layout-server-total");
-    console.log("Starting layout server load function");
-
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const _ = params.language;
 
     // Create navigation bar routes. It's a bit messy but it's our only option.
     const routes = [];
 
-    console.time("fetch-configurations");
     const configs = await prisma.configuration.findMany();
-    console.timeEnd("fetch-configurations");
-    console.log(`Fetched ${configs.length} configurations`);
-
-    console.time("fetch-pages");
     const pages = await prisma.page.findMany({
         where: { organization: locals.configuration.organization },
+        select: {
+            id: true,
+            organization: true,
+            nav_name_dutch: true,
+            nav_name_english: true,
+            slug: true,
+        },
     });
-    console.timeEnd("fetch-pages");
-    console.log(
-        `Fetched ${pages.length} pages for organization: ${locals.configuration.organization}`,
-    );
 
-    console.time("build-navigation-routes");
     //todo remove all this, no longer necessary
     if (locals.configuration.who_section) {
         routes.push(locals.language == Language.DUTCH ? ["Wie", "/nl/wie"] : ["Who", "/en/wie"]);
@@ -110,16 +112,11 @@ export const load = (async ({ params, locals }) => {
         );
     }
 
-    console.time("check-project-count");
     const projectCount = await prisma.project.count({
         where: {
             organization: locals.configuration.organization,
         },
     });
-    console.timeEnd("check-project-count");
-    console.log(
-        `Project count for organization ${locals.configuration.organization}: ${projectCount}`,
-    );
 
     if (locals.configuration.project_section && projectCount > 0) {
         routes.push(
@@ -128,10 +125,7 @@ export const load = (async ({ params, locals }) => {
                 : ["Projects", "/en/projecten"],
         );
     }
-    console.timeEnd("build-navigation-routes");
-    console.log(`Built ${routes.length} navigation routes`);
 
-    console.time("fetch-i18n");
     const i18n = await prisma.i18n.findMany({
         select: {
             key: true,
@@ -146,10 +140,7 @@ export const load = (async ({ params, locals }) => {
             ],
         },
     });
-    console.timeEnd("fetch-i18n");
-    console.log(`Fetched ${i18n.length} translation entries`);
 
-    console.time("add-pages-to-routes");
     if (locals.language == Language.DUTCH) {
         for (const page of pages) {
             routes.push([page.nav_name_dutch, page.slug]);
@@ -159,10 +150,7 @@ export const load = (async ({ params, locals }) => {
             routes.push([page.nav_name_english, page.slug]);
         }
     }
-    console.timeEnd("add-pages-to-routes");
-    console.log(`Final routes count: ${routes.length}`);
 
-    console.time("initialize-translations");
     const translations: Record<"nl" | "en", Map<TranslationString, string>> = {
         nl: new Map(),
         en: new Map(),
@@ -172,46 +160,17 @@ export const load = (async ({ params, locals }) => {
         translations.nl.set(e, `missing i18n: "${e}"`); //set key value as default value
         translations.en.set(e, `missing i18n: "${e}"`); //set key value as default value
     });
-    console.timeEnd("initialize-translations");
-    console.log(
-        `Initialized ${_TRANSLATION_STRINGS.length} translation strings with default values`,
-    );
 
-    console.time("set-translations");
-    let validTranslationCount = 0;
     i18n.forEach(({ key, dutch, english }) => {
-        if (_TRANSLATION_STRINGS.includes(key as TranslationString)) {
-            translations.nl.set(key as TranslationString, dutch);
-            translations.en.set(key as TranslationString, english);
-            validTranslationCount++;
-        }
+        translations.nl.set(key, dutch);
+        translations.en.set(key, english);
     });
-    console.timeEnd("set-translations");
-    console.log(`Set ${validTranslationCount} valid translations from database`);
 
-    console.time("finalize-configuration");
     if (JSON.stringify(locals.configuration.navbar) == JSON.stringify({})) {
         locals.configuration.navbar = [];
     }
-    console.timeEnd("finalize-configuration");
-
-    // Check for missing translations
-    console.time("check-missing-translations");
-    const missingTranslations = _TRANSLATION_STRINGS.filter(
-        (key) =>
-            translations.nl.get(key).startsWith("missing i18n") ||
-            translations.en.get(key).startsWith("missing i18n"),
-    );
-    console.timeEnd("check-missing-translations");
-
-    if (missingTranslations.length > 0) {
-        console.warn("Missing translations found:", missingTranslations);
-    }
 
     // Done! Pass to the view.
-    console.log("Layout server load function completed");
-    console.timeEnd("layout-server-total");
-
     return {
         language: locals.language,
         configs: configs.filter((e) => e.id != locals.configuration.id),
