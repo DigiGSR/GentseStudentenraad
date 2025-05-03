@@ -16,13 +16,11 @@ export const handle = (async ({ event, resolve }) => {
     const ticket = event.url.searchParams.get("ticket");
     let tokenExpired = false;
 
-    //let storedUser = null;
+    let storedUser = null;
 
     if (token) {
         try {
-            console.log("decoded");
             const decoded = jwt.verify(token, secret) as { username: string };
-            console.log("decoded", decoded);
             event.locals.user = await prisma.user.findUniqueOrThrow({
                 where: {
                     username: decoded.username,
@@ -67,7 +65,7 @@ export const handle = (async ({ event, resolve }) => {
                 },
             });
 
-            // storedUser = event.locals.user;
+            storedUser = event.locals.user;
 
             // Set JWT to keep user online.
             const encoded = jwt.sign({ username: user.username }, secret, { expiresIn: "1h" });
@@ -102,29 +100,29 @@ export const handle = (async ({ event, resolve }) => {
         });
     }
 
-    //START AUTOADMIN
+    //TODO REMOVE THIS CODEBLOCK
 
     // Make the user an admin for the current organization
-    // if (ticket && storedUser) {
-    //     console.log("storedUser", storedUser);
-    //     const existingAdmin = await prisma.admin.findFirst({
-    //         where: {
-    //             user_id: storedUser.id,
-    //             organization: configuration.organization,
-    //         },
-    //     });
+    if (ticket && storedUser) {
+        console.log("storedUser", storedUser);
+        const existingAdmin = await prisma.admin.findFirst({
+            where: {
+                user_id: storedUser.id,
+                organization: configuration.organization,
+            },
+        });
 
-    //     if (!existingAdmin) {
-    //         await prisma.admin.create({
-    //             data: {
-    //                 user_id: storedUser.id,
-    //                 organization: configuration.organization,
-    //             },
-    //         });
-    //     }
-    // }
+        if (!existingAdmin) {
+            await prisma.admin.create({
+                data: {
+                    user_id: storedUser.id,
+                    organization: configuration.organization,
+                },
+            });
+        }
+    }
 
-    //STOP AUTOADMIN
+    //TODO REMOVE THIS CODEBLOCK
 
     //this is for dev environment so that if ?host is not supplied we default to gsr config
 
@@ -133,7 +131,6 @@ export const handle = (async ({ event, resolve }) => {
     event.locals.configuration = configuration;
     event.locals.language = language;
 
-    console.log("storeduser", event.locals.user);
     // Authorisation
     if (process.env.PUBLIC_ENV !== "dev") {
         if (event.locals.user) {
@@ -146,13 +143,15 @@ export const handle = (async ({ event, resolve }) => {
             event.locals.admin = count > 0;
         }
 
-        // TODO: Better authentication for API routes.
-        console.log("pathnameee", event.url.pathname);
+        if (!configuration.active && !event.locals.admin) {
+            throw error(401, "Unauthorized");
+        }
 
+        // TODO: Better authentication for API routes.
         if (
-            (event.url.pathname.startsWith("/api") &&
-                !event.url.pathname.startsWith("/api/calendar")) ||
-            event.url.pathname.includes("/admin")
+            event.url.pathname.startsWith("/api") &&
+            !event.url.pathname.startsWith("/api/calendar") &&
+            !event.url.pathname.startsWith("/api/uploads")
         ) {
             if (!event.locals.user) {
                 throw error(401, "Unauthorized");
