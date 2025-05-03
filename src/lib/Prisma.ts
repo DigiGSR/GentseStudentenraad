@@ -1,10 +1,3 @@
 import { PrismaClient } from "@prisma/client";
 
-export const prisma = new PrismaClient({
-    datasources: {
-        db: {
-            url: process.env.DATABASE_URL,
-        },
-    },
-    connectionLimit: 10, // Increase from default 3
-});
+export const prisma = new PrismaClient();
