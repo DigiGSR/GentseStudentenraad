@@ -1,4 +1,4 @@
-import { error, type Handle } from "@sveltejs/kit";
+import { type Handle } from "@sveltejs/kit";
 import { prisma } from "$lib/Prisma";
 import { Language } from "$lib/Language";
 import { XMLParser } from "fast-xml-parser";
@@ -104,6 +104,8 @@ export const handle = (async ({ event, resolve }) => {
     // 2. The hostname contained in the request headers.
     const requestedHost = event.url.searchParams.get("host") || event.url.hostname;
 
+    console.log("host", requestedHost);
+
     let configuration = await prisma.configuration.findFirst({
         where: {
             hostnames: {
@@ -173,18 +175,18 @@ export const handle = (async ({ event, resolve }) => {
         // TODO: Better authentication for API routes.
         //console.log("pathnameee", event.url.pathname);
 
-        if (
-            (event.url.pathname.startsWith("/api") &&
-                (!event.url.pathname.startsWith("/api/calendar") ||
-                    !event.url.pathname.startsWith("/api/images"))) ||
-            event.url.pathname.includes("/admin")
-        ) {
-            if (!event.locals.user) {
-                throw error(401, "Unauthorized");
-            } else if (!event.locals.admin) {
-                throw error(403, "Forbidden");
-            }
-        }
+        //     if (
+        //         (event.url.pathname.startsWith("/api") &&
+        //             (!event.url.pathname.startsWith("/api/calendar") ||
+        //                 !event.url.pathname.startsWith("/api/images"))) ||
+        //         event.url.pathname.includes("/admin")
+        //     ) {
+        //         if (!event.locals.user) {
+        //             throw error(401, "Unauthorized");
+        //         } else if (!event.locals.admin) {
+        //             throw error(403, "Forbidden");
+        //         }
+        //     }
     }
     timing.authorization = performance.now() - authzStart;
 
