@@ -38,7 +38,24 @@ export const load = (async ({ params, locals }) => {
     );
     const pages = await prisma.page.findMany({
         where: { organization: locals.configuration.organization },
+        include: {
+            content: {
+                select: {
+                    id: true,
+                    slug: true,
+                },
+            },
+        },
+        select: {
+            id: true,
+            nav_name_dutch: true,
+            nav_name_english: true,
+            slug: true,
+            organization: true,
+        },
     });
+
+    console.log(pages);
     const pagesTime = performance.now() - pagesStartTime;
     console.log(`[Performance] Pages fetch completed in ${pagesTime.toFixed(2)}ms`);
     console.log(`[Performance] Found ${pages.length} pages`);
