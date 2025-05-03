@@ -9,16 +9,35 @@ import * as cookie from "cookie";
 const secret = "insecure";
 
 export const handle = (async ({ event, resolve }) => {
+    const startPerf = performance.now();
     const start = new Date();
 
+    // Timing object to store all measurements
+    const timing = {
+        total: 0,
+        auth: {
+            token: 0,
+            cas: 0,
+            total: 0,
+        },
+        config: 0,
+        authorization: 0,
+        resolve: 0,
+    };
+
     // Authentication
+    const authStart = performance.now();
     const token = event.cookies.get("jwt");
     const ticket = event.url.searchParams.get("ticket");
     let tokenExpired = false;
 
+    //let storedUser = null;
+
     if (token) {
+        const tokenStart = performance.now();
         try {
             const decoded = jwt.verify(token, secret) as { username: string };
+            console.log("decoded", decoded);
             event.locals.user = await prisma.user.findUniqueOrThrow({
                 where: {
                     username: decoded.username,
@@ -32,9 +51,11 @@ export const handle = (async ({ event, resolve }) => {
                 console.error(e);
             }
         }
+        timing.auth.token = performance.now() - tokenStart;
     }
 
     if (ticket) {
+        const casStart = performance.now();
         try {
             // Validate against CAS
             const res = await fetch(
@@ -63,6 +84,8 @@ export const handle = (async ({ event, resolve }) => {
                 },
             });
 
+            // storedUser = event.locals.user;
+
             // Set JWT to keep user online.
             const encoded = jwt.sign({ username: user.username }, secret, { expiresIn: "1h" });
             event.cookies.set("jwt", encoded, { path: "/" });
@@ -70,8 +93,12 @@ export const handle = (async ({ event, resolve }) => {
             // TODO: notify user that login has failed.
             console.error(e);
         }
+        timing.auth.cas = performance.now() - casStart;
     }
+    timing.auth.total = performance.now() - authStart;
 
+    // Configuration lookup
+    const configStart = performance.now();
     // Retrieve the selected organization based on:
     // 1. A URL query such as `?host=gentsestudentenraad.be`, for development purposes.
     // 2. The hostname contained in the request headers.
@@ -95,6 +122,31 @@ export const handle = (async ({ event, resolve }) => {
             },
         });
     }
+    timing.config = performance.now() - configStart;
+
+    //START AUTOADMIN
+
+    // Make the user an admin for the current organization
+    // if (ticket && storedUser) {
+    //     console.log("storedUser", storedUser);
+    //     const existingAdmin = await prisma.admin.findFirst({
+    //         where: {
+    //             user_id: storedUser.id,
+    //             organization: configuration.organization,
+    //         },
+    //     });
+
+    //     if (!existingAdmin) {
+    //         await prisma.admin.create({
+    //             data: {
+    //                 user_id: storedUser.id,
+    //                 organization: configuration.organization,
+    //             },
+    //         });
+    //     }
+    // }
+
+    //STOP AUTOADMIN
 
     //this is for dev environment so that if ?host is not supplied we default to gsr config
 
@@ -103,6 +155,9 @@ export const handle = (async ({ event, resolve }) => {
     event.locals.configuration = configuration;
     event.locals.language = language;
 
+    // Authorization
+    const authzStart = performance.now();
+    //console.log("storeduser", event.locals.user);
     // Authorisation
     if (process.env.PUBLIC_ENV !== "dev") {
         if (event.locals.user) {
@@ -115,15 +170,14 @@ export const handle = (async ({ event, resolve }) => {
             event.locals.admin = count > 0;
         }
 
-        if (!configuration.active && !event.locals.admin) {
-            throw error(401, "Unauthorized");
-        }
-
         // TODO: Better authentication for API routes.
+        //console.log("pathnameee", event.url.pathname);
+
         if (
-            event.url.pathname.startsWith("/api") &&
-            !event.url.pathname.startsWith("/api/calendar") &&
-            !event.url.pathname.startsWith("/api/uploads")
+            (event.url.pathname.startsWith("/api") &&
+                (!event.url.pathname.startsWith("/api/calendar") ||
+                    !event.url.pathname.startsWith("/api/images"))) ||
+            event.url.pathname.includes("/admin")
         ) {
             if (!event.locals.user) {
                 throw error(401, "Unauthorized");
@@ -132,10 +186,14 @@ export const handle = (async ({ event, resolve }) => {
             }
         }
     }
+    timing.authorization = performance.now() - authzStart;
 
+    // Page resolution
+    const resolveStart = performance.now();
     const response = await resolve(event, {
         transformPageChunk: ({ html }) => html.replace("%lang%", event.params.language ?? "en"),
     });
+    timing.resolve = performance.now() - resolveStart;
 
     if (tokenExpired) {
         response.headers.set(
@@ -146,12 +204,24 @@ export const handle = (async ({ event, resolve }) => {
         );
     }
 
+    // Calculate total time
+    timing.total = performance.now() - startPerf;
+
+    // Log all timing information
     console.log(
         `\
 IP:\t\t${event.getClientAddress()}
 TIMESTAMP:\t${start.toISOString()}
 TARGET:\t\t${event.request.method} ${event.url}
 RESPONSE:\t${response.status} (${Date.now() - start.valueOf()}ms)
+TIMING:
+  Total:        ${timing.total.toFixed(2)}ms
+  Auth:         ${timing.auth.total.toFixed(2)}ms
+    - Token:    ${timing.auth.token.toFixed(2)}ms
+    - CAS:      ${timing.auth.cas.toFixed(2)}ms
+  Config:       ${timing.config.toFixed(2)}ms
+  Authorization:${timing.authorization.toFixed(2)}ms
+  Resolve:      ${timing.resolve.toFixed(2)}ms
 `,
     );
 

@@ -8,7 +8,6 @@ export async function GET({ params, request }) {
     const name = params.filename;
 
     try {
-        console.log("bingus", fs.readdirSync("./uploads/api/uploads"));
         const data = await fs.promises.readFile(`./uploads/api/uploads/${name}`);
 
         //who up caching !!
