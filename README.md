@@ -1,6 +1,7 @@
 # Gentse Studentenraad
 
-**DISCLAIMER: DEZE DOCUMENTATIE IS ERG OUT OF DATE!!! CHECK DE WIKI**
+
+**DISCLAIMER: DEZE DOCUMENTATIE IS ERG OUT OF DATE!!! GEBRUIK DE WIKI**
 
 [![Build Status](https://ci.gentsestudentenraad.be/api/badges/GentseStudentenraad/website/status.svg?ref=refs/heads/main)](https://ci.gentsestudentenraad.be/GentseStudentenraad/website)
 
@@ -31,3 +32,7 @@ We maken gebruik van het Drone CI platform. Momenteel testen we bij elke push en
 Bij iedere push naar `main` worden voorlopig nog de _staging_ websites geüpdatet. Wanneer een specifieke build in Drone gepromoveerd wordt naar `production` zal deze ook op de hoofddomeinnamen online gebracht worden.
 
 > Momenteel zijn we nog niet overgeschakeld, waardoor een build nog niet gepromoveerd kan worden. Ook het `.drone.yml` bestand dient hiervoor nog uitgebreid te worden.
+
+
+
+**Postmortem notice: Deze site is niet langer in productie, de GSR is intussen gewisseld naar een Google Sites approach**
